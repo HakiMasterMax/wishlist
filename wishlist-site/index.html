@@ -27,9 +27,22 @@
   </svg>
 
   <div class="wrap hero-inner">
-    <div class="event-tag">
-      <svg aria-hidden="true" width="10" height="12" viewBox="0 0 10 12"><path d="M0 0 L10 6 L0 12 Z" fill="#FFD166"/></svg>
-      <span>WINTER EVENT</span>
+    <div class="hero-top">
+      <div class="event-tag">
+        <svg aria-hidden="true" width="10" height="12" viewBox="0 0 10 12"><path d="M0 0 L10 6 L0 12 Z" fill="#FFD166"/></svg>
+        <span>WINTER EVENT</span>
+      </div>
+      <div class="stats">
+        <span class="stat">
+          <svg aria-hidden="true" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#2B2A5C" stroke-width="2.2" stroke-linejoin="round"><path d="M12 2 L21 7 V17 L12 22 L3 17 V7 Z"/><path d="M12 7 L17.5 16 H6.5 Z"/><path d="M12 2 V7 M3 7 L6.5 16 M21 7 L17.5 16 M12 22 L6.5 16 M12 22 L17.5 16"/></svg>
+          <span id="stat-items">loading…</span>
+        </span>
+        <span class="stat stat-gold">
+          <svg aria-hidden="true" width="14" height="14" viewBox="0 0 24 24"><path d="M12 2.5l2.9 6 6.6.9-4.8 4.6 1.2 6.5L12 17.4 6.1 20.5l1.2-6.5L2.5 9.4l6.6-.9z" fill="#2B2A5C"/></svg>
+          <span id="stat-starred">…</span>
+        </span>
+        <span class="stat" id="stat-shops">…</span>
+      </div>
     </div>
     <h1>Wishlist Item Shop</h1>
 
@@ -46,21 +59,9 @@
       <p>Welcome, traveler! Everything on these shelves is on my wishlist. Gold-star items are legendary: the ones I want most.</p>
       <svg aria-hidden="true" class="dialog-caret" width="14" height="10" viewBox="0 0 14 10"><path d="M0 0 H14 L7 10 Z" fill="#2B2A5C"/></svg>
     </div>
-
-    <div class="stats">
-      <span class="stat">
-        <svg aria-hidden="true" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#2B2A5C" stroke-width="2.2" stroke-linejoin="round"><path d="M12 2 L21 7 V17 L12 22 L3 17 V7 Z"/><path d="M12 7 L17.5 16 H6.5 Z"/><path d="M12 2 V7 M3 7 L6.5 16 M21 7 L17.5 16 M12 22 L6.5 16 M12 22 L17.5 16"/></svg>
-        <span id="stat-items">loading…</span>
-      </span>
-      <span class="stat stat-gold">
-        <svg aria-hidden="true" width="15" height="15" viewBox="0 0 24 24"><path d="M12 2.5l2.9 6 6.6.9-4.8 4.6 1.2 6.5L12 17.4 6.1 20.5l1.2-6.5L2.5 9.4l6.6-.9z" fill="#2B2A5C"/></svg>
-        <span id="stat-starred">…</span>
-      </span>
-      <span class="stat" id="stat-shops">…</span>
-    </div>
   </div>
 
-  <svg class="hero-scene" aria-hidden="true" viewBox="0 0 1200 200" preserveAspectRatio="xMidYMax slice">
+  <svg class="hero-scene" aria-hidden="true" viewBox="0 22 1200 178" preserveAspectRatio="xMidYMax slice">
     <path d="M0 200 V120 C150 60 300 60 450 110 C600 160 700 70 880 80 C1020 88 1120 120 1200 100 V200 Z" fill="#AEBBF5"/>
     <g fill="#4F9C94" stroke="#4F9C94" stroke-width="8" stroke-linejoin="round">
       <path d="M780 88 L800 170 H760 Z"/><path d="M1010 78 L1032 170 H988 Z"/><path d="M1052 106 L1068 170 H1036 Z"/><path d="M240 98 L260 176 H220 Z"/><path d="M196 116 L211 176 H181 Z"/>
@@ -89,11 +90,13 @@
 <section class="wrap planner-wrap" aria-labelledby="gp-title">
   <div class="panel planner">
     <div class="planner-left">
-      <div class="quest-tag">
-        <svg aria-hidden="true" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#2B2A5C" stroke-width="2.4" stroke-linejoin="round"><path d="M12 2 L21 7 V17 L12 22 L3 17 V7 Z"/><path d="M12 7 L17.5 16 H6.5 Z"/></svg>
-        <span>SIDE QUEST</span>
+      <div class="planner-head">
+        <h2 id="gp-title" class="pixel planner-title">Ask Smudge</h2>
+        <div class="quest-tag">
+          <svg aria-hidden="true" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#2B2A5C" stroke-width="2.4" stroke-linejoin="round"><path d="M12 2 L21 7 V17 L12 22 L3 17 V7 Z"/><path d="M12 7 L17.5 16 H6.5 Z"/></svg>
+          <span>SIDE QUEST</span>
+        </div>
       </div>
-      <h2 id="gp-title" class="pixel planner-title">Ask Smudge</h2>
 
       <div class="smudge-row">
         <div class="smudge-col">
@@ -169,7 +172,7 @@
 
   <section class="results" aria-label="Wishlist items">
     <div class="results-bar">
-      <div id="count" class="pixel count" aria-live="polite"></div>
+      <div id="count" class="count" aria-live="polite"></div>
       <label class="sort">
         <span>Sort</span>
         <select id="sort">

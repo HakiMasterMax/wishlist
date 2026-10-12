@@ -21,6 +21,8 @@
     imageExtensions: ['jpg', 'png', 'jpeg', 'webp'],
     // Upper limit for the gift planner budget (keeps the math fast).
     maxPlannerBudget: 5000,
+    // Share of the gift planner budget set aside for tax and shipping (0.15 = 15%).
+    taxShippingBuffer: 0.15,
 
     // "Looted" claims. Leave blank to turn the feature off.
     claims: {
@@ -592,25 +594,29 @@
     const box = $('#gp-result');
     const budget = parseFloat(state.budget);
     const want = parseInt(state.count, 10);
-    const plan = planGifts(list, budget, want > 0 ? want : 0);
+    const buffer = Math.min(0.9, Math.max(0, CONFIG.taxShippingBuffer || 0));
+    const reserve = budget > 0 ? Math.round(budget * buffer * 100) / 100 : 0;
+    const giftBudget = budget > 0 ? budget - reserve : budget;
+    const plan = planGifts(list, giftBudget, want > 0 ? want : 0);
 
     if (plan.state === 'idle') {
       setSmudge('idle', 'Psst! Tell me your budget and I will dig through the shop for the best loot.');
       box.replaceChildren(el('div', { class: 'plan-empty' }, [
         svg('<svg aria-hidden="true" width="44" height="44" viewBox="0 0 24 24" fill="#FFFFFF" stroke="#2B2A5C" stroke-width="1.8" stroke-linejoin="round"><path d="M12 2 L21 7 V17 L12 22 L3 17 V7 Z"/><path d="M12 7 L17.5 16 H6.5 Z" fill="#FFD166"/><path d="M12 2 V7 M3 7 L6.5 16 M21 7 L17.5 16 M12 22 L6.5 16 M12 22 L17.5 16" fill="none"/></svg>'),
         el('div', { class: 'plan-empty-title', text: 'No loot yet' }),
-        el('p', { class: 'plan-empty-sub', text: CLAIMS_ON
+        el('p', { class: 'plan-empty-sub', text: (CLAIMS_ON
           ? 'Smudge only digs through items the shop filters are showing, and skips anything already looted.'
-          : 'Smudge only digs through items the shop filters are showing.' }),
+          : 'Smudge only digs through items the shop filters are showing.') +
+          (buffer > 0 ? ' ' + Math.round(buffer * 100) + '% of your budget is saved for tax and shipping.' : '') }),
       ]));
       return;
     }
 
     if (plan.state === 'none') {
-      setSmudge('sad', 'Eep! Nothing fits under ' + fmt(budget) + '. More gold, or fewer filters?');
+      setSmudge('sad', 'Eep! Nothing fits under ' + fmt(giftBudget) + ' once I save some for tax and shipping. More gold, or fewer filters?');
       box.replaceChildren(el('div', { class: 'plan-empty' }, [
         el('div', { class: 'plan-empty-title', text: 'Not enough gold' }),
-        el('p', { class: 'plan-empty-sub', text: 'Nothing still available fits under ' + fmt(budget) + '. Raise the budget or loosen the filters.' }),
+        el('p', { class: 'plan-empty-sub', text: 'After setting aside ' + fmt(reserve) + ' for tax and shipping, nothing still available fits in ' + fmt(giftBudget) + '. Raise the budget or loosen the filters.' }),
       ]));
       return;
     }
@@ -636,14 +642,15 @@
       el('div', { class: 'plan-head' }, [el('strong', { text: "Smudge's picks" }), el('span', { text: plural(plan.units, 'gift', 'gifts') })]),
       el('ul', { class: 'plan-list' }, rows),
       el('div', { class: 'plan-totals' }, [
-        el('span', { class: 'plan-total', text: 'Total ' + fmt(plan.total) }),
-        el('span', { class: 'plan-left', text: fmt(Math.max(0, budget - plan.total)) + ' left' }),
+        el('span', { class: 'plan-total', text: 'Gifts ' + fmt(plan.total) }),
+        reserve > 0 && el('span', { class: 'plan-left', text: '+ ' + fmt(reserve) + ' for tax & shipping' }),
+        el('span', { class: 'plan-left', text: fmt(Math.max(0, giftBudget - plan.total)) + ' spare' }),
       ]),
     ];
     if (want > 0 && plan.units < want) {
       children.push(el('p', { class: 'plan-note', text: 'Only ' + plan.units + ' of ' + want + ' gifts fit this budget with the current filters.' }));
     }
-    if (budget > CONFIG.maxPlannerBudget) {
+    if (giftBudget > CONFIG.maxPlannerBudget) {
       children.push(el('p', { class: 'plan-note', text: 'Smudge can only count up to ' + fmt(CONFIG.maxPlannerBudget) + ' at a time.' }));
     }
     if (CLAIMS_ON) {

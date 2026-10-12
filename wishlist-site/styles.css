@@ -309,3 +309,85 @@ input[type="checkbox"] { width: 18px; height: 18px; margin: 0; accent-color: var
 @media (prefers-reduced-motion: reduce) {
   .smudge, .dialog-caret { animation: none; }
 }
+
+/* ---------- Looting ---------- */
+.mode-badge {
+  display: inline-flex; align-items: center; gap: 6px; padding: 2px 10px;
+  border: 2px dashed var(--ink); border-radius: 999px; font-size: 13px; font-weight: 800;
+}
+.mode-badge[hidden] { display: none; }
+.mode-badge.is-shield { background: var(--mint); }
+.mode-badge.is-test { background: var(--pink-soft); }
+
+.card-actions { display: flex; gap: 6px; }
+.loot-btn {
+  display: inline-flex; align-items: center; gap: 5px; min-height: 36px; padding: 0 10px;
+  border: 2px solid var(--ink); border-radius: 10px; background: var(--gold-soft); box-shadow: 2px 2px 0 var(--ink);
+  font-size: 14px; font-weight: 800; cursor: pointer; color: var(--ink);
+}
+.loot-btn:hover { background: var(--gold); }
+.loot-btn:active { transform: translate(2px, 2px); box-shadow: none; }
+
+.tag-looted { background: var(--ink); color: var(--white); }
+.card.is-looted { background: #F1F2F7; box-shadow: 4px 4px 0 #9A9CB8; border-color: #6C6E92; }
+.card.is-looted .photo img,
+.card.is-looted .star-badge { filter: grayscale(1); opacity: 0.55; }
+.card.is-looted h2,
+.card.is-looted .price { color: #5B5D82; }
+.card.is-looted .price { text-decoration: line-through; }
+.looted-stamp {
+  position: absolute; left: 50%; top: 50%; transform: translate(-50%, -50%) rotate(-12deg);
+  padding: 2px 12px; border: 3px solid var(--ink); border-radius: 8px; background: var(--white);
+  font-family: var(--pixel); font-size: 22px; font-weight: 700; letter-spacing: 0.08em; color: var(--ink);
+  box-shadow: 3px 3px 0 var(--ink);
+}
+.looted-note { margin: 2px 0 0; font-size: 12.5px; font-weight: 700; color: #5B5D82; }
+
+.plan-hint { margin: 0; font-size: 12.5px; color: var(--ink-soft); font-weight: 600; }
+
+.loot-dialog {
+  width: min(400px, calc(100vw - 32px)); padding: 20px; color: var(--ink);
+  border: 3px solid var(--ink); border-radius: 16px; box-shadow: 5px 5px 0 var(--ink); background: var(--white);
+}
+.loot-dialog::backdrop { background: rgba(43, 42, 92, 0.45); }
+.loot-dialog form { display: flex; flex-direction: column; gap: 10px; }
+.loot-head { display: flex; align-items: center; gap: 10px; }
+.loot-head h2 { margin: 0; font-size: 22px; }
+.loot-item { margin: 0; font-weight: 800; font-size: 16px; }
+.loot-copy { margin: 0; font-size: 13.5px; color: var(--ink-soft); }
+.loot-qty-row { display: grid; grid-template-columns: 1fr 80px; align-items: center; gap: 4px 10px; font-weight: 700; font-size: 14px; }
+.loot-qty-row[hidden] { display: none; }
+.loot-qty-row input { text-align: center; font-weight: 800; }
+.loot-left { grid-column: 1 / -1; font-size: 12.5px; font-weight: 600; color: var(--ink-soft); }
+.loot-error { margin: 0; padding: 6px 10px; background: var(--pink-soft); border: 2px solid var(--ink); border-radius: 8px; font-size: 13px; font-weight: 600; }
+.loot-actions { display: flex; justify-content: flex-end; gap: 10px; margin-top: 4px; }
+.btn-plain { background: var(--white); }
+.btn-gold { background: var(--gold); }
+.btn:disabled { opacity: 0.6; cursor: progress; }
+
+.toast {
+  position: fixed; left: 50%; bottom: 18px; transform: translateX(-50%); z-index: 50;
+  width: max-content; max-width: calc(100vw - 32px);
+  display: flex; align-items: center; gap: 10px; padding: 10px 12px 10px 16px;
+  background: var(--soot); color: var(--white); border-radius: 14px; box-shadow: 4px 4px 0 var(--gold-shadow);
+  font-size: 14px; font-weight: 700;
+}
+.toast[hidden] { display: none; }
+.toast-text { flex: 1; min-width: 0; }
+.toast-undo {
+  min-height: 34px; padding: 0 12px; border: 2px solid var(--white); border-radius: 9px;
+  background: transparent; color: var(--white); font-weight: 800; cursor: pointer;
+}
+.toast-undo:hover { background: var(--white); color: var(--soot); }
+.toast-close { width: 34px; height: 34px; border: 0; background: transparent; color: var(--white); font-size: 20px; cursor: pointer; }
+
+@media (max-width: 520px) {
+  .grid { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 16px 12px; }
+  .card { padding: 6px; }
+  .card-actions { flex-wrap: wrap; width: 100%; }
+  .card-actions > * { flex: 1 1 auto; justify-content: center; }
+  .price { font-size: 17px; }
+  .star-badge { width: 30px; height: 30px; top: -10px; right: -8px; }
+  .info { top: 10px; left: 10px; }
+  .info-btn { width: 30px; height: 30px; }
+}

@@ -42,6 +42,28 @@ New tags and merchants show up as filters automatically.
 
 Save it into `wishlist-images/` with exactly the name in the `image_name` column, plus `.jpg` (or `.png`/`.webp`), then upload it to the repo. Names are case-sensitive on GitHub Pages. Keep photos around 900px wide so the page stays quick.
 
+## Looting (gift-givers marking things as bought)
+
+Each card gets a **Loot** button. Pressing it asks how many they bought and records it in a Google Form. The item then shows how many are left, and once none are left it greys out with a LOOTED stamp, sinks to the end of the list, and Smudge stops suggesting it. A giver can **Undo** right after. Other mistakes are fixed by deleting the row in the claims sheet.
+
+The feature is off until the four `claims` values at the top of `app.js` are filled in:
+
+| Setting | Where it comes from |
+|---|---|
+| `csvUrl` | The claims response sheet, published as CSV (File > Share > Publish to web) |
+| `formUrl` | The form's pre-filled link, with `viewform?...` replaced by `formResponse` |
+| `itemField`, `qtyField`, `refField` | The `entry.123456` ids in the pre-filled link, in question order |
+
+The form needs three short-answer questions titled **item**, **quantity** and **ref**. Don't add number-only validation to quantity, because Undo sends a negative number. Don't require sign-in.
+
+### Spoiler shield
+
+- `…/wishlist/?shield`: turns the shield on in that browser for good. Purchases are never loaded, Loot buttons are hidden, and a "Spoiler shield on" badge shows. Open this once on each of your devices.
+- `…/wishlist/?shield=off`: turns it off again in that browser.
+- `…/wishlist/?test-claims`: fake purchases and nothing gets sent. Use this when working on the site.
+
+Share the plain link with gift-givers.
+
 ## Settings
 
 The top of `app.js` has a `CONFIG` block: the sheet URL, the image folder name and the image file types to try.

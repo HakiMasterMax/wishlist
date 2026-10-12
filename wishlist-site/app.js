@@ -1,6 +1,13 @@
 /* Wishlist Item Shop
  * Reads a published Google Sheet (CSV) and renders it as a filterable storefront.
+ * Gift-givers can mark items as "looted" (purchased); those claims go to a Google Form
+ * and are read back from that form's published response sheet.
  * No build step and no dependencies: edit CONFIG below and push to GitHub Pages.
+ *
+ * URL switches
+ *   ?shield        turn the spoiler shield ON in this browser (remembered). Claims are never loaded.
+ *   ?shield=off    turn the spoiler shield off again in this browser.
+ *   ?test-claims   use made-up claims and don't send anything (for working on the site).
  */
 (() => {
   'use strict';
@@ -14,6 +21,18 @@
     imageExtensions: ['jpg', 'png', 'jpeg', 'webp'],
     // Upper limit for the gift planner budget (keeps the math fast).
     maxPlannerBudget: 5000,
+
+    // "Looted" claims. Leave blank to turn the feature off.
+    claims: {
+      // Published CSV of the claims form's response sheet.
+      csvUrl: '',
+      // https://docs.google.com/forms/d/e/<form id>/formResponse
+      formUrl: '',
+      // entry.<number> ids from the form's pre-filled link.
+      itemField: '',
+      qtyField: '',
+      refField: '',
+    },
   };
 
   const PRICE_BANDS = [
@@ -25,9 +44,34 @@
   ];
 
   const STAR_PATH = 'M12 2.5l2.9 6 6.6.9-4.8 4.6 1.2 6.5L12 17.4 6.1 20.5l1.2-6.5L2.5 9.4l6.6-.9z';
+  const SHIELD_KEY = 'wishlist-spoiler-shield';
+  const PENDING_KEY = 'wishlist-pending-claims';
+  const PENDING_TTL = 30 * 60 * 1000; // a local claim counts for 30 min or until the sheet shows it
+
+  /* ---------- mode ---------- */
+
+  const store = {
+    get(k) { try { return window.localStorage.getItem(k); } catch (e) { return null; } },
+    set(k, v) { try { window.localStorage.setItem(k, v); } catch (e) { /* private mode */ } },
+    del(k) { try { window.localStorage.removeItem(k); } catch (e) { /* private mode */ } },
+  };
+
+  const params = new URLSearchParams(window.location.search);
+  if (params.has('shield')) {
+    if (params.get('shield') === 'off') store.del(SHIELD_KEY);
+    else store.set(SHIELD_KEY, 'on');
+  }
+  const SHIELD = store.get(SHIELD_KEY) === 'on';
+  const TEST = params.has('test-claims');
+  const c = CONFIG.claims;
+  const CLAIMS_CONFIGURED = Boolean(c.csvUrl && c.formUrl && c.itemField && c.qtyField);
+  const CLAIMS_ON = !SHIELD && (TEST || CLAIMS_CONFIGURED);
+  const pendingKey = TEST ? PENDING_KEY + '-test' : PENDING_KEY;
 
   const state = {
     items: [],
+    sheetClaims: new Map(), // key -> qty claimed according to the sheet
+    sheetRefs: new Set(),   // refs already in the sheet
     q: '',
     starOnly: false,
     vendorsOff: new Set(),
@@ -53,9 +97,9 @@
         else node.setAttribute(k, v === true ? '' : v);
       }
     }
-    for (const c of [].concat(children || [])) {
-      if (c == null || c === false) continue;
-      node.append(c.nodeType ? c : document.createTextNode(String(c)));
+    for (const ch of [].concat(children || [])) {
+      if (ch == null || ch === false) continue;
+      node.append(ch.nodeType ? ch : document.createTextNode(String(ch)));
     }
     return node;
   }
@@ -68,12 +112,15 @@
 
   const starSvg = (size, fill) =>
     svg(`<svg aria-hidden="true" width="${size}" height="${size}" viewBox="0 0 24 24"><path d="${STAR_PATH}" fill="${fill}"/></svg>`);
+  const chestSvg = () =>
+    svg('<svg aria-hidden="true" width="16" height="16" viewBox="0 0 16 16" shape-rendering="crispEdges"><path d="M2 5h12v9H2z" fill="#FFD166"/><path d="M2 5h12v1H2zM2 13h12v1H2zM1 5h1v9H1zM14 5h1v9h-1zM2 8h12v1H2zM3 3h10v2H3zM2 4h1v1H2zM13 4h1v1h-1zM4 2h8v1H4z" fill="currentColor"/><path d="M7 7h2v3H7z" fill="currentColor"/></svg>');
 
   const fmt = (v) => '$' + (Math.round(v * 100) % 100 === 0 ? String(Math.round(v)) : v.toFixed(2));
   const titleCase = (s) => s.toLowerCase().replace(/(^|[\s/-])(\w)/g, (m, a, b) => a + b.toUpperCase());
   const truthy = (v) => /^(true|yes|y|1|x|✓)$/i.test(String(v).trim());
   const plural = (n, one, many) => n + ' ' + (n === 1 ? one : many);
   const safeUrl = (u) => (/^https?:\/\//i.test(u) ? u : null);
+  const keyOf = (name) => String(name).trim().toLowerCase().replace(/\s+/g, ' ');
 
   /* ---------- CSV ---------- */
 
@@ -96,7 +143,7 @@
       else if (ch !== '\r') field += ch;
     }
     if (field !== '' || row.length) { row.push(field); rows.push(row); }
-    return rows.filter((r) => r.some((c) => c.trim() !== ''));
+    return rows.filter((r) => r.some((cell) => cell.trim() !== ''));
   }
 
   function toItems(rows) {
@@ -112,9 +159,11 @@
       let tags = get(r, 'tags').split(/[:;,]/).map((t) => t.trim()).filter(Boolean).map(titleCase);
       tags = [...new Set(tags)];
       if (!tags.length) tags = ['Other'];
+      const name = get(r, 'item_name');
       return {
         id: n,
-        name: get(r, 'item_name'),
+        key: keyOf(name),
+        name,
         price: Number.isFinite(price) ? price : NaN,
         size: get(r, 'size'),
         color: get(r, 'color_or_pattern'),
@@ -127,6 +176,80 @@
         link: safeUrl(get(r, 'link')),
       };
     }).filter((it) => it.name);
+  }
+
+  /* ---------- claims ---------- */
+
+  // Reads the form's response sheet: columns are Timestamp plus the form questions.
+  function readClaims(rows) {
+    const totals = new Map();
+    const refs = new Set();
+    if (!rows.length) return { totals, refs };
+    const header = rows[0].map((h) => h.trim().toLowerCase());
+    const find = (word) => header.findIndex((h) => h.includes(word));
+    const iItem = find('item');
+    const iQty = find('quant');
+    const iRef = find('ref');
+    if (iItem < 0 || iQty < 0) return { totals, refs };
+    rows.slice(1).forEach((r) => {
+      const key = keyOf(r[iItem] || '');
+      const qty = parseInt(r[iQty], 10);
+      if (!key || !Number.isFinite(qty)) return;
+      totals.set(key, (totals.get(key) || 0) + qty);
+      if (iRef >= 0 && r[iRef]) refs.add(r[iRef].trim());
+    });
+    return { totals, refs };
+  }
+
+  function testClaimsRows(items) {
+    // Made-up claims so the looted styling can be worked on without real data.
+    const pick = (i, q) => (items[i] ? [items[i].name, String(q)] : null);
+    const rows = [['Timestamp', 'item', 'quantity', 'ref']];
+    [pick(3, 1), pick(14, 1), pick(1, 1), pick(items.length - 1, 3)].filter(Boolean)
+      .forEach(([name, q], n) => rows.push(['', name, q, 'test-' + n]));
+    return rows;
+  }
+
+  function loadPending() {
+    try {
+      const list = JSON.parse(store.get(pendingKey) || '[]');
+      return Array.isArray(list) ? list : [];
+    } catch (e) { return []; }
+  }
+  function savePending(list) { store.set(pendingKey, JSON.stringify(list)); }
+
+  // Local claims this browser made that the published sheet hasn't caught up with yet.
+  function livePending() {
+    const now = Date.now();
+    const list = loadPending().filter((p) => now - p.at < PENDING_TTL && !state.sheetRefs.has(p.ref));
+    savePending(list);
+    return list;
+  }
+
+  function applyClaims() {
+    const totals = new Map(state.sheetClaims);
+    livePending().forEach((p) => totals.set(p.key, (totals.get(p.key) || 0) + p.qty));
+    state.items.forEach((it) => {
+      const claimed = CLAIMS_ON ? Math.max(0, totals.get(it.key) || 0) : 0;
+      it.remaining = Math.max(0, it.qty - claimed);
+      it.looted = CLAIMS_ON && it.remaining === 0;
+    });
+  }
+
+  async function sendClaim(item, qty) {
+    const ref = Date.now().toString(36) + Math.random().toString(36).slice(2, 7);
+    if (!TEST) {
+      const body = new URLSearchParams();
+      body.set(c.itemField, item.name);
+      body.set(c.qtyField, String(qty));
+      if (c.refField) body.set(c.refField, ref);
+      // Google Forms doesn't allow reading the reply cross-origin; a network error still throws.
+      await fetch(c.formUrl, { method: 'POST', mode: 'no-cors', body });
+    }
+    const list = loadPending();
+    list.push({ key: item.key, qty, ref, at: Date.now() });
+    savePending(list);
+    return ref;
   }
 
   /* ---------- filtering ---------- */
@@ -154,15 +277,15 @@
     high: (a, b) => priceKey(a, -1) - priceKey(b, -1),
     name: (a, b) => a.name.localeCompare(b.name),
   };
+  // Looted items always sink to the end.
+  const sortWith = (fn) => (a, b) => (a.looted - b.looted) || fn(a, b);
 
   /* ---------- filter controls ---------- */
 
   function buildFilters() {
-    // Item types: alphabetical, "Other" always last
     const types = [...new Set(state.items.flatMap((it) => it.tags))].filter((t) => t !== 'Other').sort();
     types.push('Other');
-    const typeBox = $('#type-chips');
-    typeBox.replaceChildren(...types.map((t) => el('button', {
+    $('#type-chips').replaceChildren(...types.map((t) => el('button', {
       type: 'button', class: 'chip chip-pill', 'aria-pressed': 'false', 'data-type': t, text: t,
       onclick: (e) => {
         state.types.has(t) ? state.types.delete(t) : state.types.add(t);
@@ -171,7 +294,6 @@
       },
     })));
 
-    // Merchants with counts
     const vendors = [...new Set(state.items.map((it) => it.vendor))].sort();
     $('#vendor-list').replaceChildren(...vendors.map((v) => {
       const input = el('input', {
@@ -185,12 +307,11 @@
       ]);
     }));
 
-    // Price bands
     $('#price-chips').replaceChildren(...PRICE_BANDS.map((b) => el('button', {
       type: 'button', class: 'chip', 'aria-pressed': String(b.id === state.band), 'data-band': b.id, text: b.label,
       onclick: () => {
         state.band = b.id;
-        document.querySelectorAll('#price-chips .chip').forEach((c) => c.setAttribute('aria-pressed', String(c.dataset.band === b.id)));
+        document.querySelectorAll('#price-chips .chip').forEach((ch) => ch.setAttribute('aria-pressed', String(ch.dataset.band === b.id)));
         render();
       },
     })));
@@ -201,8 +322,8 @@
     $('#q').value = '';
     $('#star-only').checked = false;
     document.querySelectorAll('#vendor-list input').forEach((i) => { i.checked = true; });
-    document.querySelectorAll('#type-chips .chip').forEach((c) => c.setAttribute('aria-pressed', 'false'));
-    document.querySelectorAll('#price-chips .chip').forEach((c) => c.setAttribute('aria-pressed', String(c.dataset.band === 'all')));
+    document.querySelectorAll('#type-chips .chip').forEach((ch) => ch.setAttribute('aria-pressed', 'false'));
+    document.querySelectorAll('#price-chips .chip').forEach((ch) => ch.setAttribute('aria-pressed', String(ch.dataset.band === 'all')));
     render();
   }
 
@@ -214,18 +335,21 @@
       svg('<svg aria-hidden="true" width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="14" rx="3"/><circle cx="8.5" cy="10" r="1.6"/><path d="M4 17l5-4.5 3.5 3 3-2.5L20 17"/></svg>'),
       'no photo yet',
     ]);
-    if (!it.image) { box.append(placeholder()); return box; }
-
-    const base = CONFIG.imageFolder + encodeURIComponent(it.image);
-    const candidates = /\.[a-z0-9]{2,5}$/i.test(it.image) ? [base] : CONFIG.imageExtensions.map((ext) => base + '.' + ext);
-    let i = 0;
-    const img = el('img', { alt: it.name, loading: 'lazy', decoding: 'async', src: candidates[0] });
-    img.addEventListener('error', () => {
-      i += 1;
-      if (i < candidates.length) img.src = candidates[i];
-      else img.replaceWith(placeholder());
-    });
-    box.append(img);
+    if (it.image) {
+      const base = CONFIG.imageFolder + encodeURIComponent(it.image);
+      const candidates = /\.[a-z0-9]{2,5}$/i.test(it.image) ? [base] : CONFIG.imageExtensions.map((ext) => base + '.' + ext);
+      let i = 0;
+      const img = el('img', { alt: it.name, loading: 'lazy', decoding: 'async', src: candidates[0] });
+      img.addEventListener('error', () => {
+        i += 1;
+        if (i < candidates.length) img.src = candidates[i];
+        else img.replaceWith(placeholder());
+      });
+      box.append(img);
+    } else {
+      box.append(placeholder());
+    }
+    if (it.looted) box.append(el('div', { class: 'looted-stamp', 'aria-hidden': 'true', text: 'LOOTED' }));
     return box;
   }
 
@@ -265,13 +389,22 @@
     });
   }
 
+  function qtyTag(it) {
+    if (it.looted) return el('span', { class: 'tag tag-looted', text: 'Looted' });
+    if (CLAIMS_ON && it.qty > 1) {
+      return el('span', { class: 'tag tag-qty', title: it.remaining + ' of ' + it.qty + ' still needed', text: it.remaining + ' of ' + it.qty + ' left' });
+    }
+    if (it.qty > 1) return el('span', { class: 'tag tag-qty', title: 'Quantity wanted', text: '×' + it.qty });
+    return null;
+  }
+
   function card(it) {
     const legendary = it.starred;
     const tags = [
       legendary && el('span', { class: 'tag tag-legend', text: 'Legendary' }),
       el('span', { class: 'tag' + (legendary ? ' tag-vendor-on-gold' : ''), text: it.vendor }),
       el('span', { class: 'tag tag-type', text: it.tags.join(' + ') }),
-      it.qty > 1 && el('span', { class: 'tag tag-qty', title: 'Quantity wanted', text: '×' + it.qty }),
+      qtyTag(it),
     ];
     const view = it.link
       ? el('a', {
@@ -282,8 +415,18 @@
           svg('<svg aria-hidden="true" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17L17 7M9 7h8v8"/></svg>'),
         ])
       : null;
+    const loot = CLAIMS_ON && !it.looted
+      ? el('button', {
+          type: 'button', class: 'loot-btn', 'aria-label': 'Mark ' + it.name + ' as looted (purchased)',
+          onclick: () => openLootDialog(it),
+        }, [chestSvg(), el('span', { text: 'Loot' })])
+      : null;
 
-    return el('article', { class: 'card' + (legendary ? ' is-legendary' : '') }, [
+    let cls = 'card';
+    if (legendary) cls += ' is-legendary';
+    if (it.looted) cls += ' is-looted';
+
+    return el('article', { class: cls }, [
       legendary && el('div', { class: 'star-badge', role: 'img', 'aria-label': 'Legendary: most wanted' }, starSvg(26, '#2B2A5C')),
       photo(it),
       details(it),
@@ -292,15 +435,88 @@
         el('h2', { text: it.name }),
         el('div', { class: 'card-foot' }, [
           el('span', { class: 'price', text: Number.isNaN(it.price) ? 'price ?' : fmt(it.price) }),
-          view,
+          el('div', { class: 'card-actions' }, [loot, view]),
         ]),
+        it.looted && el('p', { class: 'looted-note', text: 'Already gifted. Thank you!' }),
       ]),
     ]);
   }
 
+  /* ---------- loot dialog + toast ---------- */
+
+  let lootTarget = null;
+
+  function openLootDialog(it) {
+    lootTarget = it;
+    const dlg = $('#loot-dialog');
+    $('#loot-name').textContent = it.name;
+    const qty = $('#loot-qty');
+    qty.max = String(it.remaining);
+    qty.value = '1';
+    $('#loot-qty-row').hidden = it.remaining <= 1;
+    $('#loot-left').textContent = it.qty > 1 ? it.remaining + ' of ' + it.qty + ' still needed.' : '';
+    $('#loot-error').hidden = true;
+    $('#loot-confirm').disabled = false;
+    if (typeof dlg.showModal === 'function') dlg.showModal();
+    else dlg.setAttribute('open', '');
+    (it.remaining > 1 ? qty : $('#loot-confirm')).focus();
+  }
+
+  function closeLootDialog() {
+    const dlg = $('#loot-dialog');
+    if (typeof dlg.close === 'function') dlg.close();
+    else dlg.removeAttribute('open');
+  }
+
+  async function confirmLoot(e) {
+    e.preventDefault();
+    const it = lootTarget;
+    if (!it) return;
+    const n = Math.min(it.remaining, Math.max(1, parseInt($('#loot-qty').value, 10) || 1));
+    const btn = $('#loot-confirm');
+    btn.disabled = true;
+    try {
+      await sendClaim(it, n);
+    } catch (err) {
+      console.error('[wishlist] claim failed:', err);
+      $('#loot-error').hidden = false;
+      btn.disabled = false;
+      return;
+    }
+    closeLootDialog();
+    applyClaims();
+    render();
+    showToast(it, n);
+  }
+
+  let toastTimer = null;
+  function showToast(it, n) {
+    const toast = $('#toast');
+    const undo = el('button', {
+      type: 'button', class: 'toast-undo', text: 'Undo',
+      onclick: async () => {
+        undo.disabled = true;
+        try { await sendClaim(it, -n); } catch (err) { console.error(err); undo.disabled = false; return; }
+        applyClaims();
+        render();
+        hideToast();
+        setSmudge($('#smudge').dataset.mood, 'Phew, un-looted! It is back on the shelf.');
+      },
+    });
+    toast.replaceChildren(
+      el('span', { class: 'toast-text', text: 'Looted! ' + (n > 1 ? n + ' × ' : '') + it.name + ' is marked as gifted.' }),
+      undo,
+      el('button', { type: 'button', class: 'toast-close', 'aria-label': 'Dismiss', text: '×', onclick: hideToast }),
+    );
+    toast.hidden = false;
+    clearTimeout(toastTimer);
+    toastTimer = setTimeout(hideToast, 20000);
+  }
+  function hideToast() { $('#toast').hidden = true; clearTimeout(toastTimer); }
+
   /* ---------- gift planner ---------- */
 
-  // Chooses units (an item wanted ×3 can be picked up to 3 times) so that:
+  // Chooses units (an item still needed ×3 can be picked up to 3 times) so that:
   // legendary units come first, then as much of the budget as possible is used.
   // 0/1 knapsack on whole dollars (prices rounded up, so the real total never exceeds the budget).
   function planGifts(list, budget, want) {
@@ -309,8 +525,8 @@
     const W = B + 1;
     const pool = [];
     list.forEach((it) => {
-      if (Number.isNaN(it.price) || Math.ceil(it.price) > B) return;
-      for (let k = 0; k < it.qty; k++) pool.push(it);
+      if (it.looted || Number.isNaN(it.price) || Math.ceil(it.price) > B) return;
+      for (let k = 0; k < it.remaining; k++) pool.push(it);
     });
     const n = pool.length;
     if (!n) return { state: 'none' };
@@ -321,22 +537,22 @@
     if (want > 0) {
       const K = Math.min(want, n);
       const dp = [];
-      for (let c = 0; c <= K; c++) { const row = new Float64Array(W); row.fill(c === 0 ? 0 : -1); dp.push(row); }
+      for (let k = 0; k <= K; k++) { const row = new Float64Array(W); row.fill(k === 0 ? 0 : -1); dp.push(row); }
       const keep = new Uint8Array(n * (K + 1) * W);
       for (let i = 0; i < n; i++) {
-        for (let c = K; c >= 1; c--) {
-          const prev = dp[c - 1], cur = dp[c];
+        for (let k = K; k >= 1; k--) {
+          const prev = dp[k - 1], cur = dp[k];
           for (let w = B; w >= cost[i]; w--) {
             const p = prev[w - cost[i]];
-            if (p >= 0 && p + val[i] > cur[w]) { cur[w] = p + val[i]; keep[(i * (K + 1) + c) * W + w] = 1; }
+            if (p >= 0 && p + val[i] > cur[w]) { cur[w] = p + val[i]; keep[(i * (K + 1) + k) * W + w] = 1; }
           }
         }
       }
-      let c = K;
-      while (c > 0 && dp[c][B] < 0) c--;
+      let k = K;
+      while (k > 0 && dp[k][B] < 0) k--;
       let w = B;
-      for (let i = n - 1; i >= 0 && c > 0; i--) {
-        if (keep[(i * (K + 1) + c) * W + w]) { chosen.push(i); c--; w -= cost[i]; }
+      for (let i = n - 1; i >= 0 && k > 0; i--) {
+        if (keep[(i * (K + 1) + k) * W + w]) { chosen.push(i); k--; w -= cost[i]; }
       }
     } else {
       const dp = new Float64Array(W);
@@ -383,7 +599,9 @@
       box.replaceChildren(el('div', { class: 'plan-empty' }, [
         svg('<svg aria-hidden="true" width="44" height="44" viewBox="0 0 24 24" fill="#FFFFFF" stroke="#2B2A5C" stroke-width="1.8" stroke-linejoin="round"><path d="M12 2 L21 7 V17 L12 22 L3 17 V7 Z"/><path d="M12 7 L17.5 16 H6.5 Z" fill="#FFD166"/><path d="M12 2 V7 M3 7 L6.5 16 M21 7 L17.5 16 M12 22 L6.5 16 M12 22 L17.5 16" fill="none"/></svg>'),
         el('div', { class: 'plan-empty-title', text: 'No loot yet' }),
-        el('p', { class: 'plan-empty-sub', text: 'Smudge only digs through items the shop filters are showing.' }),
+        el('p', { class: 'plan-empty-sub', text: CLAIMS_ON
+          ? 'Smudge only digs through items the shop filters are showing, and skips anything already looted.'
+          : 'Smudge only digs through items the shop filters are showing.' }),
       ]));
       return;
     }
@@ -392,7 +610,7 @@
       setSmudge('sad', 'Eep! Nothing fits under ' + fmt(budget) + '. More gold, or fewer filters?');
       box.replaceChildren(el('div', { class: 'plan-empty' }, [
         el('div', { class: 'plan-empty-title', text: 'Not enough gold' }),
-        el('p', { class: 'plan-empty-sub', text: 'Nothing showing right now fits under ' + fmt(budget) + '. Raise the budget or loosen the filters.' }),
+        el('p', { class: 'plan-empty-sub', text: 'Nothing still available fits under ' + fmt(budget) + '. Raise the budget or loosen the filters.' }),
       ]));
       return;
     }
@@ -428,6 +646,9 @@
     if (budget > CONFIG.maxPlannerBudget) {
       children.push(el('p', { class: 'plan-note', text: 'Smudge can only count up to ' + fmt(CONFIG.maxPlannerBudget) + ' at a time.' }));
     }
+    if (CLAIMS_ON) {
+      children.push(el('p', { class: 'plan-hint', text: 'Bought one? Hit Loot on its card so nobody doubles up.' }));
+    }
     box.replaceChildren(...children);
   }
 
@@ -435,9 +656,10 @@
 
   function render() {
     const list = filtered();
-    const sorted = list.slice().sort(SORTS[state.sort] || SORTS.wanted);
+    const sorted = list.slice().sort(sortWith(SORTS[state.sort] || SORTS.wanted));
     $('#grid').replaceChildren(...sorted.map(card));
-    $('#count').textContent = list.length + ' / ' + state.items.length + ' in stock';
+    const looted = list.filter((it) => it.looted).length;
+    $('#count').textContent = (list.length - looted) + ' / ' + state.items.length + ' in stock' + (looted ? ' · ' + looted + ' looted' : '');
 
     const status = $('#status');
     if (!list.length) {
@@ -457,6 +679,23 @@
     $('#stat-items').textContent = plural(items.length, 'item', 'items');
     $('#stat-starred').textContent = items.filter((it) => it.starred).length + ' legendary';
     $('#stat-shops').textContent = plural(new Set(items.map((it) => it.vendor)).size, 'merchant', 'merchants');
+  }
+
+  function renderModeBadge() {
+    const badge = $('#mode-badge');
+    if (SHIELD) {
+      badge.hidden = false;
+      badge.className = 'mode-badge is-shield';
+      badge.replaceChildren(
+        svg('<svg aria-hidden="true" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linejoin="round"><path d="M12 2 L20 5 V11 C20 16 16.5 20 12 22 C7.5 20 4 16 4 11 V5 Z"/></svg>'),
+        el('span', { text: 'Spoiler shield on' }),
+      );
+      badge.title = 'Purchases are hidden in this browser. Visit with ?shield=off to turn this off.';
+    } else if (TEST) {
+      badge.hidden = false;
+      badge.className = 'mode-badge is-test';
+      badge.replaceChildren(el('span', { text: 'Test claims (nothing is sent)' }));
+    }
   }
 
   function showError() {
@@ -481,22 +720,44 @@
     $('#reset').addEventListener('click', resetFilters);
     $('#gp-budget').addEventListener('input', (e) => { state.budget = e.target.value; renderPlanner(filtered()); });
     $('#gp-count').addEventListener('input', (e) => { state.count = e.target.value; renderPlanner(filtered()); });
+    $('#loot-form').addEventListener('submit', confirmLoot);
+    $('#loot-cancel').addEventListener('click', closeLootDialog);
+    $('#loot-dialog').addEventListener('click', (e) => { if (e.target.id === 'loot-dialog') closeLootDialog(); });
     document.addEventListener('click', (e) => { if (!e.target.closest('.info')) closeAllDetails(); });
     document.addEventListener('keydown', (e) => { if (e.key === 'Escape') closeAllDetails(); });
   }
 
+  async function fetchText(url) {
+    const res = await fetch(url, { cache: 'no-store' });
+    if (!res.ok) throw new Error('HTTP ' + res.status);
+    return res.text();
+  }
+
   async function init() {
     wire();
+    renderModeBadge();
+    const claimsPromise = CLAIMS_ON && !TEST ? fetchText(c.csvUrl).catch((err) => err) : null;
     try {
-      const res = await fetch(CONFIG.dataUrl, { cache: 'no-store' });
-      if (!res.ok) throw new Error('HTTP ' + res.status);
-      state.items = toItems(parseCSV(await res.text()));
+      state.items = toItems(parseCSV(await fetchText(CONFIG.dataUrl)));
       if (!state.items.length) throw new Error('No rows');
     } catch (err) {
       console.error('[wishlist] could not load data:', err);
       showError();
       return;
     }
+    if (CLAIMS_ON) {
+      let rows = [];
+      if (TEST) rows = testClaimsRows(state.items);
+      else {
+        const res = await claimsPromise;
+        if (res instanceof Error) console.error('[wishlist] could not load claims:', res);
+        else rows = parseCSV(res);
+      }
+      const { totals, refs } = readClaims(rows);
+      state.sheetClaims = totals;
+      state.sheetRefs = refs;
+    }
+    applyClaims();
     renderStats();
     buildFilters();
     render();

@@ -25,13 +25,13 @@
     // "Looted" claims. Leave blank to turn the feature off.
     claims: {
       // Published CSV of the claims form's response sheet.
-      csvUrl: '',
+      csvUrl: 'https://docs.google.com/spreadsheets/d/e/2PACX-1vRdSsy_4ciPhZl43oc8Yx3iC8HfDeyepumtFmE_HhiO5FjC4LZXQ7HaYmFok0QI3mmuSlZoH3lFuQaW/pub?output=csv',
       // https://docs.google.com/forms/d/e/<form id>/formResponse
-      formUrl: '',
+      formUrl: 'https://docs.google.com/forms/d/e/1FAIpQLScZ8d-t2U92YeqPuCLlDhBSLJbsCOp80O7cXAP1P75z2SD_dA/formResponse',
       // entry.<number> ids from the form's pre-filled link.
-      itemField: '',
-      qtyField: '',
-      refField: '',
+      itemField: 'entry.1737454356',
+      qtyField: 'entry.871293525',
+      refField: 'entry.511342756',
     },
   };
 

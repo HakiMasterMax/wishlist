@@ -48,7 +48,7 @@
   const STAR_PATH = 'M12 2.5l2.9 6 6.6.9-4.8 4.6 1.2 6.5L12 17.4 6.1 20.5l1.2-6.5L2.5 9.4l6.6-.9z';
   const SHIELD_KEY = 'wishlist-spoiler-shield';
   const PENDING_KEY = 'wishlist-pending-claims';
-  const PENDING_TTL = 30 * 60 * 1000; // a local claim counts for 30 min or until the sheet shows it
+  const PENDING_TTL = 10 * 60 * 1000; // a local claim counts for 10 min or until the sheet shows it
 
   /* ---------- mode ---------- */
 
@@ -643,10 +643,13 @@
       el('ul', { class: 'plan-list' }, rows),
       el('div', { class: 'plan-totals' }, [
         el('span', { class: 'plan-total', text: 'Gifts ' + fmt(plan.total) }),
-        reserve > 0 && el('span', { class: 'plan-left', text: '+ ' + fmt(reserve) + ' for tax & shipping' }),
+        reserve > 0 && el('span', { class: 'plan-left', text: '+ ~' + fmt(reserve) + ' est. tax & shipping' }),
         el('span', { class: 'plan-left', text: fmt(Math.max(0, giftBudget - plan.total)) + ' spare' }),
       ]),
     ];
+    if (reserve > 0) {
+      children.push(el('p', { class: 'plan-hint', text: 'Smudge sets aside about ' + Math.round(buffer * 100) + '% of your budget as a rough guess for tax and shipping. Real costs vary by shop and location, so check the total at checkout.' }));
+    }
     if (want > 0 && plan.units < want) {
       children.push(el('p', { class: 'plan-note', text: 'Only ' + plan.units + ' of ' + want + ' gifts fit this budget with the current filters.' }));
     }

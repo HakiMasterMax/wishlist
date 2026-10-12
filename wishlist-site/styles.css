@@ -391,3 +391,32 @@ input[type="checkbox"] { width: 18px; height: 18px; margin: 0; accent-color: var
   .info { top: 10px; left: 10px; }
   .info-btn { width: 30px; height: 30px; }
 }
+
+/* ---------- Soft theme: hairline outlines and soft shadows (overrides the chunky defaults above) ---------- */
+:root { --line: #CBD3F2; }
+.panel, .dialog, .bubble { border: 1.5px solid var(--line); box-shadow: 0 6px 18px rgba(43, 42, 92, 0.08); border-radius: 18px; }
+.card { border: 1.5px solid var(--line); box-shadow: 0 4px 14px rgba(43, 42, 92, 0.07); border-radius: 16px; padding: 10px; transition: transform .15s ease, box-shadow .15s ease; }
+.card:hover { transform: translateY(-2px); box-shadow: 0 10px 22px rgba(43, 42, 92, 0.12); }
+.card.is-legendary { border-color: #F0C766; box-shadow: 0 4px 14px rgba(224, 161, 0, 0.16); }
+.grid { gap: 26px 22px; }
+.photo { border: 0; background: #F6F8FF; }
+.chip, .view, .loot-btn, .btn { border: 1.5px solid var(--ink); box-shadow: none; }
+.chip { border-color: #B9C3EE; }
+.chip[aria-pressed="true"] { transform: none; border-color: var(--ink); }
+.info-btn { border: 1.5px solid #B9C3EE; box-shadow: 0 2px 6px rgba(43,42,92,.12); }
+.tag { border: 0; padding: 1px 7px; }
+.tag-vendor-on-gold { background: #FFFFFF; }
+.stat, .quest-tag, .dialog-name { border-width: 1.5px; }
+.text-input, .money-input, .sort select, .star-toggle { border: 1.5px solid #B9C3EE; }
+.plan-row { border: 1px solid var(--line); }
+.planner-right { border: 1.5px dashed #B9C3EE; }
+.star-badge { border-width: 2px; box-shadow: 0 2px 6px rgba(43,42,92,.18); }
+.bubble-tail path { stroke: var(--line); stroke-width: 1.5; }
+.card.is-looted { border-color: #D5D8E6; box-shadow: none; background: #F3F4F9; }
+.card.is-looted:hover { transform: none; box-shadow: none; }
+.looted-stamp { border-width: 2px; box-shadow: 0 3px 8px rgba(43, 42, 92, 0.15); }
+.loot-dialog { border: 1.5px solid var(--line); box-shadow: 0 18px 40px rgba(43, 42, 92, 0.22); }
+.toast { box-shadow: 0 10px 28px rgba(30, 27, 51, 0.3); }
+.chip:hover, .loot-btn:hover, .view:hover { filter: brightness(0.97); }
+.btn:active, .view:active, .loot-btn:active { transform: translateY(1px); }
+@media (prefers-reduced-motion: reduce) { .card, .card:hover { transition: none; transform: none; } }

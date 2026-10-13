@@ -1,6 +1,10 @@
-   <!doctype html>
-   <meta charset="utf-8">
-   <title>Wishlist Item Shop</title>
-   <meta http-equiv="refresh" content="0; url=wishlist-site/">
-   <link rel="canonical" href="wishlist-site/">
-   <a href="wishlist-site/">Go to the wishlist</a>
+<!doctype html>
+<meta charset="utf-8">
+<title>Wishlist Item Shop</title>
+<script>
+  // Forward to the shop, keeping ?shield / ?test-claims and any #hash.
+  location.replace('wishlist-site/' + location.search + location.hash);
+</script>
+<noscript><meta http-equiv="refresh" content="0; url=wishlist-site/"></noscript>
+<link rel="canonical" href="wishlist-site/">
+<a href="wishlist-site/">Go to the wishlist</a>

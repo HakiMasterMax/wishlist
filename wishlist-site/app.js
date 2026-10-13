@@ -428,7 +428,7 @@
     if (legendary) cls += ' is-legendary';
     if (it.looted) cls += ' is-looted';
 
-    return el('article', { class: cls }, [
+    return el('article', { class: cls, 'data-item': it.id }, [
       legendary && el('div', { class: 'star-badge', role: 'img', 'aria-label': 'Legendary: most wanted' }, starSvg(26, '#2B2A5C')),
       photo(it),
       details(it),
@@ -486,9 +486,63 @@
       return;
     }
     closeLootDialog();
+    await lootAnimation(document.querySelector('.card[data-item="' + it.id + '"]'), n);
     applyClaims();
     render();
     showToast(it, n);
+  }
+
+  /* Card lifts forward, grows, then shrinks into a pixel loot bag that pops up at the bottom. */
+  const BAG_SVG = '<svg aria-hidden="true" width="96" height="96" viewBox="0 0 16 15" shape-rendering="crispEdges"><path d="M5 0h1v1h-1zM10 0h1v1h-1zM4 1h1v1h-1zM6 1h1v1h-1zM9 1h1v1h-1zM11 1h1v1h-1zM5 2h1v1h-1zM7 2h2v1h-2zM10 2h1v1h-1zM6 3h1v1h-1zM9 3h1v1h-1zM5 4h6v1h-6zM4 5h1v1h-1zM11 5h1v1h-1zM3 6h1v1h-1zM12 6h1v1h-1zM2 7h1v1h-1zM13 7h1v1h-1zM1 8h1v1h-1zM14 8h1v1h-1zM1 9h1v1h-1zM14 9h1v1h-1zM1 10h1v1h-1zM14 10h1v1h-1zM1 11h1v1h-1zM14 11h1v1h-1zM1 12h1v1h-1zM14 12h1v1h-1zM2 13h1v1h-1zM13 13h1v1h-1zM3 14h10v1h-10z" fill="#2B2A5C"/><path d="M5 1h1v1h-1zM10 1h1v1h-1zM6 2h1v1h-1zM9 2h1v1h-1zM7 3h2v1h-2z" fill="#FF9DBD"/><path d="M5 5h6v1h-6zM4 6h8v1h-8zM3 7h10v1h-10zM2 8h5v1h-5zM8 8h6v1h-6zM2 9h4v1h-4zM9 9h5v1h-5zM2 10h5v1h-5zM8 10h5v1h-5zM2 11h11v1h-11zM2 12h10v1h-10zM3 13h8v1h-8z" fill="#E9B872"/><path d="M13 10h1v1h-1zM13 11h1v1h-1zM12 12h2v1h-2zM11 13h2v1h-2z" fill="#C98F48"/><path d="M7 8h1v1h-1zM6 9h3v1h-3zM7 10h1v1h-1z" fill="#FFD166"/></svg>';
+
+  function lootAnimation(cardEl, n) {
+    const reduce = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    if (!cardEl || reduce || typeof cardEl.animate !== 'function') return Promise.resolve();
+    return new Promise((resolve) => {
+      const r = cardEl.getBoundingClientRect();
+      const ghost = cardEl.cloneNode(true);
+      ghost.classList.add('loot-ghost');
+      Object.assign(ghost.style, {
+        position: 'fixed', left: r.left + 'px', top: r.top + 'px', width: r.width + 'px', height: r.height + 'px',
+        margin: '0', zIndex: '60', pointerEvents: 'none', transition: 'none', transformOrigin: 'center center',
+      });
+      const bag = el('div', { class: 'loot-bag', 'aria-hidden': 'true' }, svg(BAG_SVG));
+      document.body.append(bag, ghost);
+      cardEl.style.visibility = 'hidden';
+
+      const b = bag.getBoundingClientRect();
+      const dx = (b.left + b.width / 2) - (r.left + r.width / 2);
+      const dy = (b.top + b.height * 0.55) - (r.top + r.height / 2);
+      const done = () => { ghost.remove(); bag.remove(); cardEl.style.visibility = ''; resolve(); };
+
+      bag.animate(
+        [{ transform: 'translateY(160%)' }, { transform: 'translateY(-8%)', offset: 0.7 }, { transform: 'translateY(0)' }],
+        { duration: 420, delay: 250, easing: 'ease-out', fill: 'both' },
+      );
+      const fly = ghost.animate([
+        { transform: 'translate(0, 0) scale(1)', boxShadow: '0 4px 14px rgba(43,42,92,0.07)', offset: 0 },
+        { transform: 'translate(0, -14px) scale(1.12)', boxShadow: '0 26px 50px rgba(43,42,92,0.30)', offset: 0.28 },
+        { transform: 'translate(0, -14px) scale(1.12)', boxShadow: '0 26px 50px rgba(43,42,92,0.30)', offset: 0.46 },
+        { transform: 'translate(' + dx + 'px, ' + dy + 'px) scale(0.06) rotate(-10deg)', boxShadow: '0 0 0 rgba(43,42,92,0)', opacity: 0.7, offset: 1 },
+      ], { duration: 1250, easing: 'cubic-bezier(.5,0,.6,1)', fill: 'forwards' });
+
+      fly.onfinish = () => {
+        ghost.remove();
+        const plus = el('div', { class: 'loot-plus', text: '+' + n });
+        bag.append(plus);
+        plus.animate([{ transform: 'translate(-50%, 0)', opacity: 1 }, { transform: 'translate(-50%, -46px)', opacity: 0 }],
+          { duration: 700, easing: 'ease-out', fill: 'forwards' });
+        const gulp = bag.animate([
+          { transform: 'scale(1)' }, { transform: 'scale(1.25, 0.85)' }, { transform: 'scale(0.92, 1.12)' }, { transform: 'scale(1)' },
+        ], { duration: 380, easing: 'ease-out' });
+        gulp.onfinish = () => {
+          const out = bag.animate([{ transform: 'translateY(0)', opacity: 1 }, { transform: 'translateY(160%)', opacity: 0 }],
+            { duration: 320, delay: 260, easing: 'ease-in', fill: 'forwards' });
+          out.onfinish = done;
+        };
+      };
+      setTimeout(() => { if (document.body.contains(bag)) done(); }, 4000); // safety net
+    });
   }
 
   let toastTimer = null;

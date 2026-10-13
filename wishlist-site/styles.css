@@ -421,3 +421,17 @@ input[type="checkbox"] { width: 18px; height: 18px; margin: 0; accent-color: var
 .btn:active, .view:active, .loot-btn:active { transform: translateY(1px); }
 @media (prefers-reduced-motion: reduce) { .card, .card:hover { transition: none; transform: none; } }
 .details { border: 1.5px solid var(--line); box-shadow: 0 8px 20px rgba(43, 42, 92, 0.14); }
+
+/* ---------- Loot animation ---------- */
+.loot-ghost { will-change: transform; }
+.loot-ghost:hover { transform: none; }
+.loot-bag {
+  position: fixed; left: calc(50% - 48px); bottom: 28px; z-index: 59; width: 96px; height: 96px;
+  filter: drop-shadow(0 8px 12px rgba(43, 42, 92, 0.25)); pointer-events: none; transform-origin: 50% 100%;
+}
+.loot-bag svg { display: block; }
+.loot-plus {
+  position: absolute; left: 50%; top: -6px; padding: 0 8px; border-radius: 8px;
+  background: var(--gold); border: 2px solid var(--ink); color: var(--ink);
+  font-family: var(--pixel); font-size: 18px; font-weight: 700;
+}

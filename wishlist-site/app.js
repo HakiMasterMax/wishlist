@@ -7,7 +7,7 @@
  * URL switches
  *   ?shield        turn the spoiler shield ON in this browser (remembered). Claims are never loaded.
  *   ?shield=off    turn the spoiler shield off again in this browser.
- *   ?test-claims   use made-up claims and don't send anything (for working on the site).
+ *   ?test-claims   use made-up claims and don't send anything (works even with the shield on).
  */
 (() => {
   'use strict';
@@ -67,7 +67,8 @@
   const TEST = params.has('test-claims');
   const c = CONFIG.claims;
   const CLAIMS_CONFIGURED = Boolean(c.csvUrl && c.formUrl && c.itemField && c.qtyField);
-  const CLAIMS_ON = !SHIELD && (TEST || CLAIMS_CONFIGURED);
+  // Test mode only ever uses fake claims, so it's allowed even behind the spoiler shield.
+  const CLAIMS_ON = TEST || (!SHIELD && CLAIMS_CONFIGURED);
   const pendingKey = TEST ? PENDING_KEY + '-test' : PENDING_KEY;
 
   const state = {
@@ -747,7 +748,11 @@
 
   function renderModeBadge() {
     const badge = $('#mode-badge');
-    if (SHIELD) {
+    if (TEST) {
+      badge.hidden = false;
+      badge.className = 'mode-badge is-test';
+      badge.replaceChildren(el('span', { text: 'Test mode: fake purchases, nothing is sent' }));
+    } else if (SHIELD) {
       badge.hidden = false;
       badge.className = 'mode-badge is-shield';
       badge.replaceChildren(
@@ -755,10 +760,6 @@
         el('span', { text: 'Spoiler shield on' }),
       );
       badge.title = 'Purchases are hidden in this browser. Visit with ?shield=off to turn this off.';
-    } else if (TEST) {
-      badge.hidden = false;
-      badge.className = 'mode-badge is-test';
-      badge.replaceChildren(el('span', { text: 'Test claims (nothing is sent)' }));
     }
   }
 

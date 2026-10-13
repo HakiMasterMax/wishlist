@@ -60,7 +60,9 @@ The form needs three short-answer questions titled **item**, **quantity** and **
 
 - `…/wishlist/?shield`: turns the shield on in that browser for good. Purchases are never loaded, Loot buttons are hidden, and a "Spoiler shield on" badge shows. Open this once on each of your devices.
 - `…/wishlist/?shield=off`: turns it off again in that browser.
-- `…/wishlist/?test-claims`: fake purchases and nothing gets sent. Use this when working on the site.
+- `…/wishlist/?test-claims`: fake purchases and nothing gets sent. Works even with the shield on, so you can try Loot and the animation safely.
+
+When you change `app.js` or `styles.css`, bump the `?v=` number on them in `index.html` so browsers fetch the new version.
 
 Share the plain link with gift-givers.
 

@@ -11,33 +11,40 @@ window.WISHLIST_CONFIG = {
    * In Google Sheets: File > Share > Publish to web.
    * Pick the tab with your items, choose "Comma-separated values (.csv)",
    * click Publish, and paste the link it gives you here. */
-  sheetUrl: 'https://docs.google.com/spreadsheets/d/e/2PACX-1vQAmDkwXniM3Tz36huytvYjJjBNp1WnambIZV7VS9YQ1-vxYt4ucaziRu6iDFf805wrWUJwmZ9FHalx/pub?output=csv',
+  sheetUrl: 'https://docs.google.com/spreadsheets/d/e/2PACX-1vRSZNbl0gQEVubOM0oLqVKIfxp6GwQ6vL1Gkcu3lHwAoNaFMLurx9XFi10w_N_HRwc-_MJOriC-GL4D/pub?output=csv',
 
 
-  /* ---------- 2. Photos ----------
-   * Photos live in this folder in the repo. The "image" column in your sheet
-   * holds the file name (with or without .jpg). Names are case-sensitive. */
+  /* ---------- 2. Your name ----------
+   * Shown to gift-givers, e.g. "Sam won't see it" when they mark something as bought.
+   * Leave blank to say "The wishlist owner". */
+  ownerName: '',
+
+
+  /* ---------- 3. Photos ----------
+   * Easiest: paste a photo link into the sheet's "image" column and ignore this.
+   * To host photos in the repo instead, upload them to this folder and put the
+   * file name in the "image" column (with or without .jpg). Names are case-sensitive. */
   imageFolder: 'wishlist-images/',
 
 
-  /* ---------- 3. Gift planner ----------
+  /* ---------- 4. Gift planner ----------
    * Part of a gift-giver's budget the planner holds back for tax and shipping.
    * 0.15 means 15%. Use 0 to turn it off. */
   taxShippingBuffer: 0.15,
 
 
-  /* ---------- 4. "Looted" claims (optional) ----------
+  /* ---------- 5. "Looted" claims (optional) ----------
    * Lets gift-givers mark items as bought so nobody doubles up.
    * Leave these blank to turn the feature off. Setup steps are in the README. */
   claims: {
     // The claims form's response sheet, published as CSV.
-    csvUrl: 'https://docs.google.com/spreadsheets/d/e/2PACX-1vRdSsy_4ciPhZl43oc8Yx3iC8HfDeyepumtFmE_HhiO5FjC4LZXQ7HaYmFok0QI3mmuSlZoH3lFuQaW/pub?output=csv',
+    csvUrl: '',
     // The form's address, ending in /formResponse.
-    formUrl: 'https://docs.google.com/forms/d/e/1FAIpQLScZ8d-t2U92YeqPuCLlDhBSLJbsCOp80O7cXAP1P75z2SD_dA/formResponse',
+    formUrl: '',
     // The entry.123456 ids for the form's item, quantity and ref questions.
-    itemField: 'entry.1737454356',
-    qtyField: 'entry.871293525',
-    refField: 'entry.511342756',
+    itemField: '',
+    qtyField: '',
+    refField: '',
   },
 
 

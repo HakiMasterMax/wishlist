@@ -36,7 +36,7 @@ Edit the Google Sheet. The published CSV refreshes within about 5 minutes, and t
 | `starred` | `TRUE` (or yes / x / ✓, or a ticked checkbox) makes the item **Legendary**: gold card, star badge, picked first |
 | `shop` | Where it's sold. Becomes a filter and a tag |
 | `category` | What kind of thing it is, separated by `:` (e.g. `craft: clothing`). Blank counts as **Other** |
-| `image` | Photo file name in `wishlist-images/`, with or without the extension (e.g. `ear-muffs-amazon`) |
+| `image` | A link to the photo (right-click the product photo → **Copy image address**), or a file name in `wishlist-images/` |
 | `link` | Where the **View** button goes (opens in a new tab) |
 
 Only `name` is required, and columns can be in any order. Headers are matched loosely, so `Starred?`, `Shop name` or `IMAGE` all work. The older names (`item_name`, `excite`, `source`, `tags`, `image_name`, `color_or_pattern`) still work too.
@@ -49,7 +49,9 @@ Set a row's category to `gift card` and put the smallest amount in `price` (or l
 
 ### Adding a photo
 
-Save it into `wishlist-images/` with exactly the name in the `image` column, plus `.jpg` (or `.png`/`.webp`), then upload it to the repo. Names are case-sensitive on GitHub Pages. Keep photos around 900px wide so the page stays quick.
+The easy way: on the product page, right-click the photo, choose **Copy image address**, and paste that into the `image` column. Google Drive share links work too, as long as the file is shared with "Anyone with the link". If a photo can't load, the card shows a placeholder.
+
+Or keep photos in the repo: save it into `wishlist-images/` with exactly the name in the `image` column, plus `.jpg` (or `.png`/`.webp`), then upload it to the repo. Names are case-sensitive on GitHub Pages. Keep photos around 900px wide so the page stays quick.
 
 ## Looting (gift-givers marking things as bought)
 

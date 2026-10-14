@@ -383,6 +383,18 @@
 
   /* ---------- cards ---------- */
 
+  // The image column holds either a pasted image link or a file name in the photo folder.
+  function imageCandidates(value) {
+    const v = value.trim();
+    if (/^https?:\/\//i.test(v)) {
+      // A Google Drive share link points at a viewer page, not the image itself.
+      const drive = v.match(/drive\.google\.com\/(?:file\/d\/|open\?id=|uc\?(?:export=\w+&)?id=)([\w-]{10,})/i);
+      return [drive ? 'https://drive.google.com/thumbnail?id=' + drive[1] + '&sz=w1000' : v];
+    }
+    const base = CONFIG.imageFolder + encodeURIComponent(v);
+    return /\.[a-z0-9]{2,5}$/i.test(v) ? [base] : CONFIG.imageExtensions.map((ext) => base + '.' + ext);
+  }
+
   function photo(it) {
     const box = el('div', { class: 'photo' });
     const placeholder = () => el('div', { class: 'photo-empty' }, [
@@ -390,10 +402,10 @@
       'no photo yet',
     ]);
     if (it.image) {
-      const base = CONFIG.imageFolder + encodeURIComponent(it.image);
-      const candidates = /\.[a-z0-9]{2,5}$/i.test(it.image) ? [base] : CONFIG.imageExtensions.map((ext) => base + '.' + ext);
+      const candidates = imageCandidates(it.image);
       let i = 0;
-      const img = el('img', { alt: it.name, loading: 'lazy', decoding: 'async', src: candidates[0] });
+      // no-referrer: some shops refuse images requested from other sites.
+      const img = el('img', { alt: it.name, loading: 'lazy', decoding: 'async', referrerpolicy: 'no-referrer', src: candidates[0] });
       img.addEventListener('error', () => {
         i += 1;
         if (i < candidates.length) img.src = candidates[i];

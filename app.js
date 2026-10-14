@@ -29,8 +29,8 @@
   if (CONFIG.imageFolder && !CONFIG.imageFolder.endsWith('/')) CONFIG.imageFolder += '/';
   CONFIG.pricesUrls = pricesUrls();
 
-  // Daily prices are written to prices.json by the GitHub Action (scripts/update-prices.mjs).
-  // On GitHub Pages, read the raw file first: it updates right away, while Pages can lag a few minutes.
+  // Daily prices are written to prices.json on the repo's "prices" branch by the GitHub Action
+  // (scripts/update-prices.mjs). On GitHub Pages, read it from there; locally, try a prices.json next to the page.
   function pricesUrls() {
     const urls = [];
     const host = window.location.hostname.match(/^([^.]+)\.github\.io$/i);
@@ -38,7 +38,7 @@
       const first = window.location.pathname.split('/').filter(Boolean)[0];
       // A project site lives at owner.github.io/<repo>/; a user site's repo is named owner.github.io.
       const repo = first && first.toLowerCase() !== 'index.html' ? first : host[1] + '.github.io';
-      urls.push('https://raw.githubusercontent.com/' + host[1] + '/' + repo + '/HEAD/prices.json');
+      urls.push('https://raw.githubusercontent.com/' + host[1] + '/' + repo + '/prices/prices.json');
     }
     urls.push('prices.json');
     return urls;

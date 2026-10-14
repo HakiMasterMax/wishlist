@@ -26,18 +26,27 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: 20
+      # Prices live on their own "prices" branch so the daily check never adds
+      # commits to main (which would make "Sync fork" conflict for everyone).
+      - name: Load the last prices
+        run: git fetch --depth=1 origin prices && git show origin/prices:prices.json > prices.json || echo "No prices branch yet"
       - name: Check prices
         run: node scripts/update-prices.mjs
         env:
           ETSY_API_KEY: ${{ secrets.ETSY_API_KEY }}
-      - name: Save prices.json
+      - name: Save prices to the prices branch
         run: |
-          if git diff --quiet -- prices.json && git ls-files --error-unmatch prices.json >/dev/null 2>&1; then
-            echo "No changes"; exit 0
+          [ -f prices.json ] || { echo "Nothing to save"; exit 0; }
+          if git cat-file -e origin/prices:prices.json 2>/dev/null && \
+             [ "$(git show origin/prices:prices.json | grep -v '"updated"')" = "$(grep -v '"updated"' prices.json)" ]; then
+            echo "Prices unchanged"; exit 0
           fi
+          out="$RUNNER_TEMP/prices-branch"
+          mkdir -p "$out" && cp prices.json "$out/" && cd "$out"
+          git init -q && git checkout -q -b prices
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add prices.json
-          git commit -m "Update prices"
-          git pull --rebase origin main
-          git push
+          git add prices.json && git commit -q -m "Update prices"
+          git push -f "https://x-access-token:${GH_TOKEN}@github.com/${GITHUB_REPOSITORY}.git" prices
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}

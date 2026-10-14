@@ -91,11 +91,203 @@
     { id: 'd', label: '$100+', min: 100, max: Infinity },
   ];
 
-  const GIFT_SVG = '<svg aria-hidden="true" width="16" height="16" viewBox="0 0 16 16" shape-rendering="crispEdges"><path d="M2 6h12v8H2z" fill="#FF9DBD"/><path d="M1 4h14v3H1z" fill="#FFC2D8"/><path d="M7 4h2v10H7z" fill="#FFD166"/><path d="M1 4h14v1H1zM1 6h14v1H1zM1 4h1v3H1zM14 4h1v3h-1zM2 7h1v7H2zM13 7h1v7h-1zM2 13h12v1H2zM4 1h2v1H4zM10 1h2v1h-2zM3 2h1v2H3zM6 2h1v2H6zM9 2h1v2H9zM12 2h1v2h-1z" fill="#2B2A5C"/></svg>';
+  const GIFT_SVG = '<svg aria-hidden="true" width="16" height="16" viewBox="0 0 16 16" shape-rendering="crispEdges"><path d="M2 6h12v8H2z" style="fill:var(--accent)"/><path d="M1 4h14v3H1z" style="fill:var(--accent-mid)"/><path d="M7 4h2v10H7z" style="fill:var(--star)"/><path d="M1 4h14v1H1zM1 6h14v1H1zM1 4h1v3H1zM14 4h1v3h-1zM2 7h1v7H2zM13 7h1v7h-1zM2 13h12v1H2zM4 1h2v1H4zM10 1h2v1h-2zM3 2h1v2H3zM6 2h1v2H6zM9 2h1v2H9zM12 2h1v2h-1z" style="fill:var(--text)"/></svg>';
   const STAR_PATH = 'M12 2.5l2.9 6 6.6.9-4.8 4.6 1.2 6.5L12 17.4 6.1 20.5l1.2-6.5L2.5 9.4l6.6-.9z';
   const SHIELD_KEY = 'wishlist-spoiler-shield';
   const PENDING_KEY = 'wishlist-pending-claims';
   const PENDING_TTL = 10 * 60 * 1000; // a local claim counts for 10 min or until the sheet shows it
+
+  /* ---------- theme: words and art ----------
+   * Plain default wording. A theme's theme.json "text" can replace any of these.
+   * {placeholders} are filled in; "one | many" picks a form by {n}; {i} becomes the little info icon. */
+  const TEXT = {
+    title: 'My Wishlist',
+    eventTag: '',
+    welcomeName: '',
+    welcome: 'Everything here is on my wishlist. Starred items are the ones I want most. Tap the {i} on a photo for sizes, colors and notes.',
+    footer: 'Made from a spreadsheet.',
+    loading: 'loading…',
+    'stat.items': '{n} item | {n} items',
+    'stat.starred': '{n} starred',
+    'stat.shops': '{n} shop | {n} shops',
+    starred: 'Starred',
+    starredOnly: 'Starred only',
+    starBadge: 'Starred: most wanted',
+    searchLabel: 'Search',
+    searchPlaceholder: 'Search the list',
+    typeFilter: 'Category',
+    shopFilter: 'Shop',
+    priceFilter: 'Price',
+    reset: 'Reset filters',
+    filtersLabel: 'Filters',
+    resultsLabel: 'Wishlist items',
+    sortLabel: 'Sort',
+    sortStarred: 'Starred first',
+    sortLow: 'Price: low to high',
+    sortHigh: 'Price: high to low',
+    sortName: 'Name A to Z',
+    count: '{left} / {total} available',
+    countLooted: ' · {n} bought',
+    'empty.title': 'Nothing matches',
+    'empty.text': 'No items match those filters. Loosen one or reset them.',
+    detailsTitle: 'DETAILS',
+    detailsAria: 'Details for {name}',
+    'details.size': 'Size',
+    'details.color': 'Color',
+    'details.wanted': 'Wanted',
+    'details.notes': 'Notes',
+    'details.price': 'Price',
+    'details.checked': 'Checked {date} on {shop}',
+    hint: 'Sizes & notes in here',
+    dismissTip: 'Dismiss tip',
+    view: 'View',
+    viewAria: 'View {name} on {shop} (opens in a new tab)',
+    sale: 'Sale −{pct}%',
+    wasAria: 'was {amount}',
+    qtyWanted: 'Quantity wanted',
+    qtyLeft: '{left} of {qty} left',
+    qtyLeftTitle: '{left} of {qty} still needed',
+    giftFrom: 'From {amount}',
+    giftAny: 'Any amount',
+    priceUnknown: 'price ?',
+    loot: 'Bought it',
+    lootAria: 'Mark {name} as bought',
+    lootedTag: 'Bought',
+    lootedStamp: 'BOUGHT',
+    lootedNote: 'Already gifted. Thank you!',
+    lootTitle: 'Mark as bought?',
+    lootCopy: "This tells other gift-givers you bought it, so nobody doubles up. {owner} won't see it.",
+    owner: 'The wishlist owner',
+    lootQty: 'How many did you get?',
+    lootLeft: '{left} of {qty} still needed.',
+    lootError: "Couldn't save that. Check your connection and try again.",
+    cancel: 'Cancel',
+    lootConfirm: 'Mark as bought',
+    toast: 'Thanks! {qty}{name} is marked as gifted.',
+    undo: 'Undo',
+    dismiss: 'Dismiss',
+    'mode.test': 'Test mode: fake purchases, nothing is sent',
+    'mode.shield': 'Spoiler shield on',
+    'mode.shieldTitle': 'Purchases are hidden in this browser. Visit with ?shield=off to turn this off.',
+    plannerTitle: 'Gift helper',
+    plannerTag: '',
+    mascotLabel: '',
+    budgetLabel: 'Budget',
+    countLabel: 'Number of gifts',
+    optional: '(optional)',
+    countPlaceholder: 'any',
+    'planner.loading': 'Loading the list…',
+    'planner.idle': "Enter a budget and I'll suggest gifts that fit.",
+    'planner.emptyTitle': 'No picks yet',
+    'planner.emptySub': 'Only items the filters are showing are considered.',
+    'planner.emptySubClaims': 'Only items the filters are showing are considered, and anything already bought is skipped.',
+    'planner.bufferNote': '{pct}% of your budget is saved for tax and shipping.',
+    'planner.none': 'Nothing fits under {budget} once some is saved for tax and shipping. Try a bigger budget or fewer filters.',
+    'planner.noneTitle': 'Nothing fits',
+    'planner.noneSub': 'After setting aside {reserve} for tax and shipping, nothing still available fits in {budget}. Raise the budget or loosen the filters.',
+    'planner.onlyCard': 'Nothing on the list fits, but a {amount} {name} does!',
+    'planner.foundOne': 'Found one!',
+    'planner.foundMany': 'Found {n}!',
+    'planner.topUp': '…plus a {amount} {name} to use up the rest!',
+    'planner.starredFirst': 'Starred items went in first.',
+    'planner.squeezed': 'Used as much of the budget as possible.',
+    'planner.picksTitle': 'Suggested gifts',
+    'planner.gifts': '{n} gift | {n} gifts',
+    'planner.plusCard': ' + gift card',
+    'planner.giftCard': 'gift card',
+    'planner.total': 'Gifts {amount}',
+    'planner.reserve': '+ ~{amount} est. tax & shipping',
+    'planner.spare': '{amount} spare',
+    'planner.bufferHint': 'About {pct}% of the budget is set aside as a rough guess for tax and shipping. Real costs vary by shop and location, so check the total at checkout.',
+    'planner.onlyFit': 'Only {n} of {want} gifts fit this budget with the current filters.',
+    'planner.maxBudget': 'The planner can only count up to {amount} at a time.',
+    'planner.claimHint': 'Bought one? Mark it on its card so nobody doubles up.',
+    'planner.giftCardMeta': 'Gift card',
+    'planner.giftCardMetaRest': 'Gift card · uses up the rest',
+    'planner.undone': "Undone. It's back on the list.",
+    'error.title': 'The list is unavailable',
+    'error.text': 'The wishlist could not be loaded right now. Please refresh the page in a little while.',
+    'error.line': "I couldn't reach the spreadsheet. Try refreshing in a minute?",
+    'setup.title': 'No sheet connected yet',
+    'setup.text': 'Paste your published Google Sheet link into sheetUrl in config.js. The README has step-by-step setup.',
+    'setup.line': 'This list has no items yet. Someone needs to connect a spreadsheet.',
+  };
+
+  const THEME = { name: window.WISHLIST_THEME || 'rpg-shop', text: {}, mascot: null, art: {} };
+
+  function t(key, vars) {
+    let s = Object.prototype.hasOwnProperty.call(THEME.text, key) ? THEME.text[key] : TEXT[key];
+    if (s == null) return key;
+    s = String(s);
+    const v = { mascot: (THEME.mascot && THEME.mascot.name) || 'The planner', ...vars };
+    if (s.includes(' | ')) { const [one, many] = s.split(' | '); s = v.n === 1 ? one : many; }
+    return s.replace(/\{(\w+)\}/g, (m, k) => (k !== 'i' && v[k] != null ? String(v[k]) : m));
+  }
+
+  // Sets an element's text, turning {i} into the little info icon.
+  function fillText(node, s) {
+    const parts = String(s).split('{i}');
+    node.replaceChildren(...parts.flatMap((p, n) => (n ? [infoIcon(), p] : [p])));
+  }
+  const infoIcon = () => {
+    const i = document.createElement('span');
+    i.className = 'inline-i'; i.setAttribute('aria-label', 'info'); i.textContent = 'i';
+    return i;
+  };
+
+  // Theme art is plain SVG. Anything script-like is stripped before it touches the page.
+  function safeSvg(markup) {
+    const doc = new DOMParser().parseFromString(markup, 'image/svg+xml');
+    const root = doc.documentElement;
+    if (!root || root.nodeName.toLowerCase() !== 'svg' || doc.getElementsByTagName('parsererror').length) return null;
+    root.querySelectorAll('script, foreignObject').forEach((n) => n.remove());
+    [root, ...root.querySelectorAll('*')].forEach((n) => [...n.attributes].forEach((a) => {
+      if (/^on/i.test(a.name) || /^\s*javascript:/i.test(a.value)) n.removeAttribute(a.name);
+    }));
+    return document.importNode(root, true);
+  }
+
+  async function loadTheme() {
+    const base = 'themes/' + THEME.name + '/';
+    let data = {};
+    try {
+      const res = await fetch(base + 'theme.json', { cache: 'no-cache' });
+      if (!res.ok) throw new Error('HTTP ' + res.status);
+      data = await res.json();
+    } catch (err) {
+      console.warn('[wishlist] could not load theme "' + THEME.name + '", using plain defaults:', err);
+    }
+    THEME.text = (data && data.text) || {};
+    THEME.mascot = (data && data.mascot) || null;
+    const art = (data && data.art) || {};
+    await Promise.all(Object.entries(art).map(async ([slot, file]) => {
+      if (!/^[\w./-]+\.svg$/i.test(String(file)) || String(file).includes('..')) return;
+      try {
+        const res = await fetch(base + file, { cache: 'no-cache' });
+        const node = res.ok ? safeSvg(await res.text()) : null;
+        if (node) THEME.art[slot] = node;
+      } catch (err) { console.warn('[wishlist] could not load theme art', file, err); }
+    }));
+    applyTheme();
+  }
+
+  function applyTheme() {
+    document.title = t('title');
+    document.querySelectorAll('[data-t]').forEach((n) => fillText(n, t(n.dataset.t)));
+    document.querySelectorAll('[data-t-placeholder]').forEach((n) => n.setAttribute('placeholder', t(n.dataset.tPlaceholder)));
+    document.querySelectorAll('[data-t-aria]').forEach((n) => n.setAttribute('aria-label', t(n.dataset.tAria)));
+    document.querySelectorAll('[data-hide-if-empty]').forEach((n) => { n.hidden = !t(n.dataset.hideIfEmpty); });
+    fillText($('#loot-copy'), t('lootCopy', { owner: String(CONFIG.ownerName || '').trim() || t('owner') }));
+    document.querySelectorAll('[data-art]').forEach((slot) => {
+      const art = THEME.art[slot.dataset.art];
+      slot.replaceChildren(...(art ? [art.cloneNode(true)] : []));
+    });
+    const hasMascot = ['mascotIdle', 'mascotHappy', 'mascotSad'].some((k) => THEME.art[k]);
+    if (THEME.mascot && THEME.mascot.idle) $('#mascot').setAttribute('aria-label', THEME.mascot.idle);
+    $('.mascot-col').hidden = !hasMascot;
+    $('.planner').classList.toggle('no-mascot', !hasMascot);
+    document.documentElement.classList.remove('theme-loading');
+  }
 
   /* ---------- mode ---------- */
 
@@ -160,15 +352,14 @@
     return t.content.firstChild;
   }
 
-  const starSvg = (size, fill) =>
-    svg(`<svg aria-hidden="true" width="${size}" height="${size}" viewBox="0 0 24 24"><path d="${STAR_PATH}" fill="${fill}"/></svg>`);
+  const starSvg = (size) =>
+    svg(`<svg aria-hidden="true" width="${size}" height="${size}" viewBox="0 0 24 24"><path d="${STAR_PATH}" style="fill:var(--text)"/></svg>`);
   const chestSvg = () =>
-    svg('<svg aria-hidden="true" width="16" height="16" viewBox="0 0 16 16" shape-rendering="crispEdges"><path d="M2 5h12v9H2z" fill="#FFD166"/><path d="M2 5h12v1H2zM2 13h12v1H2zM1 5h1v9H1zM14 5h1v9h-1zM2 8h12v1H2zM3 3h10v2H3zM2 4h1v1H2zM13 4h1v1h-1zM4 2h8v1H4z" fill="currentColor"/><path d="M7 7h2v3H7z" fill="currentColor"/></svg>');
+    svg('<svg aria-hidden="true" width="16" height="16" viewBox="0 0 16 16" shape-rendering="crispEdges"><path d="M2 5h12v9H2z" style="fill:var(--star)"/><path d="M2 5h12v1H2zM2 13h12v1H2zM1 5h1v9H1zM14 5h1v9h-1zM2 8h12v1H2zM3 3h10v2H3zM2 4h1v1H2zM13 4h1v1h-1zM4 2h8v1H4z" fill="currentColor"/><path d="M7 7h2v3H7z" fill="currentColor"/></svg>');
 
   const fmt = (v) => '$' + (Math.round(v * 100) % 100 === 0 ? String(Math.round(v)) : v.toFixed(2));
   const titleCase = (s) => s.toLowerCase().replace(/(^|[\s/-])(\w)/g, (m, a, b) => a + b.toUpperCase());
   const truthy = (v) => /^(true|yes|y|1|x|✓)$/i.test(String(v).trim());
-  const plural = (n, one, many) => n + ' ' + (n === 1 ? one : many);
   const safeUrl = (u) => (/^https?:\/\//i.test(u) ? u : null);
   const keyOf = (name) => String(name).trim().toLowerCase().replace(/\s+/g, ' ');
 
@@ -432,24 +623,24 @@
     } else {
       box.append(placeholder());
     }
-    if (it.looted) box.append(el('div', { class: 'looted-stamp', 'aria-hidden': 'true', text: 'LOOTED' }));
+    if (it.looted) box.append(el('div', { class: 'looted-stamp', 'aria-hidden': 'true', text: t('lootedStamp') }));
     return box;
   }
 
   function details(it) {
     const rows = [];
-    if (it.size) rows.push(['Size', it.size]);
-    if (it.color) rows.push(['Color', it.color]);
-    if (it.qty > 1) rows.push(['Wanted', '×' + it.qty]);
-    if (it.notes) rows.push(['Notes', it.notes]);
-    if (it.checked) rows.push(['Price', 'Checked ' + it.checked.toLocaleDateString(undefined, { month: 'short', day: 'numeric' }) + ' on ' + it.vendor]);
+    if (it.size) rows.push([t('details.size'), it.size]);
+    if (it.color) rows.push([t('details.color'), it.color]);
+    if (it.qty > 1) rows.push([t('details.wanted'), '×' + it.qty]);
+    if (it.notes) rows.push([t('details.notes'), it.notes]);
+    if (it.checked) rows.push([t('details.price'), t('details.checked', { date: it.checked.toLocaleDateString(undefined, { month: 'short', day: 'numeric' }), shop: it.vendor })]);
     if (!rows.length) return null;
 
     const id = 'details-' + it.id;
     const wrap = el('div', { class: 'info' });
     const btn = el('button', {
       type: 'button', class: 'info-btn', 'aria-expanded': 'false', 'aria-controls': id,
-      'aria-label': 'Details for ' + it.name,
+      'aria-label': t('detailsAria', { name: it.name }),
       onclick: (e) => {
         e.stopPropagation();
         dismissHint();
@@ -460,7 +651,7 @@
       },
     }, svg('<svg aria-hidden="true" width="20" height="20" viewBox="0 0 8 8" shape-rendering="crispEdges"><path d="M3 1h2v1h-2zM3 3h2v4h-2z" fill="currentColor"/></svg>'));
     const panel = el('div', { class: 'details', id, role: 'note' }, [
-      el('div', { class: 'details-title', text: 'ITEM DETAILS' }),
+      el('div', { class: 'details-title', text: t('detailsTitle') }),
       el('dl', null, rows.flatMap(([k, v]) => [el('dt', { text: k }), el('dd', { text: v })])),
     ]);
     wrap.append(btn, panel);
@@ -475,37 +666,37 @@
   }
 
   function qtyTag(it) {
-    if (it.looted) return el('span', { class: 'tag tag-looted', text: 'Looted' });
+    if (it.looted) return el('span', { class: 'tag tag-looted', text: t('lootedTag') });
     if (CLAIMS_ON && it.qty > 1) {
-      return el('span', { class: 'tag tag-qty', title: it.remaining + ' of ' + it.qty + ' still needed', text: it.remaining + ' of ' + it.qty + ' left' });
+      return el('span', { class: 'tag tag-qty', title: t('qtyLeftTitle', { left: it.remaining, qty: it.qty }), text: t('qtyLeft', { left: it.remaining, qty: it.qty }) });
     }
-    if (it.qty > 1) return el('span', { class: 'tag tag-qty', title: 'Quantity wanted', text: '×' + it.qty });
+    if (it.qty > 1) return el('span', { class: 'tag tag-qty', title: t('qtyWanted'), text: '×' + it.qty });
     return null;
   }
 
   function card(it) {
     const legendary = it.starred;
     const tags = [
-      legendary && el('span', { class: 'tag tag-legend', text: 'Legendary' }),
+      legendary && el('span', { class: 'tag tag-legend', text: t('starred') }),
       el('span', { class: 'tag' + (legendary ? ' tag-vendor-on-gold' : ''), text: it.vendor }),
       el('span', { class: 'tag tag-type', text: it.tags.join(' + ') }),
-      it.wasPrice && el('span', { class: 'tag tag-sale', text: 'Sale −' + it.salePct + '%' }),
+      it.wasPrice && el('span', { class: 'tag tag-sale', text: t('sale', { pct: it.salePct }) }),
       qtyTag(it),
     ];
     const view = it.link
       ? el('a', {
           class: 'view', href: it.link, target: '_blank', rel: 'noopener noreferrer',
-          'aria-label': 'View ' + it.name + ' on ' + it.vendor + ' (opens in a new tab)',
+          'aria-label': t('viewAria', { name: it.name, shop: it.vendor }),
         }, [
-          el('span', { text: 'View' }),
+          el('span', { text: t('view') }),
           svg('<svg aria-hidden="true" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17L17 7M9 7h8v8"/></svg>'),
         ])
       : null;
     const loot = CLAIMS_ON && !it.looted && !it.giftCard
       ? el('button', {
-          type: 'button', class: 'loot-btn', 'aria-label': 'Mark ' + it.name + ' as looted (purchased)',
+          type: 'button', class: 'loot-btn', 'aria-label': t('lootAria', { name: it.name }),
           onclick: () => openLootDialog(it),
-        }, [chestSvg(), el('span', { text: 'Loot' })])
+        }, [chestSvg(), el('span', { text: t('loot') })])
       : null;
 
     let cls = 'card';
@@ -513,7 +704,7 @@
     if (it.looted) cls += ' is-looted';
 
     return el('article', { class: cls, 'data-item': it.id }, [
-      legendary && el('div', { class: 'star-badge', role: 'img', 'aria-label': 'Legendary: most wanted' }, starSvg(26, '#2B2A5C')),
+      legendary && el('div', { class: 'star-badge', role: 'img', 'aria-label': t('starBadge') }, starSvg(26)),
       photo(it),
       details(it),
       el('div', { class: 'card-body' }, [
@@ -522,14 +713,14 @@
         el('div', { class: 'card-foot' }, [
           it.giftCard ? el('span', { class: 'price is-giftcard' }, [
             svg(GIFT_SVG),
-            it.giftMin ? 'From ' + fmt(it.giftMin) : 'Any amount',
+            it.giftMin ? t('giftFrom', { amount: fmt(it.giftMin) }) : t('giftAny'),
           ]) : el('span', { class: 'price' + (it.wasPrice ? ' is-sale' : '') }, [
-            Number.isNaN(it.price) ? 'price ?' : fmt(it.price),
-            it.wasPrice && el('s', { class: 'was-price', 'aria-label': 'was ' + fmt(it.wasPrice), text: fmt(it.wasPrice) }),
+            Number.isNaN(it.price) ? t('priceUnknown') : fmt(it.price),
+            it.wasPrice && el('s', { class: 'was-price', 'aria-label': t('wasAria', { amount: fmt(it.wasPrice) }), text: fmt(it.wasPrice) }),
           ]),
           el('div', { class: 'card-actions' }, [loot, view]),
         ]),
-        it.looted && el('p', { class: 'looted-note', text: 'Already gifted. Thank you!' }),
+        it.looted && el('p', { class: 'looted-note', text: t('lootedNote') }),
       ]),
     ]);
   }
@@ -546,7 +737,7 @@
     qty.max = String(it.remaining);
     qty.value = '1';
     $('#loot-qty-row').hidden = it.remaining <= 1;
-    $('#loot-left').textContent = it.qty > 1 ? it.remaining + ' of ' + it.qty + ' still needed.' : '';
+    $('#loot-left').textContent = it.qty > 1 ? t('lootLeft', { left: it.remaining, qty: it.qty }) : '';
     $('#loot-error').hidden = true;
     $('#loot-confirm').disabled = false;
     if (typeof dlg.showModal === 'function') dlg.showModal();
@@ -583,7 +774,6 @@
   }
 
   /* Card lifts forward, grows, then shrinks into a pixel loot bag that pops up at the bottom. */
-  const BAG_SVG = '<svg aria-hidden="true" width="96" height="96" viewBox="0 0 16 15" shape-rendering="crispEdges"><path d="M5 0h1v1h-1zM10 0h1v1h-1zM4 1h1v1h-1zM6 1h1v1h-1zM9 1h1v1h-1zM11 1h1v1h-1zM5 2h1v1h-1zM7 2h2v1h-2zM10 2h1v1h-1zM6 3h1v1h-1zM9 3h1v1h-1zM5 4h6v1h-6zM4 5h1v1h-1zM11 5h1v1h-1zM3 6h1v1h-1zM12 6h1v1h-1zM2 7h1v1h-1zM13 7h1v1h-1zM1 8h1v1h-1zM14 8h1v1h-1zM1 9h1v1h-1zM14 9h1v1h-1zM1 10h1v1h-1zM14 10h1v1h-1zM1 11h1v1h-1zM14 11h1v1h-1zM1 12h1v1h-1zM14 12h1v1h-1zM2 13h1v1h-1zM13 13h1v1h-1zM3 14h10v1h-10z" fill="#2B2A5C"/><path d="M5 1h1v1h-1zM10 1h1v1h-1zM6 2h1v1h-1zM9 2h1v1h-1zM7 3h2v1h-2z" fill="#FF9DBD"/><path d="M5 5h6v1h-6zM4 6h8v1h-8zM3 7h10v1h-10zM2 8h5v1h-5zM8 8h6v1h-6zM2 9h4v1h-4zM9 9h5v1h-5zM2 10h5v1h-5zM8 10h5v1h-5zM2 11h11v1h-11zM2 12h10v1h-10zM3 13h8v1h-8z" fill="#E9B872"/><path d="M13 10h1v1h-1zM13 11h1v1h-1zM12 12h2v1h-2zM11 13h2v1h-2z" fill="#C98F48"/><path d="M7 8h1v1h-1zM6 9h3v1h-3zM7 10h1v1h-1z" fill="#FFD166"/></svg>';
 
   function lootAnimation(cardEl, n) {
     const reduce = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
@@ -596,7 +786,7 @@
         position: 'fixed', left: r.left + 'px', top: r.top + 'px', width: r.width + 'px', height: r.height + 'px',
         margin: '0', zIndex: '60', pointerEvents: 'none', transition: 'none', transformOrigin: 'center center',
       });
-      const bag = el('div', { class: 'loot-bag', 'aria-hidden': 'true' }, svg(BAG_SVG));
+      const bag = el('div', { class: 'loot-bag', 'aria-hidden': 'true' }, THEME.art.lootBag ? THEME.art.lootBag.cloneNode(true) : null);
       document.body.append(bag, ghost);
       cardEl.style.visibility = 'hidden';
 
@@ -639,20 +829,20 @@
   function showToast(it, n) {
     const toast = $('#toast');
     const undo = el('button', {
-      type: 'button', class: 'toast-undo', text: 'Undo',
+      type: 'button', class: 'toast-undo', text: t('undo'),
       onclick: async () => {
         undo.disabled = true;
         try { await sendClaim(it, -n); } catch (err) { console.error(err); undo.disabled = false; return; }
         applyClaims();
         render();
         hideToast();
-        setSmudge($('#smudge').dataset.mood, 'Phew, un-looted! It is back on the shelf.');
+        setMascot($('#mascot').dataset.mood, t('planner.undone'));
       },
     });
     toast.replaceChildren(
-      el('span', { class: 'toast-text', text: 'Looted! ' + (n > 1 ? n + ' × ' : '') + it.name + ' is marked as gifted.' }),
+      el('span', { class: 'toast-text', text: t('toast', { qty: n > 1 ? n + ' × ' : '', name: it.name }) }),
       undo,
-      el('button', { type: 'button', class: 'toast-close', 'aria-label': 'Dismiss', text: '×', onclick: hideToast }),
+      el('button', { type: 'button', class: 'toast-close', 'aria-label': t('dismiss'), text: '×', onclick: hideToast }),
     );
     toast.hidden = false;
     clearTimeout(toastTimer);
@@ -729,9 +919,12 @@
     return { state: 'show', picks, units, total };
   }
 
-  function setSmudge(mood, line) {
-    $('#smudge').dataset.mood = mood;
-    $('#smudge-line').textContent = line;
+  function setMascot(mood, line) {
+    const m = $('#mascot');
+    m.dataset.mood = mood;
+    const label = THEME.mascot && THEME.mascot[mood];
+    if (label) m.setAttribute('aria-label', label); else m.removeAttribute('aria-label');
+    $('#mascot-line').textContent = line;
   }
 
   // Pick a gift card to fill leftover budget: legendary first, then sheet order. Blank minimum counts as $5.
@@ -750,14 +943,12 @@
     const plan = planGifts(list, giftBudget, want > 0 ? want : 0);
 
     if (plan.state === 'idle') {
-      setSmudge('idle', 'Psst! Tell me your budget and I will dig through the shop for the best loot.');
+      setMascot('idle', t('planner.idle'));
       box.replaceChildren(el('div', { class: 'plan-empty' }, [
-        svg('<svg aria-hidden="true" width="44" height="44" viewBox="0 0 24 24" fill="#FFFFFF" stroke="#2B2A5C" stroke-width="1.8" stroke-linejoin="round"><path d="M12 2 L21 7 V17 L12 22 L3 17 V7 Z"/><path d="M12 7 L17.5 16 H6.5 Z" fill="#FFD166"/><path d="M12 2 V7 M3 7 L6.5 16 M21 7 L17.5 16 M12 22 L6.5 16 M12 22 L17.5 16" fill="none"/></svg>'),
-        el('div', { class: 'plan-empty-title', text: 'No loot yet' }),
-        el('p', { class: 'plan-empty-sub', text: (CLAIMS_ON
-          ? 'Smudge only digs through items the shop filters are showing, and skips anything already looted.'
-          : 'Smudge only digs through items the shop filters are showing.') +
-          (buffer > 0 ? ' ' + Math.round(buffer * 100) + '% of your budget is saved for tax and shipping.' : '') }),
+        svg('<svg aria-hidden="true" width="44" height="44" viewBox="0 0 24 24" stroke-width="1.8" stroke-linejoin="round" style="fill:var(--surface);stroke:var(--text)"><path d="M12 2 L21 7 V17 L12 22 L3 17 V7 Z"/><path d="M12 7 L17.5 16 H6.5 Z" style="fill:var(--star)"/><path d="M12 2 V7 M3 7 L6.5 16 M21 7 L17.5 16 M12 22 L6.5 16 M12 22 L17.5 16" fill="none"/></svg>'),
+        el('div', { class: 'plan-empty-title', text: t('planner.emptyTitle') }),
+        el('p', { class: 'plan-empty-sub', text: t(CLAIMS_ON ? 'planner.emptySubClaims' : 'planner.emptySub') +
+          (buffer > 0 ? ' ' + t('planner.bufferNote', { pct: Math.round(buffer * 100) }) : '') }),
       ]));
       return;
     }
@@ -772,27 +963,27 @@
     }
 
     if (plan.state === 'none') {
-      setSmudge('sad', 'Eep! Nothing fits under ' + fmt(giftBudget) + ' once I save some for tax and shipping. More gold, or fewer filters?');
+      setMascot('sad', t('planner.none', { budget: fmt(giftBudget) }));
       box.replaceChildren(el('div', { class: 'plan-empty' }, [
-        el('div', { class: 'plan-empty-title', text: 'Not enough gold' }),
-        el('p', { class: 'plan-empty-sub', text: 'After setting aside ' + fmt(reserve) + ' for tax and shipping, nothing still available fits in ' + fmt(giftBudget) + '. Raise the budget or loosen the filters.' }),
+        el('div', { class: 'plan-empty-title', text: t('planner.noneTitle') }),
+        el('p', { class: 'plan-empty-sub', text: t('planner.noneSub', { reserve: fmt(reserve), budget: fmt(giftBudget) }) }),
       ]));
       return;
     }
 
     const anyGold = plan.picks.some((g) => g.item.starred);
     if (!plan.units) {
-      setSmudge('happy', 'Nothing on the shelves fits, but a ' + fmt(topUp.amount) + ' ' + topUp.item.name + ' does!');
+      setMascot('happy', t('planner.onlyCard', { amount: fmt(topUp.amount), name: topUp.item.name }));
     } else {
-      setSmudge('happy', (plan.units === 1 ? 'Found one! ' : 'Found ' + plan.units + '! ') +
-        (topUp ? '…plus a ' + fmt(topUp.amount) + ' ' + topUp.item.name + ' to use up the rest!'
-          : (anyGold ? 'Gold-star treasures went in first.' : 'Squeezed the most out of your gold.')));
+      setMascot('happy', (plan.units === 1 ? t('planner.foundOne') : t('planner.foundMany', { n: plan.units })) + ' ' +
+        (topUp ? t('planner.topUp', { amount: fmt(topUp.amount), name: topUp.item.name })
+          : t(anyGold ? 'planner.starredFirst' : 'planner.squeezed')));
     }
 
     const rows = plan.picks.map(({ item, n }) => el('li', { class: 'plan-row' }, [
       el('span', item.starred
-        ? { class: 'plan-dot is-gold', role: 'img', 'aria-label': 'Legendary' }
-        : { class: 'plan-dot', 'aria-hidden': 'true' }, item.starred ? starSvg(15, '#2B2A5C') : null),
+        ? { class: 'plan-dot is-gold', role: 'img', 'aria-label': t('starred') }
+        : { class: 'plan-dot', 'aria-hidden': 'true' }, item.starred ? starSvg(15) : null),
       el('span', { class: 'plan-name' }, [
         item.link
           ? el('a', { href: item.link, target: '_blank', rel: 'noopener noreferrer', text: item.name })
@@ -809,7 +1000,7 @@
           gc.link
             ? el('a', { href: gc.link, target: '_blank', rel: 'noopener noreferrer', text: gc.name })
             : el('span', { text: gc.name }),
-          el('span', { class: 'plan-meta', text: plan.units ? 'Gift card · uses up the rest' : 'Gift card' }),
+          el('span', { class: 'plan-meta', text: t(plan.units ? 'planner.giftCardMetaRest' : 'planner.giftCardMeta') }),
         ]),
         el('span', { class: 'plan-price', text: fmt(topUp.amount) }),
       ]));
@@ -817,27 +1008,27 @@
     const grand = plan.total + (topUp ? topUp.amount : 0);
 
     const children = [
-      el('div', { class: 'plan-head' }, [el('strong', { text: "Smudge's picks" }), el('span', {
-        text: (plan.units ? plural(plan.units, 'gift', 'gifts') : '') + (topUp ? (plan.units ? ' + gift card' : 'gift card') : ''),
+      el('div', { class: 'plan-head' }, [el('strong', { text: t('planner.picksTitle') }), el('span', {
+        text: (plan.units ? t('planner.gifts', { n: plan.units }) : '') + (topUp ? t(plan.units ? 'planner.plusCard' : 'planner.giftCard') : ''),
       })]),
       el('ul', { class: 'plan-list' }, rows),
       el('div', { class: 'plan-totals' }, [
-        el('span', { class: 'plan-total', text: 'Gifts ' + fmt(grand) }),
-        reserve > 0 && el('span', { class: 'plan-left', text: '+ ~' + fmt(reserve) + ' est. tax & shipping' }),
-        el('span', { class: 'plan-left', text: fmt(Math.max(0, giftBudget - grand)) + ' spare' }),
+        el('span', { class: 'plan-total', text: t('planner.total', { amount: fmt(grand) }) }),
+        reserve > 0 && el('span', { class: 'plan-left', text: t('planner.reserve', { amount: fmt(reserve) }) }),
+        el('span', { class: 'plan-left', text: t('planner.spare', { amount: fmt(Math.max(0, giftBudget - grand)) }) }),
       ]),
     ];
     if (reserve > 0) {
-      children.push(el('p', { class: 'plan-hint', text: 'Smudge sets aside about ' + Math.round(buffer * 100) + '% of your budget as a rough guess for tax and shipping. Real costs vary by shop and location, so check the total at checkout.' }));
+      children.push(el('p', { class: 'plan-hint', text: t('planner.bufferHint', { pct: Math.round(buffer * 100) }) }));
     }
     if (want > 0 && plan.units < want) {
-      children.push(el('p', { class: 'plan-note', text: 'Only ' + plan.units + ' of ' + want + ' gifts fit this budget with the current filters.' }));
+      children.push(el('p', { class: 'plan-note', text: t('planner.onlyFit', { n: plan.units, want }) }));
     }
     if (giftBudget > CONFIG.maxPlannerBudget) {
-      children.push(el('p', { class: 'plan-note', text: 'Smudge can only count up to ' + fmt(CONFIG.maxPlannerBudget) + ' at a time.' }));
+      children.push(el('p', { class: 'plan-note', text: t('planner.maxBudget', { amount: fmt(CONFIG.maxPlannerBudget) }) }));
     }
     if (CLAIMS_ON && plan.units) {
-      children.push(el('p', { class: 'plan-hint', text: 'Bought one? Hit Loot on its card so nobody doubles up.' }));
+      children.push(el('p', { class: 'plan-hint', text: t('planner.claimHint') }));
     }
     box.replaceChildren(...children);
   }
@@ -849,14 +1040,14 @@
     const sorted = list.slice().sort(sortWith(SORTS[state.sort] || SORTS.wanted));
     $('#grid').replaceChildren(...sorted.map(card));
     const looted = list.filter((it) => it.looted).length;
-    $('#count').textContent = (list.length - looted) + ' / ' + state.items.length + ' in stock' + (looted ? ' · ' + looted + ' looted' : '');
+    $('#count').textContent = t('count', { left: list.length - looted, total: state.items.length }) + (looted ? t('countLooted', { n: looted }) : '');
 
     const status = $('#status');
     if (!list.length) {
       status.hidden = false;
       status.replaceChildren(
-        el('div', { class: 'status-title', text: 'The shelves are empty' }),
-        el('p', { text: 'No items match those filters. Loosen one or reset them.' }),
+        el('div', { class: 'status-title', text: t('empty.title') }),
+        el('p', { text: t('empty.text') }),
       );
     } else {
       status.hidden = true;
@@ -883,9 +1074,9 @@
     wrap.classList.add('has-hint');
     wrap.closest('.card').classList.add('has-hint-card');
     wrap.append(el('div', { class: 'info-hint', role: 'note' }, [
-      el('span', { text: 'Psst! Sizes & notes in here' }),
+      el('span', { text: t('hint') }),
       el('button', {
-        type: 'button', 'aria-label': 'Dismiss tip', text: '×',
+        type: 'button', 'aria-label': t('dismissTip'), text: '×',
         onclick: (e) => { e.stopPropagation(); dismissHint(); },
       }),
     ]));
@@ -893,9 +1084,9 @@
 
   function renderStats() {
     const items = state.items;
-    $('#stat-items').textContent = plural(items.length, 'item', 'items');
-    $('#stat-starred').textContent = items.filter((it) => it.starred).length + ' legendary';
-    $('#stat-shops').textContent = plural(new Set(items.map((it) => it.vendor)).size, 'merchant', 'merchants');
+    $('#stat-items').textContent = t('stat.items', { n: items.length });
+    $('#stat-starred').textContent = t('stat.starred', { n: items.filter((it) => it.starred).length });
+    $('#stat-shops').textContent = t('stat.shops', { n: new Set(items.map((it) => it.vendor)).size });
   }
 
   function renderModeBadge() {
@@ -903,32 +1094,28 @@
     if (TEST) {
       badge.hidden = false;
       badge.className = 'mode-badge is-test';
-      badge.replaceChildren(el('span', { text: 'Test mode: fake purchases, nothing is sent' }));
+      badge.replaceChildren(el('span', { text: t('mode.test') }));
     } else if (SHIELD) {
       badge.hidden = false;
       badge.className = 'mode-badge is-shield';
       badge.replaceChildren(
         svg('<svg aria-hidden="true" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linejoin="round"><path d="M12 2 L20 5 V11 C20 16 16.5 20 12 22 C7.5 20 4 16 4 11 V5 Z"/></svg>'),
-        el('span', { text: 'Spoiler shield on' }),
+        el('span', { text: t('mode.shield') }),
       );
-      badge.title = 'Purchases are hidden in this browser. Visit with ?shield=off to turn this off.';
+      badge.title = t('mode.shieldTitle');
     }
   }
 
   function showError(setup) {
-    setSmudge('sad', setup
-      ? 'Eep! This shop has no shelves yet. Someone needs to connect a spreadsheet.'
-      : 'Eep! I could not reach the spreadsheet. Try refreshing in a minute?');
+    setMascot('sad', t(setup ? 'setup.line' : 'error.line'));
     $('#gp-result').replaceChildren();
     $('#count').textContent = '';
-    $('#stat-items').textContent = '? items';
+    $('#stat-items').textContent = t('stat.items', { n: '?' });
     const status = $('#status');
     status.hidden = false;
     status.replaceChildren(
-      el('div', { class: 'status-title', text: setup ? 'No sheet connected yet' : 'The shop is closed' }),
-      el('p', { text: setup
-        ? 'Paste your published Google Sheet link into sheetUrl in config.js. The README has step-by-step setup.'
-        : 'The wishlist could not be loaded right now. Please refresh the page in a little while.' }),
+      el('div', { class: 'status-title', text: t(setup ? 'setup.title' : 'error.title') }),
+      el('p', { text: t(setup ? 'setup.text' : 'error.text') }),
     );
   }
 
@@ -990,17 +1177,23 @@
   }
 
   async function init() {
+    // Start every download at once; the theme's words are needed before anything is drawn.
+    const sheetSet = /^https?:\/\//i.test(String(CONFIG.sheetUrl).trim());
+    const themeReady = loadTheme();
+    const dataPromise = sheetSet ? fetchText(CONFIG.sheetUrl).catch((err) => err) : null;
+    const claimsPromise = sheetSet && CLAIMS_ON && !TEST ? fetchText(c.csvUrl).catch((err) => err) : null;
+    const pricesPromise = sheetSet ? loadPrices() : null;
+    await themeReady;
     wire();
     renderModeBadge();
-    if (CONFIG.ownerName) $('#owner-name').textContent = String(CONFIG.ownerName).trim();
-    if (!/^https?:\/\//i.test(String(CONFIG.sheetUrl).trim())) {
+    if (!sheetSet) {
       showError(true);
       return;
     }
-    const claimsPromise = CLAIMS_ON && !TEST ? fetchText(c.csvUrl).catch((err) => err) : null;
-    const pricesPromise = loadPrices();
     try {
-      state.items = toItems(parseCSV(await fetchText(CONFIG.sheetUrl)));
+      const data = await dataPromise;
+      if (data instanceof Error) throw data;
+      state.items = toItems(parseCSV(data));
       if (!state.items.length) throw new Error('No rows');
       groupShops(state.items);
     } catch (err) {

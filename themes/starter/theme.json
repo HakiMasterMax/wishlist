@@ -1,0 +1,9 @@
+{
+  "name": "Starter",
+  "description": "A blank theme to copy. Uses the plain default wording, with no mascot or art.",
+  "mascot": null,
+  "art": {},
+  "text": {
+    "title": "My Wishlist"
+  }
+}

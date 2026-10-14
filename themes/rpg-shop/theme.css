@@ -1,0 +1,57 @@
+/* RPG Item Shop: a cozy pixel-game shop with Smudge the soot sprite.
+   Colors and fonts for this theme. Layout lives in styles.css; art lives in art/. */
+@import url('https://fonts.googleapis.com/css2?family=M+PLUS+Rounded+1c:wght@400;500;700;800&family=Pixelify+Sans:wght@400;500;600;700&display=swap');
+
+:root {
+  /* text */
+  --text: #2B2A5C;          /* main text, outlines, icons */
+  --text-soft: #4B4A80;     /* secondary text */
+  --dark: #1E1B33;          /* toast, tip bubble, mascot name tag */
+  --dark-rgb: 30, 27, 51;
+  --on-dark: #FFFFFF;       /* text on --dark or --text backgrounds */
+
+  /* backgrounds */
+  --page: #EAF0FF;          /* page background */
+  --header: #C9D4FF;        /* header sky */
+  --surface: #FFFFFF;       /* cards and panels */
+  --input: #F4F7FF;         /* text boxes */
+  --tint: #D5DEFF;          /* shop tags, counts */
+  --photo-bg: #F6F8FF;      /* behind item photos */
+
+  /* starred ("Legendary") items */
+  --star: #FFD166;
+  --star-rgb: 255, 209, 102;
+  --star-soft: #FFE9A8;
+  --star-card: #FFF6D6;
+  --star-line: #F0C766;
+  --star-shadow: #E0A100;
+  --star-shadow-rgb: 224, 161, 0;
+
+  /* accents */
+  --accent: #FF9DBD;        /* pink: name tags, gift icon */
+  --accent-mid: #FFC2D8;
+  --accent-soft: #FFE3EE;   /* category chips and tags */
+  --secondary: #B8EEDD;     /* mint: View and Reset buttons */
+  --secondary-hover: #A3E6D1;
+
+  /* lines and focus */
+  --line: #CBD3F2;
+  --line-strong: #B9C3EE;
+  --focus: #5A3FA0;
+  --shadow-rgb: 43, 42, 92;
+
+  /* prices */
+  --sale: #B4235A;
+  --sale-soft: #FFD1E0;
+  --sale-text: #8E1846;
+  --gift: #A3305E;
+
+  /* bought ("looted") items */
+  --looted-bg: #F3F4F9;
+  --looted-line: #D5D8E6;
+  --looted-text: #5B5D82;
+
+  /* fonts: display for headings and labels, body for everything else */
+  --font-display: 'Pixelify Sans', ui-monospace, monospace;
+  --font-body: 'M PLUS Rounded 1c', system-ui, sans-serif;
+}

@@ -36,10 +36,15 @@ After a minute or two your wishlist is live at `https://<your-username>.github.i
 - **Let gift-givers mark things as bought:** see [Looting](#looting-gift-givers-marking-things-as-bought).
 - **Get new features later:** on your fork's main page, click **Sync fork → Update branch**. Your settings in `config.js` are kept. If GitHub ever offers to **Discard commits** instead, don't: that would erase your settings. Open an issue here and we'll sort it out.
 
+## Themes
+
+Pick a look in `config.js` with `theme:`. Preview any theme first by adding `?theme=` and its folder name to your site's address. The [themes guide](themes/README.md) lists the themes and shows how to make your own: colors, fonts, wording, art and a mascot, with no coding.
+
 ## Files
 
 ```
-config.js           your settings: sheet link, name, gift planner, claims (the only file you need to edit)
+config.js           your settings: sheet link, name, theme, gift planner, claims (the only file you need to edit)
+themes/             looks and wording; see themes/README.md
 index.html          page structure
 styles.css          all styling
 app.js              loads the sheet, filters, cards, Smudge's gift planner

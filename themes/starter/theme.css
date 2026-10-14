@@ -1,0 +1,46 @@
+/* Starter theme: copy this folder, rename it, and change what you like.
+   Every color and font the site uses is listed here. Anything you delete falls back to the plain defaults.
+   To use Google Fonts, add an @import line at the very top, e.g.:
+   @import url('https://fonts.googleapis.com/css2?family=Nunito:wght@400;700;800&display=swap'); */
+
+:root {
+  --text: #1F2430;  /* main text, outlines, icons */
+  --text-soft: #5B6170;  /* secondary text */
+  --dark: #1F2430;  /* toast, tip bubble, mascot name tag */
+  --dark-rgb: 31, 36, 48;  /* the same color as numbers ("r, g, b"), used for see-through shadows */
+  --on-dark: #FFFFFF;  /* text on --dark or --text backgrounds */
+  --page: #F6F6F4;  /* page background */
+  --header: #ECEBE7;  /* header background */
+  --tint: #ECEBE7;  /* shop tags, counts */
+  --input: #FFFFFF;  /* text boxes */
+  --surface: #FFFFFF;  /* cards and panels */
+  --star: #F2B705;  /* starred items: badge, tag */
+  --star-rgb: 242, 183, 5;  /* the same color as numbers ("r, g, b"), used for see-through shadows */
+  --star-soft: #FCEFC2;  /* "starred only" toggle, Loot button */
+  --star-card: #FFFBEA;  /* starred card background */
+  --star-shadow: #C99500;  /* toast shadow */
+  --star-shadow-rgb: 201, 149, 0;  /* the same color as numbers ("r, g, b"), used for see-through shadows */
+  --star-line: #EBCB6B;  /* starred card outline */
+  --accent: #E58FA8;  /* name tags, gift icon */
+  --accent-mid: #F2BFCD;  /* gift icon lid */
+  --accent-soft: #FBE6EC;  /* category chips and tags */
+  --secondary: #DCEFE8;  /* View and Reset buttons */
+  --secondary-hover: #C9E6DB;  /* View button hover */
+  --line: #E2E1DC;  /* soft outlines */
+  --line-strong: #CFCEC8;  /* input and chip outlines */
+  --focus: #3B5BDB;  /* keyboard focus ring, link hover */
+  --photo-bg: #F6F6F4;  /* behind item photos */
+  --shadow-rgb: 31, 36, 48;  /* the same color as numbers ("r, g, b"), used for see-through shadows */
+  --sale: #B4235A;  /* sale price */
+  --sale-soft: #FFD9E5;  /* sale tag */
+  --sale-text: #8E1846;  /* sale tag text */
+  --gift: #A3305E;  /* gift card price */
+  --looted-bg: #F3F3F1;  /* bought card background */
+  --looted-line: #DDDCD7;  /* bought card outline */
+  --looted-text: #6B6F7A;  /* bought card text */
+  --font-display: system-ui, sans-serif;  /* headings and labels */
+  --font-body: system-ui, sans-serif;  /* everything else */
+}
+
+/* You can also restyle anything else here, for example rounder cards:
+.card { border-radius: 24px; } */

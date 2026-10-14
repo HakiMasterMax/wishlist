@@ -27,6 +27,13 @@ window.WISHLIST_CONFIG = {
   imageFolder: 'wishlist-images/',
 
 
+  /* ---------- Theme ----------
+   * The look and wording of your shop. Each theme is a folder in themes/
+   * (see themes/README.md for the list). To preview a theme before switching,
+   * add ?theme=its-folder-name to the end of your site's address. */
+  theme: 'rpg-shop',
+
+
   /* ---------- 4. Gift planner ----------
    * Part of a gift-giver's budget the planner holds back for tax and shipping.
    * 0.15 means 15%. Use 0 to turn it off. */

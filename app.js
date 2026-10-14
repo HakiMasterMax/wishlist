@@ -2,7 +2,7 @@
  * Reads a published Google Sheet (CSV) and renders it as a filterable storefront.
  * Gift-givers can mark items as "looted" (purchased); those claims go to a Google Form
  * and are read back from that form's published response sheet.
- * No build step and no dependencies: edit CONFIG below and push to GitHub Pages.
+ * No build step and no dependencies. Settings live in config.js.
  *
  * URL switches
  *   ?shield        turn the spoiler shield ON in this browser (remembered). Claims are never loaded.
@@ -12,37 +12,74 @@
 (() => {
   'use strict';
 
-  const CONFIG = {
-    // Google Sheets: File > Share > Publish to web > (your tab) > CSV
-    dataUrl: 'https://docs.google.com/spreadsheets/d/e/2PACX-1vQAmDkwXniM3Tz36huytvYjJjBNp1WnambIZV7VS9YQ1-vxYt4ucaziRu6iDFf805wrWUJwmZ9FHalx/pub?output=csv',
-    // Folder (next to index.html) holding the photos named in the image_name column.
+  const DEFAULTS = {
+    sheetUrl: '',
     imageFolder: 'wishlist-images/',
-    // Tried in order when image_name has no extension. GitHub Pages is case-sensitive.
-    imageExtensions: ['jpg', 'png', 'jpeg', 'webp'],
-    // Upper limit for the gift planner budget (keeps the math fast).
-    maxPlannerBudget: 5000,
-    // Share of the gift planner budget set aside for tax and shipping (0.15 = 15%).
     taxShippingBuffer: 0.15,
-    // Current prices written daily by the GitHub Action (scripts/update-prices.mjs). Tried in order.
-    pricesUrls: [
-      'https://raw.githubusercontent.com/nicolenadine/wishlist/main/wishlist-site/prices.json',
-      'prices.json',
-    ],
-    // Ignore price checks older than this and fall back to the sheet price.
+    claims: { csvUrl: '', formUrl: '', itemField: '', qtyField: '', refField: '' },
+    imageExtensions: ['jpg', 'png', 'jpeg', 'webp'],
+    maxPlannerBudget: 5000,
     maxPriceAgeDays: 3,
-
-    // "Looted" claims. Leave blank to turn the feature off.
-    claims: {
-      // Published CSV of the claims form's response sheet.
-      csvUrl: 'https://docs.google.com/spreadsheets/d/e/2PACX-1vRdSsy_4ciPhZl43oc8Yx3iC8HfDeyepumtFmE_HhiO5FjC4LZXQ7HaYmFok0QI3mmuSlZoH3lFuQaW/pub?output=csv',
-      // https://docs.google.com/forms/d/e/<form id>/formResponse
-      formUrl: 'https://docs.google.com/forms/d/e/1FAIpQLScZ8d-t2U92YeqPuCLlDhBSLJbsCOp80O7cXAP1P75z2SD_dA/formResponse',
-      // entry.<number> ids from the form's pre-filled link.
-      itemField: 'entry.1737454356',
-      qtyField: 'entry.871293525',
-      refField: 'entry.511342756',
-    },
   };
+  const USER = window.WISHLIST_CONFIG || {};
+  const CONFIG = { ...DEFAULTS, ...USER, claims: { ...DEFAULTS.claims, ...(USER.claims || {}) } };
+  if (!CONFIG.sheetUrl && USER.dataUrl) CONFIG.sheetUrl = USER.dataUrl; // older setting name
+  if (CONFIG.imageFolder && !CONFIG.imageFolder.endsWith('/')) CONFIG.imageFolder += '/';
+  CONFIG.pricesUrls = pricesUrls();
+
+  // Daily prices are written to prices.json by the GitHub Action (scripts/update-prices.mjs).
+  // On GitHub Pages, read the raw file first: it updates right away, while Pages can lag a few minutes.
+  function pricesUrls() {
+    const urls = [];
+    const host = window.location.hostname.match(/^([^.]+)\.github\.io$/i);
+    if (host) {
+      const first = window.location.pathname.split('/').filter(Boolean)[0];
+      // A project site lives at owner.github.io/<repo>/; a user site's repo is named owner.github.io.
+      const repo = first && first.toLowerCase() !== 'index.html' ? first : host[1] + '.github.io';
+      urls.push('https://raw.githubusercontent.com/' + host[1] + '/' + repo + '/HEAD/prices.json');
+    }
+    urls.push('prices.json');
+    return urls;
+  }
+
+  /* Sheet columns. Headers are matched loosely: case, spaces and punctuation are ignored,
+   * so "Starred?", "STARRED" and "starred" all work. Older names stay supported. */
+  const COLUMNS = {
+    name: ['name', 'item_name', 'item', 'title'],
+    price: ['price', 'cost'],
+    size: ['size'],
+    color: ['color', 'colour', 'color_or_pattern', 'pattern'],
+    quantity: ['quantity', 'qty', 'how_many'],
+    starred: ['starred', 'star', 'excite', 'really_want', 'favorite', 'favourite', 'must_have'],
+    shop: ['shop', 'source', 'store', 'vendor', 'merchant'],
+    category: ['category', 'categories', 'tags', 'tag', 'type'],
+    image: ['image', 'image_name', 'photo', 'picture'],
+    notes: ['notes', 'note', 'details'],
+    link: ['link', 'url'],
+  };
+  const norm = (s) => String(s).toLowerCase().replace(/[^a-z0-9]/g, '');
+
+  // Returns { field: columnIndex }. Exact matches win; then a header that starts with
+  // a known name ("Shop name", "Image file") fills any field still missing.
+  function mapColumns(headerRow) {
+    const header = headerRow.map(norm);
+    const used = new Set();
+    const map = {};
+    for (const [field, names] of Object.entries(COLUMNS)) {
+      for (const n of names.map(norm)) {
+        const i = header.findIndex((h, j) => h === n && !used.has(j));
+        if (i >= 0) { map[field] = i; used.add(i); break; }
+      }
+    }
+    for (const [field, names] of Object.entries(COLUMNS)) {
+      if (field in map) continue;
+      for (const n of names.map(norm)) {
+        const i = header.findIndex((h, j) => h && h.startsWith(n) && !used.has(j));
+        if (i >= 0) { map[field] = i; used.add(i); break; }
+      }
+    }
+    return map;
+  }
 
   const PRICE_BANDS = [
     { id: 'all', label: 'Any', min: -Infinity, max: Infinity },
@@ -159,20 +196,21 @@
 
   function toItems(rows) {
     if (!rows.length) return [];
-    const header = rows[0].map((h) => h.trim().toLowerCase());
-    const idx = (name) => header.indexOf(name);
-    const get = (r, name) => {
-      const i = idx(name);
-      return i >= 0 && r[i] != null ? r[i].trim() : '';
+    const cols = mapColumns(rows[0]);
+    const missing = ['name', 'price'].filter((f) => !(f in cols));
+    if (missing.length) console.warn('[wishlist] could not find these columns in the sheet:', missing.join(', '));
+    const get = (r, field) => {
+      const i = cols[field];
+      return i != null && r[i] != null ? r[i].trim() : '';
     };
     return rows.slice(1).map((r, n) => {
       const priceNum = get(r, 'price').replace(/,/g, '').match(/\d+(?:\.\d+)?/); // "$12.99", "From $25", "Any amount"
       const price = priceNum ? parseFloat(priceNum[0]) : NaN;
-      let tags = get(r, 'tags').split(/[:;,]/).map((t) => t.trim()).filter(Boolean).map(titleCase);
+      let tags = get(r, 'category').split(/[:;,]/).map((t) => t.trim()).filter(Boolean).map(titleCase);
       tags = [...new Set(tags)];
       tags = [...new Set(tags.map((t) => (/^gift ?cards?$/i.test(t) ? 'Gift Cards' : t)))];
       if (!tags.length) tags = ['Other'];
-      const name = get(r, 'item_name');
+      const name = get(r, 'name');
       return {
         id: n,
         key: keyOf(name),
@@ -181,12 +219,12 @@
         giftCard: tags.includes('Gift Cards'),
         giftMin: Number.isFinite(price) && price > 0 ? price : 0,
         size: get(r, 'size'),
-        color: get(r, 'color_or_pattern'),
+        color: get(r, 'color'),
         qty: Math.max(1, parseInt(get(r, 'quantity'), 10) || 1),
-        starred: truthy(get(r, 'excite')),
-        vendor: get(r, 'source') || 'Other',
+        starred: truthy(get(r, 'starred')),
+        vendor: get(r, 'shop') || 'Other',
         tags,
-        image: get(r, 'image_name'),
+        image: get(r, 'image'),
         notes: get(r, 'notes'),
         link: safeUrl(get(r, 'link')),
       };
@@ -924,7 +962,7 @@
     const claimsPromise = CLAIMS_ON && !TEST ? fetchText(c.csvUrl).catch((err) => err) : null;
     const pricesPromise = loadPrices();
     try {
-      state.items = toItems(parseCSV(await fetchText(CONFIG.dataUrl)));
+      state.items = toItems(parseCSV(await fetchText(CONFIG.sheetUrl)));
       if (!state.items.length) throw new Error('No rows');
     } catch (err) {
       console.error('[wishlist] could not load data:', err);

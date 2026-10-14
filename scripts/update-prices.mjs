@@ -1,7 +1,7 @@
 // Daily price check for the wishlist. Run by .github/workflows/update-prices.yml (Node 20+, no dependencies).
 //
 // Reads the published wishlist sheet, looks up the current price for each link it knows how to check,
-// and writes wishlist-site/prices.json. The site shows those prices (and sales) when they are recent,
+// and writes prices.json. The site shows those prices (and sales) when they are recent,
 // and falls back to the sheet price otherwise.
 //
 // Supported:
@@ -11,11 +11,30 @@
 // Not checked: Amazon (no permitted way without an affiliate/paid API) and anything else.
 
 import { readFile, writeFile } from 'node:fs/promises';
+import vm from 'node:vm';
 
-const SHEET_CSV = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vQAmDkwXniM3Tz36huytvYjJjBNp1WnambIZV7VS9YQ1-vxYt4ucaziRu6iDFf805wrWUJwmZ9FHalx/pub?output=csv';
-const OUT = new URL('../wishlist-site/prices.json', import.meta.url);
+const OUT = new URL('../prices.json', import.meta.url);
 const ETSY_KEY = process.env.ETSY_API_KEY || '';
-const UA = 'Mozilla/5.0 (compatible; wishlist-price-check/1.0; +https://github.com/nicolenadine/wishlist)';
+const UA = 'Mozilla/5.0 (compatible; wishlist-price-check/1.0)';
+
+// The sheet link comes from config.js, the same file the site uses.
+async function sheetUrl() {
+  const sandbox = { window: {} };
+  vm.runInNewContext(await readFile(new URL('../config.js', import.meta.url), 'utf8'), sandbox);
+  const cfg = sandbox.window.WISHLIST_CONFIG || {};
+  const url = cfg.sheetUrl || cfg.dataUrl;
+  if (!url) throw new Error('No sheetUrl in config.js');
+  return url;
+}
+
+// Same loose header matching as app.js (keep the two lists in step).
+const norm = (s) => String(s).toLowerCase().replace(/[^a-z0-9]/g, '');
+function findColumn(header, names) {
+  const h = header.map(norm);
+  for (const n of names.map(norm)) { const i = h.indexOf(n); if (i >= 0) return i; }
+  for (const n of names.map(norm)) { const i = h.findIndex((x) => x && x.startsWith(n)); if (i >= 0) return i; }
+  return -1;
+}
 
 function parseCSV(text) {
   text = text.replace(/^﻿/, '');
@@ -88,10 +107,10 @@ async function main() {
   let previous = {};
   try { previous = JSON.parse(await readFile(OUT, 'utf8')).prices || {}; } catch { /* first run */ }
 
-  const rows = parseCSV(await (await get(SHEET_CSV)).text());
-  const header = rows[0].map((h) => h.trim().toLowerCase());
-  const iName = header.indexOf('item_name');
-  const iLink = header.indexOf('link');
+  const rows = parseCSV(await (await get(await sheetUrl())).text());
+  const iName = findColumn(rows[0], ['name', 'item_name', 'item', 'title']);
+  const iLink = findColumn(rows[0], ['link', 'url']);
+  if (iName < 0 || iLink < 0) throw new Error('Sheet needs a name column and a link column');
   const prices = {};
   const log = [];
 

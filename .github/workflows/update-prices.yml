@@ -9,6 +9,7 @@ on:
     paths:
       - 'scripts/update-prices.mjs'
       - '.github/workflows/update-prices.yml'
+      - 'config.js'
 
 permissions:
   contents: write
@@ -31,12 +32,12 @@ jobs:
           ETSY_API_KEY: ${{ secrets.ETSY_API_KEY }}
       - name: Save prices.json
         run: |
-          if git diff --quiet -- wishlist-site/prices.json && git ls-files --error-unmatch wishlist-site/prices.json >/dev/null 2>&1; then
+          if git diff --quiet -- prices.json && git ls-files --error-unmatch prices.json >/dev/null 2>&1; then
             echo "No changes"; exit 0
           fi
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add wishlist-site/prices.json
+          git add prices.json
           git commit -m "Update prices"
           git pull --rebase origin main
           git push

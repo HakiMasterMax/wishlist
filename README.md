@@ -21,6 +21,10 @@ wishlist-site/      redirect so old links to /wishlist-site/ still work
 3. Go to **Settings → Pages**. Under **Build and deployment**, set Source to **Deploy from a branch**, Branch to `main`, and folder to `/ (root)`, then click **Save**.
 4. After a minute or two the site is live at `https://<your-username>.github.io/wishlist/`.
 
+## Start your wishlist sheet
+
+**[Make a copy of the wishlist template](https://docs.google.com/spreadsheets/d/1xcYWpix2X1ZDpUfDu7IXhiKeWtpUENBPletfdRZQ8g8/copy)**. It opens a copy in your own Google Drive with example items, a tip on every column header, and a **How to use** tab. Replace the examples with your own items, publish the **Items** tab as CSV (File → Share → Publish to web), and paste that link into `sheetUrl` in `config.js`.
+
 ## Updating the wishlist
 
 Edit the Google Sheet. The published CSV refreshes within about 5 minutes, and the site picks it up on the next page load. You don't need to redeploy anything.
@@ -34,9 +38,9 @@ Edit the Google Sheet. The published CSV refreshes within about 5 minutes, and t
 | `size`, `color`, `notes` | Shown in the **i** details popup (hover on desktop, tap on phones) |
 | `quantity` | If more than 1, a ×N tag appears, and Smudge can pick it up to N times |
 | `starred` | `TRUE` (or yes / x / ✓, or a ticked checkbox) makes the item **Legendary**: gold card, star badge, picked first |
-| `shop` | Where it's sold. Becomes a filter and a tag |
+| `shop` | Where it's sold. Shown on the card and used as a filter. Shops with only one item are grouped under **Other** in the filter so the list stays short (change this with `groupSmallShops` in `config.js`) |
 | `category` | What kind of thing it is, separated by `:` (e.g. `craft: clothing`). Blank counts as **Other** |
-| `image` | Photo file name in `wishlist-images/`, with or without the extension (e.g. `ear-muffs-amazon`) |
+| `image` | A link to the photo (right-click the product photo → **Copy image address**), or a file name in `wishlist-images/` |
 | `link` | Where the **View** button goes (opens in a new tab) |
 
 Only `name` is required, and columns can be in any order. Headers are matched loosely, so `Starred?`, `Shop name` or `IMAGE` all work. The older names (`item_name`, `excite`, `source`, `tags`, `image_name`, `color_or_pattern`) still work too.
@@ -49,7 +53,9 @@ Set a row's category to `gift card` and put the smallest amount in `price` (or l
 
 ### Adding a photo
 
-Save it into `wishlist-images/` with exactly the name in the `image` column, plus `.jpg` (or `.png`/`.webp`), then upload it to the repo. Names are case-sensitive on GitHub Pages. Keep photos around 900px wide so the page stays quick.
+The easy way: on the product page, right-click the photo, choose **Copy image address**, and paste that into the `image` column. Google Drive share links work too, as long as the file is shared with "Anyone with the link". If a photo can't load, the card shows a placeholder.
+
+Or keep photos in the repo: save it into `wishlist-images/` with exactly the name in the `image` column, plus `.jpg` (or `.png`/`.webp`), then upload it to the repo. Names are case-sensitive on GitHub Pages. Keep photos around 900px wide so the page stays quick.
 
 ## Looting (gift-givers marking things as bought)
 

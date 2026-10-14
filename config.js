@@ -49,4 +49,7 @@ window.WISHLIST_CONFIG = {
   maxPlannerBudget: 5000,
   // Ignore daily price checks older than this many days and use the sheet price instead.
   maxPriceAgeDays: 3,
+  // Shops with fewer items than this are grouped under "Other" in the shop filter
+  // (cards still show the real shop). 2 groups one-item shops. Use 0 to list every shop.
+  groupSmallShops: 2,
 };

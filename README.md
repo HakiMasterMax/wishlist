@@ -1,29 +1,51 @@
 # Wishlist Item Shop
 
-A cozy, filterable storefront for my wishlist. It's plain HTML, CSS and JS with no build step. The data comes live from a published Google Sheet, so editing the sheet updates the site within a few minutes.
+Turn a Google Sheet into a cozy, filterable wishlist shop that friends and family can browse. Gift-givers can filter by price, shop and category, see your most-wanted items first, ask Smudge to pick gifts that fit their budget, and mark things as bought so nobody doubles up.
+
+**[See the live demo](https://nicolenadine.github.io/wishlist/)**
+
+No coding needed. It runs free on GitHub Pages, and you update it by editing your spreadsheet.
+
+## Set up your own (about 10 minutes)
+
+You'll need a free [GitHub](https://github.com/signup) account and a Google account.
+
+### 1. Copy the spreadsheet
+
+**[Make a copy of the wishlist template](https://docs.google.com/spreadsheets/d/1xcYWpix2X1ZDpUfDu7IXhiKeWtpUENBPletfdRZQ8g8/copy)**. It opens a copy in your own Google Drive with example items, a tip on every column header, and a **How to use** tab. Replace the examples with your own items whenever you're ready.
+
+Then publish it so the site can read it: **File → Share → Publish to web**, choose the **Items** tab and **Comma-separated values (.csv)**, click **Publish**, and copy the link it gives you.
+
+### 2. Fork this repo
+
+Click **Fork** at the top of this page, then **Create fork**. You now have your own copy at `github.com/<your-username>/wishlist`.
+
+### 3. Connect your sheet
+
+In your fork, open `config.js` and click the pencil icon to edit it. Paste your sheet link between the quotes after `sheetUrl:`, and put your name after `ownerName:` if you like. Click **Commit changes**.
+
+### 4. Turn on the website
+
+In your fork, go to **Settings → Pages**. Under **Build and deployment**, set Source to **Deploy from a branch**, Branch to `main`, and folder to `/ (root)`, then click **Save**.
+
+After a minute or two your wishlist is live at `https://<your-username>.github.io/wishlist/`. Share that link with gift-givers.
+
+### Optional extras
+
+- **Daily price and sale checks:** open your fork's **Actions** tab and click the button to enable workflows. See [Daily price check](#daily-price-check).
+- **Let gift-givers mark things as bought:** see [Looting](#looting-gift-givers-marking-things-as-bought).
+- **Get new features later:** on your fork's main page, click **Sync fork → Update branch**. Your settings in `config.js` are kept. If GitHub ever offers to **Discard commits** instead, don't: that would erase your settings. Open an issue here and we'll sort it out.
 
 ## Files
 
 ```
-config.js           your settings: sheet link, photo folder, gift planner, claims (the only file you need to edit)
+config.js           your settings: sheet link, name, gift planner, claims (the only file you need to edit)
 index.html          page structure
 styles.css          all styling
 app.js              loads the sheet, filters, cards, Smudge's gift planner
-wishlist-images/    item photos, named to match the sheet's image column
+wishlist-images/    optional: photos hosted in the repo instead of linked
 prices.json         daily price checks, written by a GitHub Action
-wishlist-site/      redirect so old links to /wishlist-site/ still work
 ```
-
-## Put it on GitHub Pages
-
-1. Create a new repository on GitHub, for example `wishlist`.
-2. Upload everything in this folder, including the `wishlist-images` folder. You can drag it onto **Add file → Upload files**, or push it with git.
-3. Go to **Settings → Pages**. Under **Build and deployment**, set Source to **Deploy from a branch**, Branch to `main`, and folder to `/ (root)`, then click **Save**.
-4. After a minute or two the site is live at `https://<your-username>.github.io/wishlist/`.
-
-## Start your wishlist sheet
-
-**[Make a copy of the wishlist template](https://docs.google.com/spreadsheets/d/1xcYWpix2X1ZDpUfDu7IXhiKeWtpUENBPletfdRZQ8g8/copy)**. It opens a copy in your own Google Drive with example items, a tip on every column header, and a **How to use** tab. Replace the examples with your own items, publish the **Items** tab as CSV (File → Share → Publish to web), and paste that link into `sheetUrl` in `config.js`.
 
 ## Updating the wishlist
 
@@ -93,7 +115,7 @@ When the current price is below the store's regular price or your sheet price, t
 
 ## Settings
 
-Everything you'd want to change lives in `config.js`, with a comment above each setting: your sheet link, the photo folder, how much of the gift planner budget to hold back for tax and shipping, and the optional claims form. You can edit it right on GitHub with the pencil icon.
+Everything you'd want to change lives in `config.js`, with a comment above each setting: your sheet link, your name, the photo folder, how much of the gift planner budget to hold back for tax and shipping, and the optional claims form. You can edit it right on GitHub with the pencil icon.
 
 ## Run it locally
 

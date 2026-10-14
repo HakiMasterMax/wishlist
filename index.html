@@ -4,13 +4,13 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Wishlist Item Shop</title>
-<meta name="description" content="My winter wishlist, filterable by shop, type and price, with a little gift-picking helper.">
+<meta name="description" content="A wishlist shop, filterable by shop, type and price, with a little gift-picking helper.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=M+PLUS+Rounded+1c:wght@400;500;700;800&family=Pixelify+Sans:wght@400;500;600;700&display=swap">
 <link rel="stylesheet" href="styles.css?v=20261013e">
-<script src="config.js?v=20261013b" defer></script>
-<script src="app.js?v=20261013i" defer></script>
+<script src="config.js?v=20261013c" defer></script>
+<script src="app.js?v=20261013j" defer></script>
 </head>
 <body>
 
@@ -200,7 +200,7 @@
       <h2 id="loot-title" class="pixel">Mark as looted?</h2>
     </div>
     <p class="loot-item" id="loot-name"></p>
-    <p class="loot-copy">This tells other gift-givers you bought it, so nobody doubles up. Nicole won't see it.</p>
+    <p class="loot-copy">This tells other gift-givers you bought it, so nobody doubles up. <span id="owner-name">The wishlist owner</span> won't see it.</p>
     <div class="loot-qty-row" id="loot-qty-row">
       <label for="loot-qty">How many did you get?</label>
       <input id="loot-qty" class="text-input" type="number" inputmode="numeric" min="1" step="1" value="1">

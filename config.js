@@ -11,7 +11,13 @@ window.WISHLIST_CONFIG = {
    * In Google Sheets: File > Share > Publish to web.
    * Pick the tab with your items, choose "Comma-separated values (.csv)",
    * click Publish, and paste the link it gives you here. */
-  sheetUrl: 'https://docs.google.com/spreadsheets/d/e/2PACX-1vQAmDkwXniM3Tz36huytvYjJjBNp1WnambIZV7VS9YQ1-vxYt4ucaziRu6iDFf805wrWUJwmZ9FHalx/pub?output=csv',
+  sheetUrl: 'TEMPLATE_SHEET_URL',
+
+
+  /* ---------- Your name ----------
+   * Shown to gift-givers, e.g. "Sam won't see it" when they mark something as bought.
+   * Leave blank to say "The wishlist owner". */
+  ownerName: '',
 
 
   /* ---------- 2. Photos ----------
@@ -31,13 +37,13 @@ window.WISHLIST_CONFIG = {
    * Leave these blank to turn the feature off. Setup steps are in the README. */
   claims: {
     // The claims form's response sheet, published as CSV.
-    csvUrl: 'https://docs.google.com/spreadsheets/d/e/2PACX-1vRdSsy_4ciPhZl43oc8Yx3iC8HfDeyepumtFmE_HhiO5FjC4LZXQ7HaYmFok0QI3mmuSlZoH3lFuQaW/pub?output=csv',
+    csvUrl: '',
     // The form's address, ending in /formResponse.
-    formUrl: 'https://docs.google.com/forms/d/e/1FAIpQLScZ8d-t2U92YeqPuCLlDhBSLJbsCOp80O7cXAP1P75z2SD_dA/formResponse',
+    formUrl: '',
     // The entry.123456 ids for the form's item, quantity and ref questions.
-    itemField: 'entry.1737454356',
-    qtyField: 'entry.871293525',
-    refField: 'entry.511342756',
+    itemField: '',
+    qtyField: '',
+    refField: '',
   },
 
 

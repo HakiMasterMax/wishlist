@@ -14,6 +14,7 @@
 
   const DEFAULTS = {
     sheetUrl: '',
+    ownerName: '',
     imageFolder: 'wishlist-images/',
     taxShippingBuffer: 0.15,
     claims: { csvUrl: '', formUrl: '', itemField: '', qtyField: '', refField: '' },
@@ -914,16 +915,20 @@
     }
   }
 
-  function showError() {
-    setSmudge('sad', 'Eep! I could not reach the spreadsheet. Try refreshing in a minute?');
+  function showError(setup) {
+    setSmudge('sad', setup
+      ? 'Eep! This shop has no shelves yet. Someone needs to connect a spreadsheet.'
+      : 'Eep! I could not reach the spreadsheet. Try refreshing in a minute?');
     $('#gp-result').replaceChildren();
     $('#count').textContent = '';
     $('#stat-items').textContent = '? items';
     const status = $('#status');
     status.hidden = false;
     status.replaceChildren(
-      el('div', { class: 'status-title', text: 'The shop is closed' }),
-      el('p', { text: 'The wishlist could not be loaded right now. Please refresh the page in a little while.' }),
+      el('div', { class: 'status-title', text: setup ? 'No sheet connected yet' : 'The shop is closed' }),
+      el('p', { text: setup
+        ? 'Paste your published Google Sheet link into sheetUrl in config.js. The README has step-by-step setup.'
+        : 'The wishlist could not be loaded right now. Please refresh the page in a little while.' }),
     );
   }
 
@@ -987,6 +992,11 @@
   async function init() {
     wire();
     renderModeBadge();
+    if (CONFIG.ownerName) $('#owner-name').textContent = String(CONFIG.ownerName).trim();
+    if (!/^https?:\/\//i.test(String(CONFIG.sheetUrl).trim())) {
+      showError(true);
+      return;
+    }
     const claimsPromise = CLAIMS_ON && !TEST ? fetchText(c.csvUrl).catch((err) => err) : null;
     const pricesPromise = loadPrices();
     try {

@@ -22,9 +22,8 @@ async function sheetUrl() {
   const sandbox = { window: {} };
   vm.runInNewContext(await readFile(new URL('../config.js', import.meta.url), 'utf8'), sandbox);
   const cfg = sandbox.window.WISHLIST_CONFIG || {};
-  const url = cfg.sheetUrl || cfg.dataUrl;
-  if (!url) throw new Error('No sheetUrl in config.js');
-  return url;
+  const url = String(cfg.sheetUrl || cfg.dataUrl || '').trim();
+  return /^https?:\/\//i.test(url) ? url : null;
 }
 
 // Same loose header matching as app.js (keep the two lists in step).
@@ -107,7 +106,9 @@ async function main() {
   let previous = {};
   try { previous = JSON.parse(await readFile(OUT, 'utf8')).prices || {}; } catch { /* first run */ }
 
-  const rows = parseCSV(await (await get(await sheetUrl())).text());
+  const url = await sheetUrl();
+  if (!url) { console.log('No sheet link in config.js yet, so there is nothing to check.'); return; }
+  const rows = parseCSV(await (await get(url)).text());
   const iName = findColumn(rows[0], ['name', 'item_name', 'item', 'title']);
   const iLink = findColumn(rows[0], ['link', 'url']);
   if (iName < 0 || iLink < 0) throw new Error('Sheet needs a name column and a link column');

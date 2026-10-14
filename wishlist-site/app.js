@@ -23,6 +23,13 @@
     maxPlannerBudget: 5000,
     // Share of the gift planner budget set aside for tax and shipping (0.15 = 15%).
     taxShippingBuffer: 0.15,
+    // Current prices written daily by the GitHub Action (scripts/update-prices.mjs). Tried in order.
+    pricesUrls: [
+      'https://raw.githubusercontent.com/nicolenadine/wishlist/main/wishlist-site/prices.json',
+      'prices.json',
+    ],
+    // Ignore price checks older than this and fall back to the sheet price.
+    maxPriceAgeDays: 3,
 
     // "Looted" claims. Leave blank to turn the feature off.
     claims: {
@@ -362,6 +369,7 @@
     if (it.color) rows.push(['Color', it.color]);
     if (it.qty > 1) rows.push(['Wanted', '×' + it.qty]);
     if (it.notes) rows.push(['Notes', it.notes]);
+    if (it.checked) rows.push(['Price', 'Checked ' + it.checked.toLocaleDateString(undefined, { month: 'short', day: 'numeric' }) + ' on ' + it.vendor]);
     if (!rows.length) return null;
 
     const id = 'details-' + it.id;
@@ -408,6 +416,7 @@
       legendary && el('span', { class: 'tag tag-legend', text: 'Legendary' }),
       el('span', { class: 'tag' + (legendary ? ' tag-vendor-on-gold' : ''), text: it.vendor }),
       el('span', { class: 'tag tag-type', text: it.tags.join(' + ') }),
+      it.wasPrice && el('span', { class: 'tag tag-sale', text: 'Sale −' + it.salePct + '%' }),
       qtyTag(it),
     ];
     const view = it.link
@@ -438,7 +447,10 @@
         el('div', { class: 'tags' }, tags),
         el('h2', { text: it.name }),
         el('div', { class: 'card-foot' }, [
-          el('span', { class: 'price', text: Number.isNaN(it.price) ? 'price ?' : fmt(it.price) }),
+          el('span', { class: 'price' + (it.wasPrice ? ' is-sale' : '') }, [
+            Number.isNaN(it.price) ? 'price ?' : fmt(it.price),
+            it.wasPrice && el('s', { class: 'was-price', 'aria-label': 'was ' + fmt(it.wasPrice), text: fmt(it.wasPrice) }),
+          ]),
           el('div', { class: 'card-actions' }, [loot, view]),
         ]),
         it.looted && el('p', { class: 'looted-note', text: 'Already gifted. Thank you!' }),
@@ -826,10 +838,46 @@
     return res.text();
   }
 
+  /* ---------- current prices ---------- */
+
+  async function loadPrices() {
+    for (const url of CONFIG.pricesUrls) {
+      try {
+        const res = await fetch(url, { cache: 'no-store' });
+        if (res.ok) return (await res.json()).prices || {};
+      } catch (e) { /* try the next one */ }
+    }
+    return {};
+  }
+
+  // Swap in recent checked prices; mark a sale when the store price is below its regular price or the sheet price.
+  function applyPrices(prices) {
+    const maxAge = CONFIG.maxPriceAgeDays * 864e5;
+    state.items.forEach((it, i) => {
+      let p = it.link && prices[it.link];
+      if (TEST && !p && i === 2 && it.price > 0) {
+        p = { price: Math.round(it.price * 75) / 100, regular: it.price, checked: new Date().toISOString() }; // fake sale to preview
+      }
+      if (!p || !(p.price >= 0)) return;
+      const checked = new Date(p.checked);
+      if (!(Date.now() - checked < maxAge)) return;
+      const sheet = it.price;
+      const was = Math.max(p.regular || 0, Number.isFinite(sheet) ? sheet : 0);
+      it.sheetPrice = sheet;
+      it.price = p.price;
+      it.checked = checked;
+      if (was - p.price >= 0.01) {
+        it.wasPrice = was;
+        it.salePct = Math.max(1, Math.round((was - p.price) / was * 100));
+      }
+    });
+  }
+
   async function init() {
     wire();
     renderModeBadge();
     const claimsPromise = CLAIMS_ON && !TEST ? fetchText(c.csvUrl).catch((err) => err) : null;
+    const pricesPromise = loadPrices();
     try {
       state.items = toItems(parseCSV(await fetchText(CONFIG.dataUrl)));
       if (!state.items.length) throw new Error('No rows');
@@ -850,6 +898,7 @@
       state.sheetClaims = totals;
       state.sheetRefs = refs;
     }
+    applyPrices(await pricesPromise);
     applyClaims();
     renderStats();
     buildFilters();

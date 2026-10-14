@@ -471,3 +471,9 @@ input[type="checkbox"] { width: 18px; height: 18px; margin: 0; accent-color: var
   .info-hint { left: 0; top: 38px; }
   .info-hint::before { left: 12px; top: -4px; transform: rotate(45deg); }
 }
+
+/* ---------- Sale prices ---------- */
+.price { display: inline-flex; align-items: baseline; gap: 6px; flex-wrap: wrap; }
+.price.is-sale { color: #B4235A; }
+.was-price { font-size: 13px; font-weight: 700; color: var(--ink-soft); }
+.tag-sale { background: #FFD1E0; color: #8E1846; }

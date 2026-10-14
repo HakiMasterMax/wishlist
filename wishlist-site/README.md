@@ -66,6 +66,16 @@ When you change `app.js` or `styles.css`, bump the `?v=` number on them in `inde
 
 Share the plain link with gift-givers.
 
+## Daily price check
+
+A GitHub Action (`.github/workflows/update-prices.yml`) runs `scripts/update-prices.mjs` every morning (about 7:17am Pacific). It can also be run by hand from the repo's **Actions** tab → **Update prices** → **Run workflow**. It writes `wishlist-site/prices.json`, and the site uses those prices when they're less than 3 days old.
+
+- **Steam** and **Nintendo**: checked automatically, including sales.
+- **Etsy**: checked once an `ETSY_API_KEY` secret is added (Settings → Secrets and variables → Actions). The value is `keystring:shared_secret` from your Etsy developer app. Etsy's API gives the listing's normal price, so Etsy sales and coupons may not show. Links that pick a specific size or style (`variation=` in the link) are skipped.
+- **Amazon** and everything else: not checked; the sheet price is used.
+
+When the current price is below the store's regular price or your sheet price, the card shows the new price in pink with the old one crossed out and a **Sale −N%** tag. The ⓘ details show when the price was last checked. Smudge's gift picks use current prices.
+
 ## Settings
 
 The top of `app.js` has a `CONFIG` block: the sheet URL, the image folder name and the image file types to try.

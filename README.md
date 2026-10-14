@@ -44,7 +44,6 @@ index.html          page structure
 styles.css          all styling
 app.js              loads the sheet, filters, cards, Smudge's gift planner
 wishlist-images/    optional: photos hosted in the repo instead of linked
-prices.json         daily price checks, written by a GitHub Action
 ```
 
 ## Updating the wishlist
@@ -105,7 +104,7 @@ Share the plain link with gift-givers.
 
 ## Daily price check
 
-A GitHub Action (`.github/workflows/update-prices.yml`) runs `scripts/update-prices.mjs` every morning (about 7:17am Pacific). It can also be run by hand from the repo's **Actions** tab → **Update prices** → **Run workflow**. It reads the sheet link from `config.js` and writes `prices.json`, and the site uses those prices when they're less than 3 days old.
+A GitHub Action (`.github/workflows/update-prices.yml`) runs `scripts/update-prices.mjs` every morning (about 7:17am Pacific). It can also be run by hand from the repo's **Actions** tab → **Update prices** → **Run workflow**. It reads the sheet link from `config.js` and saves `prices.json` to a separate `prices` branch (so it never adds commits to `main` or gets in the way of **Sync fork**). The site uses those prices when they're less than 3 days old.
 
 - **Steam** and **Nintendo**: checked automatically, including sales.
 - **Etsy**: checked once an `ETSY_API_KEY` secret is added (Settings → Secrets and variables → Actions). The value is `keystring:shared_secret` from your Etsy developer app. Etsy's API gives the listing's normal price, so Etsy sales and coupons may not show. Links that pick a specific size or style (`variation=` in the link) are skipped.

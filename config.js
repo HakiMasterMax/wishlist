@@ -11,28 +11,29 @@ window.WISHLIST_CONFIG = {
    * In Google Sheets: File > Share > Publish to web.
    * Pick the tab with your items, choose "Comma-separated values (.csv)",
    * click Publish, and paste the link it gives you here. */
-  sheetUrl: 'TEMPLATE_SHEET_URL',
+  sheetUrl: 'https://docs.google.com/spreadsheets/d/e/2PACX-1vRSZNbl0gQEVubOM0oLqVKIfxp6GwQ6vL1Gkcu3lHwAoNaFMLurx9XFi10w_N_HRwc-_MJOriC-GL4D/pub?output=csv',
 
 
-  /* ---------- Your name ----------
+  /* ---------- 2. Your name ----------
    * Shown to gift-givers, e.g. "Sam won't see it" when they mark something as bought.
    * Leave blank to say "The wishlist owner". */
   ownerName: '',
 
 
-  /* ---------- 2. Photos ----------
-   * Photos live in this folder in the repo. The "image" column in your sheet
-   * holds the file name (with or without .jpg). Names are case-sensitive. */
+  /* ---------- 3. Photos ----------
+   * Easiest: paste a photo link into the sheet's "image" column and ignore this.
+   * To host photos in the repo instead, upload them to this folder and put the
+   * file name in the "image" column (with or without .jpg). Names are case-sensitive. */
   imageFolder: 'wishlist-images/',
 
 
-  /* ---------- 3. Gift planner ----------
+  /* ---------- 4. Gift planner ----------
    * Part of a gift-giver's budget the planner holds back for tax and shipping.
    * 0.15 means 15%. Use 0 to turn it off. */
   taxShippingBuffer: 0.15,
 
 
-  /* ---------- 4. "Looted" claims (optional) ----------
+  /* ---------- 5. "Looted" claims (optional) ----------
    * Lets gift-givers mark items as bought so nobody doubles up.
    * Leave these blank to turn the feature off. Setup steps are in the README. */
   claims: {

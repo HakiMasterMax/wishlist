@@ -1,0 +1,77 @@
+{
+  "name": "RPG Item Shop",
+  "description": "A cozy pixel-game shop: starred items are Legendary, gift-givers Loot what they buy, and Smudge the soot sprite picks gifts.",
+  "mascot": {
+    "name": "Smudge",
+    "idle": "Smudge, a fuzzy little soot sprite, looking up",
+    "happy": "Smudge, a fuzzy little soot sprite, beaming",
+    "sad": "Smudge, a fuzzy little soot sprite, sweating nervously"
+  },
+  "art": {
+    "heroSky": "art/hero-sky.svg",
+    "heroScene": "art/hero-scene.svg",
+    "portrait": "art/portrait.svg",
+    "mascotIdle": "art/mascot-idle.svg",
+    "mascotHappy": "art/mascot-happy.svg",
+    "mascotSad": "art/mascot-sad.svg",
+    "lootBag": "art/loot-bag.svg"
+  },
+  "text": {
+    "title": "Wishlist Item Shop",
+    "eventTag": "WINTER EVENT",
+    "welcomeName": "SHOPKEEP",
+    "welcome": "Welcome, traveler! Everything on these shelves is on my wishlist. Gold-star items are legendary: the ones I want most. Tap the {i} on a photo for sizes, colors and notes.",
+    "footer": "save point reached. generated from a spreadsheet.",
+    "loading": "loading…",
+
+    "stat.items": "{n} item | {n} items",
+    "stat.starred": "{n} legendary",
+    "stat.shops": "{n} merchant | {n} merchants",
+
+    "starred": "Legendary",
+    "starredOnly": "Legendary only",
+    "starBadge": "Legendary: most wanted",
+    "typeFilter": "Item type",
+    "shopFilter": "Merchant",
+    "searchPlaceholder": "dice, mugs, games",
+    "sortStarred": "Legendary first",
+
+    "count": "{left} / {total} in stock",
+    "countLooted": " · {n} looted",
+    "empty.title": "The shelves are empty",
+    "detailsTitle": "ITEM DETAILS",
+    "hint": "Psst! Sizes & notes in here",
+
+    "loot": "Loot",
+    "lootAria": "Mark {name} as looted (purchased)",
+    "lootedTag": "Looted",
+    "lootedStamp": "LOOTED",
+    "lootTitle": "Mark as looted?",
+    "lootError": "{mascot} couldn't reach the loot log. Check your connection and try again.",
+    "lootConfirm": "Loot it!",
+    "toast": "Looted! {qty}{name} is marked as gifted.",
+
+    "plannerTitle": "Ask {mascot}",
+    "plannerTag": "SIDE QUEST",
+    "mascotLabel": "SMUDGE",
+    "planner.loading": "Fetching the shop inventory…",
+    "planner.idle": "Psst! Tell me your budget and I will dig through the shop for the best loot.",
+    "planner.emptyTitle": "No loot yet",
+    "planner.emptySub": "{mascot} only digs through items the shop filters are showing.",
+    "planner.emptySubClaims": "{mascot} only digs through items the shop filters are showing, and skips anything already looted.",
+    "planner.none": "Eep! Nothing fits under {budget} once I save some for tax and shipping. More gold, or fewer filters?",
+    "planner.noneTitle": "Not enough gold",
+    "planner.onlyCard": "Nothing on the shelves fits, but a {amount} {name} does!",
+    "planner.starredFirst": "Gold-star treasures went in first.",
+    "planner.squeezed": "Squeezed the most out of your gold.",
+    "planner.picksTitle": "{mascot}'s picks",
+    "planner.bufferHint": "{mascot} sets aside about {pct}% of your budget as a rough guess for tax and shipping. Real costs vary by shop and location, so check the total at checkout.",
+    "planner.maxBudget": "{mascot} can only count up to {amount} at a time.",
+    "planner.claimHint": "Bought one? Hit Loot on its card so nobody doubles up.",
+    "planner.undone": "Phew, un-looted! It is back on the shelf.",
+
+    "error.title": "The shop is closed",
+    "error.line": "Eep! I could not reach the spreadsheet. Try refreshing in a minute?",
+    "setup.line": "Eep! This shop has no shelves yet. Someone needs to connect a spreadsheet."
+  }
+}

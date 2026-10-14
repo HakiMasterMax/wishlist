@@ -27,13 +27,20 @@ window.WISHLIST_CONFIG = {
   imageFolder: 'wishlist-images/',
 
 
-  /* ---------- 4. Gift planner ----------
+  /* ---------- 4. Theme ----------
+   * The look and wording of your shop. Each theme is a folder in themes/
+   * (see themes/README.md for the list). To preview a theme before switching,
+   * add ?theme=its-folder-name to the end of your site's address. */
+  theme: 'rpg-shop',
+
+
+  /* ---------- 5. Gift planner ----------
    * Part of a gift-giver's budget the planner holds back for tax and shipping.
    * 0.15 means 15%. Use 0 to turn it off. */
   taxShippingBuffer: 0.15,
 
 
-  /* ---------- 5. "Looted" claims (optional) ----------
+  /* ---------- 6. "Looted" claims (optional) ----------
    * Lets gift-givers mark items as bought so nobody doubles up.
    * Leave these blank to turn the feature off. Setup steps are in the README. */
   claims: {

@@ -371,6 +371,7 @@
       'aria-label': 'Details for ' + it.name,
       onclick: (e) => {
         e.stopPropagation();
+        dismissHint();
         const open = !wrap.classList.contains('is-open');
         closeAllDetails();
         wrap.classList.toggle('is-open', open);
@@ -737,6 +738,33 @@
       status.hidden = true;
     }
     renderPlanner(list);
+    applyHint();
+  }
+
+  /* One-time tip pointing at the first info button. Gone for good once any info button is tapped or the tip is closed. */
+  const HINT_KEY = 'wishlist-info-hint-seen';
+  function dismissHint() {
+    store.set(HINT_KEY, '1');
+    document.querySelectorAll('.info.has-hint').forEach((w) => {
+      w.classList.remove('has-hint');
+      w.closest('.card').classList.remove('has-hint-card');
+      const tag = w.querySelector('.info-hint');
+      if (tag) tag.remove();
+    });
+  }
+  function applyHint() {
+    if (store.get(HINT_KEY)) return;
+    const wrap = document.querySelector('#grid .card:not(.is-looted) .info') || document.querySelector('#grid .info');
+    if (!wrap || wrap.classList.contains('has-hint')) return;
+    wrap.classList.add('has-hint');
+    wrap.closest('.card').classList.add('has-hint-card');
+    wrap.append(el('div', { class: 'info-hint', role: 'note' }, [
+      el('span', { text: 'Psst! Sizes & notes in here' }),
+      el('button', {
+        type: 'button', 'aria-label': 'Dismiss tip', text: '×',
+        onclick: (e) => { e.stopPropagation(); dismissHint(); },
+      }),
+    ]));
   }
 
   function renderStats() {

@@ -38,7 +38,7 @@ Edit the Google Sheet. The published CSV refreshes within about 5 minutes, and t
 | `size`, `color`, `notes` | Shown in the **i** details popup (hover on desktop, tap on phones) |
 | `quantity` | If more than 1, a ×N tag appears, and Smudge can pick it up to N times |
 | `starred` | `TRUE` (or yes / x / ✓, or a ticked checkbox) makes the item **Legendary**: gold card, star badge, picked first |
-| `shop` | Where it's sold. Becomes a filter and a tag |
+| `shop` | Where it's sold. Shown on the card and used as a filter. Shops with only one item are grouped under **Other** in the filter so the list stays short (change this with `groupSmallShops` in `config.js`) |
 | `category` | What kind of thing it is, separated by `:` (e.g. `craft: clothing`). Blank counts as **Other** |
 | `image` | A link to the photo (right-click the product photo → **Copy image address**), or a file name in `wishlist-images/` |
 | `link` | Where the **View** button goes (opens in a new tab) |

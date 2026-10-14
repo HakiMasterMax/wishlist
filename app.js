@@ -20,6 +20,7 @@
     imageExtensions: ['jpg', 'png', 'jpeg', 'webp'],
     maxPlannerBudget: 5000,
     maxPriceAgeDays: 3,
+    groupSmallShops: 2,
   };
   const USER = window.WISHLIST_CONFIG || {};
   const CONFIG = { ...DEFAULTS, ...USER, claims: { ...DEFAULTS.claims, ...(USER.claims || {}) } };
@@ -231,6 +232,15 @@
     }).filter((it) => it.name);
   }
 
+  // Shops with only a few items fold into "Other" in the shop filter so the list stays short.
+  // Cards still show each item's real shop.
+  function groupShops(items) {
+    const min = Math.max(0, parseInt(CONFIG.groupSmallShops, 10) || 0);
+    const counts = new Map();
+    items.forEach((it) => counts.set(it.vendor, (counts.get(it.vendor) || 0) + 1));
+    items.forEach((it) => { it.shopGroup = counts.get(it.vendor) < min ? 'Other' : it.vendor; });
+  }
+
   /* ---------- claims ---------- */
 
   // Reads the form's response sheet: columns are Timestamp plus the form questions.
@@ -312,7 +322,7 @@
     const band = PRICE_BANDS.find((b) => b.id === state.band) || PRICE_BANDS[0];
     const q = state.q.trim().toLowerCase();
     return state.items.filter((it) => {
-      if (state.vendorsOff.has(it.vendor)) return false;
+      if (state.vendorsOff.has(it.shopGroup)) return false;
       if (state.starOnly && !it.starred) return false;
       if (state.types.size && !it.tags.some((t) => state.types.has(t))) return false;
       if (band.id !== 'all' && !it.giftCard && !(it.price >= band.min && it.price < band.max)) return false;
@@ -348,16 +358,22 @@
       },
     })));
 
-    const vendors = [...new Set(state.items.map((it) => it.vendor))].sort();
+    const vendors = [...new Set(state.items.map((it) => it.shopGroup))]
+      .sort((a, b) => (a === 'Other') - (b === 'Other') || a.localeCompare(b));
     $('#vendor-list').replaceChildren(...vendors.map((v) => {
+      const inGroup = state.items.filter((it) => it.shopGroup === v);
+      const shops = [...new Set(inGroup.map((it) => it.vendor))].sort();
       const input = el('input', {
         type: 'checkbox', checked: true, 'data-vendor': v,
         onchange: (e) => { e.target.checked ? state.vendorsOff.delete(v) : state.vendorsOff.add(v); render(); },
       });
-      return el('label', { class: 'vendor' }, [
+      // "Other" lists the shops it holds, so a gift-giver can still see what's in there.
+      const named = shops.filter((sh) => sh !== 'Other');
+      const title = v === 'Other' && named.length ? 'Includes ' + named.join(', ') : null;
+      return el('label', { class: 'vendor', title }, [
         input,
         el('span', { class: 'vendor-name', text: v }),
-        el('span', { class: 'vendor-count', text: state.items.filter((it) => it.vendor === v).length }),
+        el('span', { class: 'vendor-count', text: inGroup.length }),
       ]);
     }));
 
@@ -976,6 +992,7 @@
     try {
       state.items = toItems(parseCSV(await fetchText(CONFIG.sheetUrl)));
       if (!state.items.length) throw new Error('No rows');
+      groupShops(state.items);
     } catch (err) {
       console.error('[wishlist] could not load data:', err);
       showError();

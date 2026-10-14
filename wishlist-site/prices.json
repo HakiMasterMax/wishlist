@@ -1,0 +1,17 @@
+{
+  "updated": "2026-10-14T00:22:49.912Z",
+  "prices": {
+    "https://store.steampowered.com/app/1444480/Turing_Complete/": {
+      "price": 19.99,
+      "regular": 19.99,
+      "source": "steam",
+      "checked": "2026-10-14T00:22:47.490Z"
+    },
+    "https://www.nintendo.com/us/store/products/mario-and-luigi-brothership-switch/": {
+      "price": 59.99,
+      "regular": 59.99,
+      "source": "nintendo",
+      "checked": "2026-10-14T00:22:48.309Z"
+    }
+  }
+}

@@ -166,7 +166,8 @@
       return i >= 0 && r[i] != null ? r[i].trim() : '';
     };
     return rows.slice(1).map((r, n) => {
-      const price = parseFloat(get(r, 'price').replace(/[$,\s]/g, ''));
+      const priceNum = get(r, 'price').replace(/,/g, '').match(/\d+(?:\.\d+)?/); // "$12.99", "From $25", "Any amount"
+      const price = priceNum ? parseFloat(priceNum[0]) : NaN;
       let tags = get(r, 'tags').split(/[:;,]/).map((t) => t.trim()).filter(Boolean).map(titleCase);
       tags = [...new Set(tags)];
       tags = [...new Set(tags.map((t) => (/^gift ?cards?$/i.test(t) ? 'Gift Cards' : t)))];

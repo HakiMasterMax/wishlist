@@ -38,6 +38,10 @@ Edit the Google Sheet. The published CSV refreshes within about 5 minutes, and t
 
 New tags and merchants show up as filters automatically.
 
+### Gift cards
+
+Tag a row `gift card` and put the smallest amount in `price` (or leave it blank for any amount). Gift cards show "From $10" / "Any amount", have no Loot button (several people can give one), always pass the price filter, and sort after regular items. Smudge uses one to fill leftover budget after picking items (a blank minimum counts as $5); it doesn't count toward "Number of gifts".
+
 ### Adding a photo
 
 Save it into `wishlist-images/` with exactly the name in the `image_name` column, plus `.jpg` (or `.png`/`.webp`), then upload it to the repo. Names are case-sensitive on GitHub Pages. Keep photos around 900px wide so the page stays quick.

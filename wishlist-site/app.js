@@ -52,6 +52,7 @@
     { id: 'd', label: '$100+', min: 100, max: Infinity },
   ];
 
+  const GIFT_SVG = '<svg aria-hidden="true" width="16" height="16" viewBox="0 0 16 16" shape-rendering="crispEdges"><path d="M2 6h12v8H2z" fill="#FF9DBD"/><path d="M1 4h14v3H1z" fill="#FFC2D8"/><path d="M7 4h2v10H7z" fill="#FFD166"/><path d="M1 4h14v1H1zM1 6h14v1H1zM1 4h1v3H1zM14 4h1v3h-1zM2 7h1v7H2zM13 7h1v7h-1zM2 13h12v1H2zM4 1h2v1H4zM10 1h2v1h-2zM3 2h1v2H3zM6 2h1v2H6zM9 2h1v2H9zM12 2h1v2h-1z" fill="#2B2A5C"/></svg>';
   const STAR_PATH = 'M12 2.5l2.9 6 6.6.9-4.8 4.6 1.2 6.5L12 17.4 6.1 20.5l1.2-6.5L2.5 9.4l6.6-.9z';
   const SHIELD_KEY = 'wishlist-spoiler-shield';
   const PENDING_KEY = 'wishlist-pending-claims';
@@ -168,6 +169,7 @@
       const price = parseFloat(get(r, 'price').replace(/[$,\s]/g, ''));
       let tags = get(r, 'tags').split(/[:;,]/).map((t) => t.trim()).filter(Boolean).map(titleCase);
       tags = [...new Set(tags)];
+      tags = [...new Set(tags.map((t) => (/^gift ?cards?$/i.test(t) ? 'Gift Cards' : t)))];
       if (!tags.length) tags = ['Other'];
       const name = get(r, 'item_name');
       return {
@@ -175,6 +177,8 @@
         key: keyOf(name),
         name,
         price: Number.isFinite(price) ? price : NaN,
+        giftCard: tags.includes('Gift Cards'),
+        giftMin: Number.isFinite(price) && price > 0 ? price : 0,
         size: get(r, 'size'),
         color: get(r, 'color_or_pattern'),
         qty: Math.max(1, parseInt(get(r, 'quantity'), 10) || 1),
@@ -242,6 +246,7 @@
     state.items.forEach((it) => {
       const claimed = CLAIMS_ON ? Math.max(0, totals.get(it.key) || 0) : 0;
       it.remaining = Math.max(0, it.qty - claimed);
+      if (it.giftCard) { it.remaining = it.qty; it.looted = false; return; } // never "used up"
       it.looted = CLAIMS_ON && it.remaining === 0;
     });
   }
@@ -271,7 +276,7 @@
       if (state.vendorsOff.has(it.vendor)) return false;
       if (state.starOnly && !it.starred) return false;
       if (state.types.size && !it.tags.some((t) => state.types.has(t))) return false;
-      if (band.id !== 'all' && !(it.price >= band.min && it.price < band.max)) return false;
+      if (band.id !== 'all' && !it.giftCard && !(it.price >= band.min && it.price < band.max)) return false;
       if (q) {
         const hay = [it.name, it.vendor, it.tags.join(' '), it.color, it.notes].join(' ').toLowerCase();
         if (!hay.includes(q)) return false;
@@ -288,7 +293,7 @@
     name: (a, b) => a.name.localeCompare(b.name),
   };
   // Looted items always sink to the end.
-  const sortWith = (fn) => (a, b) => (a.looted - b.looted) || fn(a, b);
+  const sortWith = (fn) => (a, b) => (a.looted - b.looted) || (a.giftCard - b.giftCard) || fn(a, b);
 
   /* ---------- filter controls ---------- */
 
@@ -428,7 +433,7 @@
           svg('<svg aria-hidden="true" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17L17 7M9 7h8v8"/></svg>'),
         ])
       : null;
-    const loot = CLAIMS_ON && !it.looted
+    const loot = CLAIMS_ON && !it.looted && !it.giftCard
       ? el('button', {
           type: 'button', class: 'loot-btn', 'aria-label': 'Mark ' + it.name + ' as looted (purchased)',
           onclick: () => openLootDialog(it),
@@ -447,7 +452,10 @@
         el('div', { class: 'tags' }, tags),
         el('h2', { text: it.name }),
         el('div', { class: 'card-foot' }, [
-          el('span', { class: 'price' + (it.wasPrice ? ' is-sale' : '') }, [
+          it.giftCard ? el('span', { class: 'price is-giftcard' }, [
+            svg(GIFT_SVG),
+            it.giftMin ? 'From ' + fmt(it.giftMin) : 'Any amount',
+          ]) : el('span', { class: 'price' + (it.wasPrice ? ' is-sale' : '') }, [
             Number.isNaN(it.price) ? 'price ?' : fmt(it.price),
             it.wasPrice && el('s', { class: 'was-price', 'aria-label': 'was ' + fmt(it.wasPrice), text: fmt(it.wasPrice) }),
           ]),
@@ -595,7 +603,7 @@
     const W = B + 1;
     const pool = [];
     list.forEach((it) => {
-      if (it.looted || Number.isNaN(it.price) || Math.ceil(it.price) > B) return;
+      if (it.looted || it.giftCard || Number.isNaN(it.price) || Math.ceil(it.price) > B) return;
       for (let k = 0; k < it.remaining; k++) pool.push(it);
     });
     const n = pool.length;
@@ -658,6 +666,12 @@
     $('#smudge-line').textContent = line;
   }
 
+  // Pick a gift card to fill leftover budget: legendary first, then sheet order. Blank minimum counts as $5.
+  function pickGiftCard(list, spare) {
+    const fits = list.filter((it) => it.giftCard && (it.giftMin || 5) <= spare);
+    return fits.find((it) => it.starred) || fits[0] || null;
+  }
+
   function renderPlanner(list) {
     const box = $('#gp-result');
     const budget = parseFloat(state.budget);
@@ -680,6 +694,15 @@
       return;
     }
 
+    const itemsTotal = plan.state === 'show' ? plan.total : 0;
+    const spareWhole = Math.floor(giftBudget - itemsTotal + 1e-9);
+    const topCard = pickGiftCard(list, spareWhole);
+    const topUp = topCard ? { item: topCard, amount: spareWhole } : null;
+
+    if (plan.state === 'none' && topUp) {
+      plan.state = 'show'; plan.picks = []; plan.units = 0; plan.total = 0;
+    }
+
     if (plan.state === 'none') {
       setSmudge('sad', 'Eep! Nothing fits under ' + fmt(giftBudget) + ' once I save some for tax and shipping. More gold, or fewer filters?');
       box.replaceChildren(el('div', { class: 'plan-empty' }, [
@@ -690,8 +713,13 @@
     }
 
     const anyGold = plan.picks.some((g) => g.item.starred);
-    setSmudge('happy', (plan.units === 1 ? 'Found one! ' : 'Found ' + plan.units + '! ') +
-      (anyGold ? 'Gold-star treasures went in first.' : 'Squeezed the most out of your gold.'));
+    if (!plan.units) {
+      setSmudge('happy', 'Nothing on the shelves fits, but a ' + fmt(topUp.amount) + ' ' + topUp.item.name + ' does!');
+    } else {
+      setSmudge('happy', (plan.units === 1 ? 'Found one! ' : 'Found ' + plan.units + '! ') +
+        (topUp ? '…plus a ' + fmt(topUp.amount) + ' ' + topUp.item.name + ' to use up the rest!'
+          : (anyGold ? 'Gold-star treasures went in first.' : 'Squeezed the most out of your gold.')));
+    }
 
     const rows = plan.picks.map(({ item, n }) => el('li', { class: 'plan-row' }, [
       el('span', item.starred
@@ -705,14 +733,30 @@
       ]),
       el('span', { class: 'plan-price', text: fmt(item.price * n) }),
     ]));
+    if (topUp) {
+      const gc = topUp.item;
+      rows.push(el('li', { class: 'plan-row is-giftcard' }, [
+        el('span', { class: 'plan-dot is-gift', 'aria-hidden': 'true' }, svg(GIFT_SVG)),
+        el('span', { class: 'plan-name' }, [
+          gc.link
+            ? el('a', { href: gc.link, target: '_blank', rel: 'noopener noreferrer', text: gc.name })
+            : el('span', { text: gc.name }),
+          el('span', { class: 'plan-meta', text: plan.units ? 'Gift card · uses up the rest' : 'Gift card' }),
+        ]),
+        el('span', { class: 'plan-price', text: fmt(topUp.amount) }),
+      ]));
+    }
+    const grand = plan.total + (topUp ? topUp.amount : 0);
 
     const children = [
-      el('div', { class: 'plan-head' }, [el('strong', { text: "Smudge's picks" }), el('span', { text: plural(plan.units, 'gift', 'gifts') })]),
+      el('div', { class: 'plan-head' }, [el('strong', { text: "Smudge's picks" }), el('span', {
+        text: (plan.units ? plural(plan.units, 'gift', 'gifts') : '') + (topUp ? (plan.units ? ' + gift card' : 'gift card') : ''),
+      })]),
       el('ul', { class: 'plan-list' }, rows),
       el('div', { class: 'plan-totals' }, [
-        el('span', { class: 'plan-total', text: 'Gifts ' + fmt(plan.total) }),
+        el('span', { class: 'plan-total', text: 'Gifts ' + fmt(grand) }),
         reserve > 0 && el('span', { class: 'plan-left', text: '+ ~' + fmt(reserve) + ' est. tax & shipping' }),
-        el('span', { class: 'plan-left', text: fmt(Math.max(0, giftBudget - plan.total)) + ' spare' }),
+        el('span', { class: 'plan-left', text: fmt(Math.max(0, giftBudget - grand)) + ' spare' }),
       ]),
     ];
     if (reserve > 0) {
@@ -724,7 +768,7 @@
     if (giftBudget > CONFIG.maxPlannerBudget) {
       children.push(el('p', { class: 'plan-note', text: 'Smudge can only count up to ' + fmt(CONFIG.maxPlannerBudget) + ' at a time.' }));
     }
-    if (CLAIMS_ON) {
+    if (CLAIMS_ON && plan.units) {
       children.push(el('p', { class: 'plan-hint', text: 'Bought one? Hit Loot on its card so nobody doubles up.' }));
     }
     box.replaceChildren(...children);
@@ -858,7 +902,7 @@
       if (TEST && !p && i === 2 && it.price > 0) {
         p = { price: Math.round(it.price * 75) / 100, regular: it.price, checked: new Date().toISOString() }; // fake sale to preview
       }
-      if (!p || !(p.price >= 0)) return;
+      if (it.giftCard || !p || !(p.price >= 0)) return;
       const checked = new Date(p.checked);
       if (!(Date.now() - checked < maxAge)) return;
       const sheet = it.price;

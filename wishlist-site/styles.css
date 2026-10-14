@@ -477,3 +477,9 @@ input[type="checkbox"] { width: 18px; height: 18px; margin: 0; accent-color: var
 .price.is-sale { color: #B4235A; }
 .was-price { font-size: 13px; font-weight: 700; color: var(--ink-soft); }
 .tag-sale { background: #FFD1E0; color: #8E1846; }
+
+/* ---------- Gift cards ---------- */
+.price.is-giftcard { font-size: 16px; color: #A3305E; align-items: center; }
+.price.is-giftcard svg, .plan-dot.is-gift svg { width: 16px; height: 16px; }
+.plan-dot.is-gift { background: var(--pink-soft); }
+.plan-row.is-giftcard { border-style: dashed; }

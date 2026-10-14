@@ -21,6 +21,10 @@ wishlist-site/      redirect so old links to /wishlist-site/ still work
 3. Go to **Settings → Pages**. Under **Build and deployment**, set Source to **Deploy from a branch**, Branch to `main`, and folder to `/ (root)`, then click **Save**.
 4. After a minute or two the site is live at `https://<your-username>.github.io/wishlist/`.
 
+## Start your wishlist sheet
+
+**[Make a copy of the wishlist template](https://docs.google.com/spreadsheets/d/1xcYWpix2X1ZDpUfDu7IXhiKeWtpUENBPletfdRZQ8g8/copy)**. It opens a copy in your own Google Drive with example items, a tip on every column header, and a **How to use** tab. Replace the examples with your own items, publish the **Items** tab as CSV (File → Share → Publish to web), and paste that link into `sheetUrl` in `config.js`.
+
 ## Updating the wishlist
 
 Edit the Google Sheet. The published CSV refreshes within about 5 minutes, and the site picks it up on the next page load. You don't need to redeploy anything.

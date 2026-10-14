@@ -5,10 +5,13 @@ A cozy, filterable storefront for my wishlist. It's plain HTML, CSS and JS with 
 ## Files
 
 ```
+config.js           your settings: sheet link, photo folder, gift planner, claims (the only file you need to edit)
 index.html          page structure
 styles.css          all styling
 app.js              loads the sheet, filters, cards, Smudge's gift planner
-wishlist-images/    item photos, named to match the sheet's image_name column
+wishlist-images/    item photos, named to match the sheet's image column
+prices.json         daily price checks, written by a GitHub Action
+wishlist-site/      redirect so old links to /wishlist-site/ still work
 ```
 
 ## Put it on GitHub Pages
@@ -26,31 +29,33 @@ Edit the Google Sheet. The published CSV refreshes within about 5 minutes, and t
 
 | Column | What it does |
 |---|---|
-| `item_name` | Card title |
+| `name` | Card title |
 | `price` | Number; a `$` is fine. Used for the price filter, sorting and the gift planner |
-| `size`, `color_or_pattern`, `notes` | Shown in the **i** details popup (hover on desktop, tap on phones) |
+| `size`, `color`, `notes` | Shown in the **i** details popup (hover on desktop, tap on phones) |
 | `quantity` | If more than 1, a ×N tag appears, and Smudge can pick it up to N times |
-| `excite` | `TRUE` makes the item **Legendary** (gold card, star badge, picked first) |
-| `source` | Merchant filter and tag |
-| `tags` | Item types, separated by `:` (e.g. `craft: clothing`). Blank counts as **Other** |
-| `image_name` | Photo file name without the extension (e.g. `ear-muffs-amazon`) |
+| `starred` | `TRUE` (or yes / x / ✓, or a ticked checkbox) makes the item **Legendary**: gold card, star badge, picked first |
+| `shop` | Where it's sold. Becomes a filter and a tag |
+| `category` | What kind of thing it is, separated by `:` (e.g. `craft: clothing`). Blank counts as **Other** |
+| `image` | Photo file name in `wishlist-images/`, with or without the extension (e.g. `ear-muffs-amazon`) |
 | `link` | Where the **View** button goes (opens in a new tab) |
 
-New tags and merchants show up as filters automatically.
+Only `name` is required, and columns can be in any order. Headers are matched loosely, so `Starred?`, `Shop name` or `IMAGE` all work. The older names (`item_name`, `excite`, `source`, `tags`, `image_name`, `color_or_pattern`) still work too.
+
+New categories and shops show up as filters automatically.
 
 ### Gift cards
 
-Tag a row `gift card` and put the smallest amount in `price` (or leave it blank for any amount). Gift cards show "From $10" / "Any amount", have no Loot button (several people can give one), always pass the price filter, and sort after regular items. Smudge uses one to fill leftover budget after picking items (a blank minimum counts as $5); it doesn't count toward "Number of gifts".
+Set a row's category to `gift card` and put the smallest amount in `price` (or leave it blank for any amount). Gift cards show "From $10" / "Any amount", have no Loot button (several people can give one), always pass the price filter, and sort after regular items. Smudge uses one to fill leftover budget after picking items (a blank minimum counts as $5); it doesn't count toward "Number of gifts".
 
 ### Adding a photo
 
-Save it into `wishlist-images/` with exactly the name in the `image_name` column, plus `.jpg` (or `.png`/`.webp`), then upload it to the repo. Names are case-sensitive on GitHub Pages. Keep photos around 900px wide so the page stays quick.
+Save it into `wishlist-images/` with exactly the name in the `image` column, plus `.jpg` (or `.png`/`.webp`), then upload it to the repo. Names are case-sensitive on GitHub Pages. Keep photos around 900px wide so the page stays quick.
 
 ## Looting (gift-givers marking things as bought)
 
 Each card gets a **Loot** button. Pressing it asks how many they bought and records it in a Google Form. The item then shows how many are left, and once none are left it greys out with a LOOTED stamp, sinks to the end of the list, and Smudge stops suggesting it. A giver can **Undo** right after. Other mistakes are fixed by deleting the row in the claims sheet.
 
-The feature is off until the four `claims` values at the top of `app.js` are filled in:
+The feature is off until the `claims` values in `config.js` are filled in:
 
 | Setting | Where it comes from |
 |---|---|
@@ -66,13 +71,13 @@ The form needs three short-answer questions titled **item**, **quantity** and **
 - `…/wishlist/?shield=off`: turns it off again in that browser.
 - `…/wishlist/?test-claims`: fake purchases and nothing gets sent. Works even with the shield on, so you can try Loot and the animation safely.
 
-When you change `app.js` or `styles.css`, bump the `?v=` number on them in `index.html` so browsers fetch the new version.
+When you change `config.js`, `app.js` or `styles.css`, bump the `?v=` number on them in `index.html` so browsers fetch the new version.
 
 Share the plain link with gift-givers.
 
 ## Daily price check
 
-A GitHub Action (`.github/workflows/update-prices.yml`) runs `scripts/update-prices.mjs` every morning (about 7:17am Pacific). It can also be run by hand from the repo's **Actions** tab → **Update prices** → **Run workflow**. It writes `wishlist-site/prices.json`, and the site uses those prices when they're less than 3 days old.
+A GitHub Action (`.github/workflows/update-prices.yml`) runs `scripts/update-prices.mjs` every morning (about 7:17am Pacific). It can also be run by hand from the repo's **Actions** tab → **Update prices** → **Run workflow**. It reads the sheet link from `config.js` and writes `prices.json`, and the site uses those prices when they're less than 3 days old.
 
 - **Steam** and **Nintendo**: checked automatically, including sales.
 - **Etsy**: checked once an `ETSY_API_KEY` secret is added (Settings → Secrets and variables → Actions). The value is `keystring:shared_secret` from your Etsy developer app. Etsy's API gives the listing's normal price, so Etsy sales and coupons may not show. Links that pick a specific size or style (`variation=` in the link) are skipped.
@@ -82,11 +87,11 @@ When the current price is below the store's regular price or your sheet price, t
 
 ## Settings
 
-The top of `app.js` has a `CONFIG` block: the sheet URL, the image folder name and the image file types to try.
+Everything you'd want to change lives in `config.js`, with a comment above each setting: your sheet link, the photo folder, how much of the gift planner budget to hold back for tax and shipping, and the optional claims form. You can edit it right on GitHub with the pencil icon.
 
 ## Run it locally
 
-Opening `index.html` straight from Finder won't load the sheet, because browsers block it. Run a tiny server from this folder instead:
+Opening `index.html` straight from Finder won't load the sheet, because browsers block it. Run a tiny server from the repo folder instead:
 
 ```
 python3 -m http.server 8000

@@ -32,7 +32,7 @@
     settingsUrl: '',
     // The claimed-items log tab's id in the template sheet (the claim form writes there). Copies keep
     // it, so turning on claiming in the Settings tab only needs the form link.
-    claimsTabId: '',
+    claimsTabId: '734565925',
   };
   const USER = window.WISHLIST_CONFIG || {};
   const CONFIG = { ...DEFAULTS, ...USER, claims: { ...DEFAULTS.claims, ...(USER.claims || {}) } };

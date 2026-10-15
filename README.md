@@ -87,7 +87,7 @@ Or keep photos in the repo: save it into `wishlist-images/` with exactly the nam
 
 Each card gets a **Loot** button. Pressing it asks how many they bought and records it in a Google Form. The item then shows how many are left, and once none are left it greys out with a LOOTED stamp, sinks to the end of the list, and Smudge stops suggesting it. A giver can **Undo** right after. Other mistakes are fixed by deleting the row in the claims sheet.
 
-**Easiest:** copy the template claim form, then fill in the claiming rows in your sheet's **Settings** tab (the **How to use** tab walks through it): tick **Enable item claiming**, and paste the **Claim form link** and the **Claimed items sheet link**. Unticking the box turns the feature off again.
+**Easiest:** the template sheet comes with its own claim form, linked to a hidden **Claimed Items Log** tab, and copying the sheet copies the form too. In your copy's **Settings** tab, paste the form's pre-filled link into **Claim form link** and tick **Enable item claiming** (the **How to use** tab walks through it). Unticking the box turns the feature off again.
 
 **Or, in `config.js`** (for your own form, or a sheet without a Settings tab), fill in the `claims` values:
 

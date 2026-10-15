@@ -15,10 +15,12 @@
  * is downloading UPDATES_URL.
  */
 
-const SCRIPT_VERSION = 1;
+const SCRIPT_VERSION = 2;
 const UPDATES_URL = 'https://nicolenadine.github.io/wishlist/sheet/updates.json';
 const DOCS_URL = 'https://github.com/nicolenadine/wishlist/blob/main/docs/sheet-menu.md';
 const SETTINGS_TAB = 'Settings';
+// The public template. Gift claiming is never set up there, or every copy would share its form.
+const TEMPLATE_ID = '1xcYWpix2X1ZDpUfDu7IXhiKeWtpUENBPletfdRZQ8g8';
 
 // ---------- menu ----------
 
@@ -133,6 +135,10 @@ const ACTIONS = {
 function setUpClaiming() {
   const ui = SpreadsheetApp.getUi();
   const ss = SpreadsheetApp.getActiveSpreadsheet();
+  if (ss.getId() === TEMPLATE_ID) {
+    ui.alert('This is the template', 'Gift claiming is set up in each person\'s own copy, not in the template. Make a copy first (File → Make a copy).', ui.ButtonSet.OK);
+    return;
+  }
   turnOnUpdateNotes_();
 
   const existing = settingCell_('Claim form link');

@@ -27,7 +27,7 @@ Click **Make a copy**. A copy opens in your own Google Drive with three tabs at 
 - **Settings:** your theme, your name and a few other choices.
 - **How to use:** a cheat sheet for the columns.
 
-<!-- screenshot: docs/media/setup/01-copy-sheet.png (the "Copy document" dialog) -->
+<img src="media/setup/01-copy-sheet.webp" alt="The Copy document dialog, with the Make a copy button highlighted" width="360">
 
 ## 2. Publish it
 
@@ -38,7 +38,9 @@ This lets your website read the sheet. It doesn't make the sheet editable by any
 3. Click **Publish**, then **OK**.
 4. Copy the link it shows. You'll paste it in step 4.
 
-<!-- screenshot: docs/media/setup/02-publish.png (Publish to web dialog with Entire document + CSV selected) -->
+<img src="media/setup/02-publish-menu.webp" alt="The File menu open at Share, then Publish to web" width="520">
+
+<img src="media/setup/03-publish-dialog.webp" alt="The Publish to web dialog: Entire document, changed to Comma-separated values, Publish, then copy the link" width="520">
 
 > [!IMPORTANT]
 > Choose **Entire document**, not just the Items tab, so the site can read your Settings tab too.
@@ -49,7 +51,7 @@ This lets your website read the sheet. It doesn't make the sheet editable by any
 
 Sign in to GitHub if it asks, then click **Create fork**. "Fork" is GitHub's word for your own copy. You'll land on it at `github.com/your-username/wishlist`.
 
-<!-- screenshot: docs/media/setup/03-fork.png (Create a new fork page) -->
+<img src="media/setup/04-fork.webp" alt="The Fork button at the top right of the repo page" width="420">
 
 ## 4. Connect the two
 
@@ -58,7 +60,9 @@ Sign in to GitHub if it asks, then click **Create fork**. "Fork" is GitHub's wor
 3. Find the line that starts with `sheetUrl:`. Replace the link between the quotes with the one you copied in step 2. Keep the quotes.
 4. Click **Commit changes…**, then **Commit changes** again.
 
-<!-- screenshot: docs/media/setup/04-config.png (editing config.js, sheetUrl line highlighted) -->
+<img src="media/setup/05-open-config.webp" alt="The file list on your copy of the repo, with config.js highlighted" width="620">
+
+<img src="media/setup/06-edit-config.webp" alt="config.js open, with the pencil (edit) icon and the sheetUrl line highlighted" width="760">
 
 It should look like this, with your own link:
 
@@ -75,7 +79,7 @@ sheetUrl: 'https://docs.google.com/spreadsheets/d/e/2PACX-…/pub?output=csv',
 2. Under **Build and deployment**, set **Source** to **Deploy from a branch**.
 3. Set **Branch** to `main` and the folder to `/ (root)`, then click **Save**.
 
-<!-- screenshot: docs/media/setup/05-pages.png (Pages settings with main + root selected) -->
+<img src="media/setup/07-pages.webp" alt="GitHub Pages settings: Settings tab, Pages, Source set to Deploy from a branch, branch main and folder root, Save, and the live site address" width="760">
 
 Wait a minute or two, then refresh the page. A box at the top shows your site's address. Click **Visit site** and you'll see the example items in your new shop. 🎉
 

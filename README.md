@@ -52,13 +52,13 @@ See detailed setup guide <a href="docs/setup.md"><b>HERE</b></a>
 
 **1. Copy the spreadsheet.** It comes with example items, a **Settings** tab and a **How to use** tab.
 
-[![Click to copy the sheet template](https://img.shields.io/badge/Copy_the_sheet_template-34A853?style=for-the-badge&logo=googlesheets&logoColor=white)](https://docs.google.com/spreadsheets/d/1xcYWpix2X1ZDpUfDu7IXhiKeWtpUENBPletfdRZQ8g8/copy)
+[![Copy the sheet template](https://img.shields.io/badge/Copy_the_sheet_template-34A853?style=for-the-badge&logo=googlesheets&logoColor=white)](https://docs.google.com/spreadsheets/d/1xcYWpix2X1ZDpUfDu7IXhiKeWtpUENBPletfdRZQ8g8/copy)
 
 **2. Publish it so your site can read it.** In your copy: **File → Share → Publish to web**, choose **Entire document** and **Comma-separated values (.csv)**, then **Publish**. Copy the link it gives you.
 
 **3. Make your own copy of this site.**
 
-[![Click to Fork this repo](https://img.shields.io/badge/Fork_this_repo-24292F?style=for-the-badge&logo=github&logoColor=white)](https://github.com/nicolenadine/wishlist/fork)
+[![Fork this repo](https://img.shields.io/badge/Fork_this_repo-24292F?style=for-the-badge&logo=github&logoColor=white)](https://github.com/nicolenadine/wishlist/fork)
 
 **4. Connect the two.** In your copy on GitHub, click the name `config.js` in the file list (the name itself, not the grey text beside it), click the pencil icon, paste your sheet link between the quotes after `sheetUrl:`, and click **Commit changes**. That's the only file you ever need to edit.
 

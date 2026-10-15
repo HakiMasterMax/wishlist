@@ -407,7 +407,12 @@
       if (Number.isFinite(n)) CONFIG.taxShippingBuffer = /%/.test(settings.taxShippingBuffer) || n > 1 ? n / 100 : n;
     }
     // Item claiming: the checkbox turns it on or off; the two links say where claims go and are read from.
-    if (settings.claimsForm) c.formUrl = formPostUrl(settings.claimsForm) || c.formUrl;
+    if (settings.claimsForm) {
+      c.formUrl = formPostUrl(settings.claimsForm) || c.formUrl;
+      // A pre-filled link carries the question ids (entry.123…) in question order: item, quantity, ref.
+      const ids = [...String(settings.claimsForm).matchAll(/[?&](entry\.\d+)=/g)].map((m) => m[1]);
+      if (ids.length >= 2) { [c.itemField, c.qtyField] = ids; c.refField = ids[2] || ''; }
+    }
     if (settings.claimsSheet) c.csvUrl = csvLink(settings.claimsSheet) || c.csvUrl;
     if (settings.claimsOn != null && !truthy(settings.claimsOn)) { c.formUrl = ''; c.csvUrl = ''; }
     refreshClaims();

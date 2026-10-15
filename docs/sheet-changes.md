@@ -13,6 +13,7 @@ Every sheet change is **optional and additive**:
 
 - Your sheet keeps working exactly as it is. You never need to start over, copy your list into a new sheet, or change your published link.
 - If you want the new thing, it's always a small step, like adding a row to your Settings tab.
+- **Easiest:** in your sheet, click **Wishlist → Check for updates**. It adds whatever's new for you. ([About the Wishlist menu](sheet-menu.md).)
 - Your site's [setup check](sheet-guide.md#checking-your-setup) (add `?check` to your site's address) also lists any settings rows your sheet doesn't have yet.
 
 ---
@@ -56,6 +57,8 @@ How to add an entry (newest first, just below the line above):
 **To use it (optional):** the exact step, usually "Add a row to your Settings tab: `Name` in column A, the value in column B."
 
 **If you skip it:** what happens instead (usually "the theme's default is used").
+
+Also add the change to sheet/updates.json so Wishlist → Check for updates can apply it.
 
 Only sheet changes go here. Site-only changes (themes, fixes, new features with defaults) don't need an entry.
 -->

@@ -8,7 +8,10 @@ The button's wording depends on your theme: "I bought this", "Loot", "Claim it",
 
 ## Turn it on
 
-You'll make your own small claim form (it takes a few minutes), and your sheet does the rest.
+> [!TIP]
+> **The quick way:** in your sheet, click **Wishlist → Set up gift claiming**. It does all five steps below for you. (First time using the menu? Google will ask for permission: [here's what to expect](sheet-menu.md#using-it-the-first-time).)
+
+To do it by hand, you'll make your own small claim form (it takes a few minutes), and your sheet does the rest.
 
 **1. Create your claim form.** In your sheet, go to **Tools → Create a new form**.
 
@@ -37,7 +40,7 @@ A copy of the form opens. Type anything into the three boxes (the words don't ma
 
 **4. Paste it and switch it on.** Back in your sheet, on the **Settings** tab, paste the link into **Claim form link** and tick **Enable item claiming**.
 
-**5. Hide the responses tab.** Right-click the **Form Responses 1** tab at the bottom and choose **Hide sheet**. It shows what people bought.
+**5. Hide the responses tab.** Right-click the **Form Responses 1** tab at the bottom and choose **Hide sheet**. It shows what people bought. If Google put it first, drag it to the end before hiding it: **Items** must stay the first tab.
 
 The buttons appear on your site within about 5 minutes. Open your site with `?check` on the end to confirm everything's connected.
 

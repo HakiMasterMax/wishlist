@@ -14,7 +14,9 @@ A theme sets the look and the wording of your wishlist shop. Each theme is a fol
 
 ## Picking a theme
 
-Open `config.js`, find `theme:`, and put the folder name between the quotes:
+In your sheet's **Settings** tab, pick a theme from the **Theme** dropdown. Your site switches within about 5 minutes.
+
+No Settings tab? Open `config.js`, find `theme:`, and put the folder name between the quotes:
 
 ```js
 theme: 'rpg-shop',
@@ -29,6 +31,7 @@ theme: 'rpg-shop',
 3. In `theme.json`, give it a name and change any wording you like (see the list below).
 4. Optionally add art and a mascot (see below).
 5. Preview it with `?theme=your-folder-name`.
+6. Add it to `themes.json` (its folder and name) so it can be picked by name in the sheet's Settings tab, and add its name to the Theme dropdown in your sheet.
 
 Made something you like? Open a pull request so others can use it too.
 

@@ -7,21 +7,27 @@
 <meta name="description" content="A wishlist shop, filterable by shop, type and price, with a little gift-picking helper.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="styles.css?v=20261014a">
-<script src="config.js?v=20261014a"></script>
+<link rel="stylesheet" href="styles.css?v=20261014b">
+<script src="config.js?v=20261014b"></script>
 <script>
   /* Load the theme's stylesheet before the page draws, so it never flashes unstyled.
-     ?theme=name previews another theme without changing config.js. */
+     Order: ?theme=name (a preview), then the theme picked in the sheet's Settings tab last
+     time this browser visited, then config.js. app.js reads the Settings tab and swaps the
+     theme if it has changed. */
   (function () {
     var cfg = window.WISHLIST_CONFIG || {};
     var asked = (location.search.match(/[?&]theme=([\w-]+)/) || [])[1];
-    var theme = String(asked || cfg.theme || 'rpg-shop').toLowerCase().replace(/[^a-z0-9-]/g, '') || 'rpg-shop';
+    var remembered = null;
+    try { remembered = localStorage.getItem('wishlist-sheet-theme'); } catch (e) { /* private mode */ }
+    var clean = function (v) { return String(v || '').toLowerCase().replace(/[^a-z0-9-]/g, ''); };
+    var theme = clean(asked) || clean(remembered) || clean(cfg.theme) || 'rpg-shop';
     window.WISHLIST_THEME = theme;
-    document.write('<link rel="stylesheet" href="themes/' + theme + '/theme.css?v=20261014a">');
-    setTimeout(function () { document.documentElement.classList.remove('theme-loading'); }, 3000);
+    window.WISHLIST_THEME_PREVIEW = Boolean(clean(asked));
+    document.write('<link rel="stylesheet" id="theme-css" href="themes/' + theme + '/theme.css?v=20261014b">');
+    setTimeout(function () { document.documentElement.classList.remove('theme-loading'); }, 4000);
   })();
 </script>
-<script src="app.js?v=20261014a" defer></script>
+<script src="app.js?v=20261014b" defer></script>
 </head>
 <body>
 

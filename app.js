@@ -27,7 +27,7 @@
     groupSmallShops: 2,
     // The Settings tab's id (the gid= number) in the template sheet. Copies of the template keep it,
     // so the site can find the tab on its own. Only change it if you built your own sheet.
-    settingsTabId: '',
+    settingsTabId: '1991352544',
     // Or paste the Settings tab's own published CSV link here instead.
     settingsUrl: '',
   };

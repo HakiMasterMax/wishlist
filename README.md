@@ -12,9 +12,9 @@ You'll need a free [GitHub](https://github.com/signup) account and a Google acco
 
 ### 1. Copy the spreadsheet
 
-**[Make a copy of the wishlist template](https://docs.google.com/spreadsheets/d/1xcYWpix2X1ZDpUfDu7IXhiKeWtpUENBPletfdRZQ8g8/copy)**. It opens a copy in your own Google Drive with example items, a tip on every column header, and a **How to use** tab. Replace the examples with your own items whenever you're ready.
+**[Make a copy of the wishlist template](https://docs.google.com/spreadsheets/d/1xcYWpix2X1ZDpUfDu7IXhiKeWtpUENBPletfdRZQ8g8/copy)**. It opens a copy in your own Google Drive with example items, a tip on every column header, a **Settings** tab, and a **How to use** tab. Replace the examples with your own items whenever you're ready.
 
-Then publish it so the site can read it: **File → Share → Publish to web**, choose the **Items** tab and **Comma-separated values (.csv)**, click **Publish**, and copy the link it gives you.
+Then publish it so the site can read it: **File → Share → Publish to web**, choose **Entire document** and **Comma-separated values (.csv)**, click **Publish**, and copy the link it gives you. (Keep **Items** as the first tab: that's the one the link opens.)
 
 ### 2. Fork this repo
 
@@ -22,7 +22,7 @@ Click **Fork** at the top of this page, then **Create fork**. You now have your 
 
 ### 3. Connect your sheet
 
-In your fork, open `config.js` and click the pencil icon to edit it. Paste your sheet link between the quotes after `sheetUrl:`, and put your name after `ownerName:` if you like. Click **Commit changes**.
+In your fork, open `config.js` and click the pencil icon to edit it. Paste your sheet link between the quotes after `sheetUrl:` and click **Commit changes**. That's the only thing you have to change here; everything else is set in the sheet's **Settings** tab.
 
 ### 4. Turn on the website
 
@@ -38,7 +38,7 @@ After a minute or two your wishlist is live at `https://<your-username>.github.i
 
 ## Themes
 
-Pick a look in `config.js` with `theme:`. Preview any theme first by adding `?theme=` and its folder name to your site's address. The [themes guide](themes/README.md) lists the themes and shows how to make your own: colors, fonts, wording, art and a mascot, with no coding.
+Pick a look from the **Theme** dropdown in your sheet's **Settings** tab. Preview any theme first by adding `?theme=` and its folder name to your site's address. The [themes guide](themes/README.md) lists the themes and shows how to make your own: colors, fonts, wording, art and a mascot, with no coding.
 
 ## Files
 
@@ -87,7 +87,9 @@ Or keep photos in the repo: save it into `wishlist-images/` with exactly the nam
 
 Each card gets a **Loot** button. Pressing it asks how many they bought and records it in a Google Form. The item then shows how many are left, and once none are left it greys out with a LOOTED stamp, sinks to the end of the list, and Smudge stops suggesting it. A giver can **Undo** right after. Other mistakes are fixed by deleting the row in the claims sheet.
 
-The feature is off until the `claims` values in `config.js` are filled in:
+**Easiest:** the template sheet comes with its own claim form, linked to a hidden **Claimed Items Log** tab, and copying the sheet copies the form too. In your copy's **Settings** tab, paste the form's pre-filled link into **Claim form link** and tick **Enable item claiming** (the **How to use** tab walks through it). Unticking the box turns the feature off again.
+
+**Or, in `config.js`** (for your own form, or a sheet without a Settings tab), fill in the `claims` values:
 
 | Setting | Where it comes from |
 |---|---|
@@ -119,7 +121,19 @@ When the current price is below the store's regular price or your sheet price, t
 
 ## Settings
 
-Everything you'd want to change lives in `config.js`, with a comment above each setting: your sheet link, your name, the photo folder, how much of the gift planner budget to hold back for tax and shipping, and the optional claims form. You can edit it right on GitHub with the pencil icon.
+Most settings live in your sheet's **Settings** tab, so you can change them without touching any code:
+
+| Setting | What it does |
+|---|---|
+| **Theme** | The look and wording of your shop. Pick one from the dropdown (see [Themes](#themes)). |
+| **Your name** | Shown to gift-givers, e.g. "Sam won't see it" when they mark something as bought. |
+| **List title** *(optional)* | Replaces the theme's title, e.g. "Sam's Birthday List". |
+| **Welcome message** *(optional)* | Replaces the theme's welcome note. Type `{i}` where you want the little info icon. |
+| **Tax & shipping buffer** | How much of a gift-giver's budget the gift planner holds back, e.g. `15%`. Use `0%` to turn it off. |
+
+Changes show up on your site within about 5 minutes, just like item edits. Leave a setting blank to use the theme's own wording or the value in `config.js`.
+
+`config.js` holds the sheet link and anything technical: the photo folder, the optional claims form, and a few advanced options. Every setting in the Settings tab can also be set there; the sheet wins when both are filled in. If your sheet doesn't have a Settings tab (for example, it was copied before the tab existed, or only the Items tab is published), the site simply uses `config.js` as before.
 
 ## Run it locally
 

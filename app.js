@@ -2,7 +2,7 @@
  * Reads a published Google Sheet (CSV) and renders it as a filterable storefront.
  * Gift-givers can mark items as "looted" (purchased); those claims go to a Google Form
  * and are read back from that form's published response sheet.
- * No build step and no dependencies. Settings live in config.js.
+ * No build step and no dependencies. Settings live in the sheet's Settings tab, with config.js as the fallback.
  *
  * URL switches
  *   ?shield        turn the spoiler shield ON in this browser (remembered). Claims are never loaded.
@@ -18,10 +18,21 @@
     imageFolder: 'wishlist-images/',
     taxShippingBuffer: 0.15,
     claims: { csvUrl: '', formUrl: '', itemField: '', qtyField: '', refField: '' },
+    // Question ids of the template claims form. Copies of the form keep them, so people
+    // who copy the template only need its two links. Override in config.js for your own form.
+    templateClaimFields: { itemField: 'entry.913828344', qtyField: 'entry.1527095566', refField: 'entry.188142570' },
     imageExtensions: ['jpg', 'png', 'jpeg', 'webp'],
     maxPlannerBudget: 5000,
     maxPriceAgeDays: 3,
     groupSmallShops: 2,
+    // The Settings tab's id (the gid= number) in the template sheet. Copies of the template keep it,
+    // so the site can find the tab on its own. Only change it if you built your own sheet.
+    settingsTabId: '1991352544',
+    // Or paste the Settings tab's own published CSV link here instead.
+    settingsUrl: '',
+    // The claimed-items log tab's id in the template sheet (the claim form writes there). Copies keep
+    // it, so turning on claiming in the Settings tab only needs the form link.
+    claimsTabId: '734565925',
   };
   const USER = window.WISHLIST_CONFIG || {};
   const CONFIG = { ...DEFAULTS, ...USER, claims: { ...DEFAULTS.claims, ...(USER.claims || {}) } };
@@ -214,6 +225,7 @@
   };
 
   const THEME = { name: window.WISHLIST_THEME || 'rpg-shop', text: {}, mascot: null, art: {} };
+  const SHEET_TEXT = {}; // wording set in the sheet's Settings tab (title, welcome), which wins over the theme's
 
   function t(key, vars) {
     let s = Object.prototype.hasOwnProperty.call(THEME.text, key) ? THEME.text[key] : TEXT[key];
@@ -257,7 +269,8 @@
     } catch (err) {
       console.warn('[wishlist] could not load theme "' + THEME.name + '", using plain defaults:', err);
     }
-    THEME.text = (data && data.text) || {};
+    THEME.text = { ...((data && data.text) || {}), ...SHEET_TEXT };
+    THEME.art = {};
     THEME.mascot = (data && data.mascot) || null;
     const art = (data && data.art) || {};
     await Promise.all(Object.entries(art).map(async ([slot, file]) => {
@@ -289,6 +302,148 @@
     document.documentElement.classList.remove('theme-loading');
   }
 
+
+  /* ---------- settings from the sheet ----------
+   * The template sheet has a Settings tab: setting names in column A, values in column B.
+   * Anything filled in there wins over config.js; blank or missing settings fall back to it. */
+
+  const THEME_KEY = 'wishlist-sheet-theme';
+  const SETTING_NAMES = {
+    theme: ['theme', 'look'],
+    ownerName: ['yourname', 'name', 'ownername', 'owner'],
+    title: ['listtitle', 'title', 'pagetitle'],
+    welcome: ['welcomemessage', 'welcome', 'message'],
+    taxShippingBuffer: ['taxshippingbuffer', 'taxandshippingbuffer', 'taxshipping', 'buffer'],
+    claimsOn: ['enableitemclaiming', 'enableclaiming', 'itemclaiming', 'claiming'],
+    claimsForm: ['claimformlink', 'claimsformlink', 'formlink', 'claimform', 'claimsform'],
+    claimsSheet: ['claimeditemssheetpublishlink', 'claimeditemssheetlink', 'claimeditemslink', 'claimssheetlink',
+      'claimssheetpublishlink', 'claimedsheetlink', 'claimssheet', 'claimedsheet'],
+  };
+
+  // The form's share link ("…/viewform") becomes the address answers are sent to ("…/formResponse").
+  function formPostUrl(link) {
+    const m = String(link).trim().match(/^(https:\/\/docs\.google\.com\/forms\/(?:u\/\d+\/)?d\/e\/[\w-]+)\//i);
+    if (m) return m[1] + '/formResponse';
+    if (/forms\.gle\//i.test(link)) console.warn('[wishlist] the claim form link is a short forms.gle link. In the form, click Send, then the link icon, and untick "Shorten URL".');
+    return '';
+  }
+  // A published sheet link, made to return CSV.
+  function csvLink(link) {
+    const u = String(link).trim();
+    if (!/^https:\/\/docs\.google\.com\/spreadsheets\/d\/e\/[\w-]+\/pub/i.test(u)) return '';
+    return u.replace(/\/pubhtml/i, '/pub').replace(/([?&])output=\w+/i, '$1output=csv') + (/output=/i.test(u) ? '' : (u.includes('?') ? '&' : '?') + 'output=csv');
+  }
+
+  // Another tab of the published sheet, as CSV, found by its tab id (gid).
+  function tabUrl(gid) {
+    gid = String(gid || '').trim();
+    const m = String(CONFIG.sheetUrl).trim().match(/^(https:\/\/docs\.google\.com\/spreadsheets\/d\/e\/[\w-]+)\/pub/i);
+    return gid && m ? m[1] + '/pub?gid=' + encodeURIComponent(gid) + '&single=true&output=csv' : '';
+  }
+
+  // The Settings tab's CSV link: set directly, or worked out from the published sheet link.
+  function settingsUrl() {
+    if (/^https?:\/\//i.test(String(CONFIG.settingsUrl).trim())) return String(CONFIG.settingsUrl).trim();
+    return tabUrl(CONFIG.settingsTabId);
+  }
+
+  function readSettings(rows) {
+    const out = {};
+    rows.forEach((r) => {
+      const name = norm(String(r[0] || '').replace(/\(.*?\)/g, '')); // "List title (optional)" -> "listtitle"
+      const value = String(r[1] == null ? '' : r[1]).trim();
+      if (!name || !value) return;
+      const key = Object.keys(SETTING_NAMES).find((k) => SETTING_NAMES[k].includes(name));
+      if (key && !(key in out)) out[key] = value;
+    });
+    return out;
+  }
+
+  // Gives up after a couple of seconds so a slow or missing tab never holds the page back.
+  async function loadSettings() {
+    const url = settingsUrl();
+    if (!url) return {};
+    try {
+      const text = await Promise.race([
+        fetchText(url),
+        new Promise((resolve, reject) => setTimeout(() => reject(new Error('timed out')), 2500)),
+      ]);
+      if (/^\s*</.test(text)) throw new Error('not published as CSV'); // Google sends a web page for unpublished tabs
+      return readSettings(parseCSV(text));
+    } catch (err) {
+      console.warn('[wishlist] could not read the Settings tab, using config.js:', err.message || err);
+      return { unreadable: true };
+    }
+  }
+
+  // "Winter Lights", "winter-lights" and "WINTER LIGHTS" all find the winter-lights folder.
+  async function themeFolder(value) {
+    const want = norm(value);
+    if (!want) return null;
+    try {
+      const res = await fetch('themes/themes.json', { cache: 'no-cache' });
+      const list = res.ok ? (await res.json()).themes || [] : [];
+      const hit = list.find((th) => norm(th.folder) === want || norm(th.name) === want);
+      if (hit) return String(hit.folder).toLowerCase().replace(/[^a-z0-9-]/g, '');
+    } catch (err) { /* fall through to a best guess */ }
+    const guess = String(value).toLowerCase().replace(/&/g, ' ').trim().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '');
+    return guess || null;
+  }
+
+  // Swaps the theme stylesheet and waits for it, so the page never shows the old look under the new words.
+  function swapThemeCss(folder) {
+    return new Promise((resolve) => {
+      const old = document.getElementById('theme-css');
+      const link = document.createElement('link');
+      link.rel = 'stylesheet';
+      link.id = 'theme-css';
+      link.href = 'themes/' + folder + '/theme.css?v=20261014b';
+      const done = (ok) => { if (ok && old) old.remove(); resolve(ok); };
+      link.onload = () => done(true);
+      link.onerror = () => { link.remove(); done(false); };
+      setTimeout(() => done(true), 3000);
+      document.head.appendChild(link);
+    });
+  }
+
+  async function applySettings(settings) {
+    if (settings.ownerName) CONFIG.ownerName = settings.ownerName;
+    if (settings.title) SHEET_TEXT.title = settings.title;
+    if (settings.welcome) SHEET_TEXT.welcome = settings.welcome;
+    if (settings.taxShippingBuffer) {
+      const n = parseFloat(String(settings.taxShippingBuffer).replace(/[^\d.]/g, ''));
+      if (Number.isFinite(n)) CONFIG.taxShippingBuffer = /%/.test(settings.taxShippingBuffer) || n > 1 ? n / 100 : n;
+    }
+    // Item claiming: the checkbox turns it on or off; the two links say where claims go and are read from.
+    if (settings.claimsForm) {
+      c.formUrl = formPostUrl(settings.claimsForm) || c.formUrl;
+      // A pre-filled link carries the question ids (entry.123…) in question order: item, quantity, ref.
+      const ids = [...String(settings.claimsForm).matchAll(/[?&](entry\.\d+)=/g)].map((m) => m[1]);
+      if (ids.length >= 2) { [c.itemField, c.qtyField] = ids; c.refField = ids[2] || ''; }
+    }
+    if (settings.claimsSheet) c.csvUrl = csvLink(settings.claimsSheet) || c.csvUrl;
+    // Sheets copied from the template have the claimed-items log built in, so no link is needed.
+    if (settings.claimsForm && !c.csvUrl) c.csvUrl = tabUrl(CONFIG.claimsTabId);
+    if (settings.claimsOn != null && !truthy(settings.claimsOn)) { c.formUrl = ''; c.csvUrl = ''; }
+    refreshClaims();
+    if (window.WISHLIST_THEME_PREVIEW) return; // ?theme= previews win over the sheet
+    const fromConfig = String(CONFIG.theme || 'rpg-shop').toLowerCase().replace(/[^a-z0-9-]/g, '') || 'rpg-shop';
+    let wanted = settings.theme ? await themeFolder(settings.theme) : null;
+    if (wanted && wanted !== THEME.name && !(await swapThemeCss(wanted))) {
+      console.warn('[wishlist] the Settings tab asks for a theme called "' + settings.theme + '", but there is no themes/' + wanted + ' folder. Using config.js instead.');
+      wanted = null;
+    }
+    if (wanted) {
+      THEME.name = wanted;
+      store.set(THEME_KEY, wanted); // so the next visit starts with this theme
+      return;
+    }
+    // If the tab couldn't be reached, keep the theme it picked last time. Otherwise fall back to config.js.
+    if (settings.unreadable) return;
+    store.del(THEME_KEY);
+    if (THEME.name !== fromConfig && (await swapThemeCss(fromConfig))) THEME.name = fromConfig;
+  }
+
   /* ---------- mode ---------- */
 
   const store = {
@@ -305,9 +460,14 @@
   const SHIELD = store.get(SHIELD_KEY) === 'on';
   const TEST = params.has('test-claims');
   const c = CONFIG.claims;
-  const CLAIMS_CONFIGURED = Boolean(c.csvUrl && c.formUrl && c.itemField && c.qtyField);
+  ['itemField', 'qtyField', 'refField'].forEach((k) => { if (!c[k]) c[k] = CONFIG.templateClaimFields[k] || ''; });
+  let CLAIMS_CONFIGURED = Boolean(c.csvUrl && c.formUrl && c.itemField && c.qtyField);
   // Test mode only ever uses fake claims, so it's allowed even behind the spoiler shield.
-  const CLAIMS_ON = TEST || (!SHIELD && CLAIMS_CONFIGURED);
+  let CLAIMS_ON = TEST || (!SHIELD && CLAIMS_CONFIGURED);
+  const refreshClaims = () => {
+    CLAIMS_CONFIGURED = Boolean(c.csvUrl && c.formUrl && c.itemField && c.qtyField);
+    CLAIMS_ON = TEST || (!SHIELD && CLAIMS_CONFIGURED);
+  };
   const pendingKey = TEST ? PENDING_KEY + '-test' : PENDING_KEY;
 
   const state = {
@@ -1179,9 +1339,11 @@
   async function init() {
     // Start every download at once; the theme's words are needed before anything is drawn.
     const sheetSet = /^https?:\/\//i.test(String(CONFIG.sheetUrl).trim());
-    const themeReady = loadTheme();
+    const settingsReady = sheetSet ? loadSettings() : Promise.resolve({});
+    const settingsApplied = settingsReady.then(applySettings);
+    const themeReady = settingsApplied.then(loadTheme);
     const dataPromise = sheetSet ? fetchText(CONFIG.sheetUrl).catch((err) => err) : null;
-    const claimsPromise = sheetSet && CLAIMS_ON && !TEST ? fetchText(c.csvUrl).catch((err) => err) : null;
+    const claimsPromise = settingsApplied.then(() => (sheetSet && CLAIMS_ON && !TEST ? fetchText(c.csvUrl).catch((err) => err) : null));
     const pricesPromise = sheetSet ? loadPrices() : null;
     await themeReady;
     wire();

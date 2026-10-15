@@ -9,8 +9,10 @@ window.WISHLIST_CONFIG = {
 
   /* ---------- 1. Your spreadsheet (required) ----------
    * In Google Sheets: File > Share > Publish to web.
-   * Pick the tab with your items, choose "Comma-separated values (.csv)",
-   * click Publish, and paste the link it gives you here. */
+   * Choose "Entire document" and "Comma-separated values (.csv)",
+   * click Publish, and paste the link it gives you here.
+   * Your name, theme, title and more are set in the sheet's Settings tab. The settings
+   * below are only used when the sheet leaves them blank (or has no Settings tab). */
   sheetUrl: 'https://docs.google.com/spreadsheets/d/e/2PACX-1vRSZNbl0gQEVubOM0oLqVKIfxp6GwQ6vL1Gkcu3lHwAoNaFMLurx9XFi10w_N_HRwc-_MJOriC-GL4D/pub?output=csv',
 
 
@@ -28,7 +30,8 @@ window.WISHLIST_CONFIG = {
 
 
   /* ---------- 4. Theme ----------
-   * The look and wording of your shop. Each theme is a folder in themes/
+   * Easiest: pick one from the Theme dropdown in the sheet's Settings tab.
+   * This one is used if the sheet doesn't pick one. Each theme is a folder in themes/
    * (see themes/README.md for the list). To preview a theme before switching,
    * add ?theme=its-folder-name to the end of your site's address. */
   theme: 'rpg-shop',

@@ -99,7 +99,7 @@ Pick one from the **Theme** dropdown in your sheet's Settings tab. To try one fi
 <summary><b>Let gift-givers mark items as bought</b></summary>
 <br>
 
-Your copy of the sheet comes with its own claim form. Paste the form's link into the **Settings** tab and tick **Enable item claiming**, and every item gets a button for gift-givers. Purchases are recorded in a hidden tab in your sheet, and items grey out once they're taken. [Turn on claiming →](docs/claiming.md)
+Make a small Google Form from your sheet (**Tools → Create a new form**, then add three questions), paste its link into the **Settings** tab, and tick **Enable item claiming**. Every item gets a button for gift-givers, purchases are recorded in hidden tabs in your sheet, and items grey out once they're taken. [Turn on claiming →](docs/claiming.md)
 
 </details>
 

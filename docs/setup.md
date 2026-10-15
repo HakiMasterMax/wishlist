@@ -107,7 +107,7 @@ When you're happy with it, share your site's address with family and friends.
 
 ## Optional extras
 
-- **[Gift claiming](claiming.md):** let gift-givers mark what they bought so nobody doubles up. Three steps.
+- **[Gift claiming](claiming.md):** let gift-givers mark what they bought so nobody doubles up. About five minutes.
 - **[Daily price checks](price-checks.md):** show sales on the cards. One click to turn on.
 - **Get new features later:** on your copy's GitHub page, click **Sync fork → Update branch**. Your settings are kept.
 

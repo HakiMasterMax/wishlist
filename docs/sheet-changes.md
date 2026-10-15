@@ -17,6 +17,19 @@ Every sheet change is **optional and additive**:
 
 ---
 
+## October 15, 2026: Gift claiming uses your own form
+
+**What changed:** setting up gift claiming now starts with **Tools → Create a new form**, so every sheet gets its own claim form. Copies of the template made earlier on October 15 were still connected to the template's form, so claims from those sheets wouldn't reach the right place.
+
+**If you copied the sheet on October 15 and turned on claiming:** the simplest fix is to make a fresh copy of the template and paste your items in, since the template only went public that day. To keep your copy instead:
+
+1. In your sheet, open the log tab and choose **Tools → Manage form → Unlink form** (if it's there).
+2. Follow the [gift claiming steps](claiming.md#turn-it-on) to create your own form.
+3. Publish just your new **Form Responses 1** tab as **Comma-separated values** (**File → Share → Publish to web**), copy that link, then set Publish to web back to **Entire document**.
+4. On the Settings tab, add a row named `Claimed items sheet link` and paste the link there.
+
+**Copied after this change, or never used claiming?** Nothing to do.
+
 ## October 15, 2026: The template sheet
 
 **Copied on or after this date?** You're all set. Nothing to do.

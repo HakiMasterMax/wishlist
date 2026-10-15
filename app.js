@@ -1372,6 +1372,7 @@
     else if (cl.formLink && !cl.formOk) add('warn', 'The claim form link doesn\'t look right', /forms\.gle/i.test(cl.formLink) ? 'It\'s a short forms.gle link.' : null, 'In the form editor, use Tools → Manage form → Edit form, then ⋮ → Pre-fill form. Type anything, click Get link, then COPY LINK, and paste that.');
     else if (cl.formLink && !cl.ids) add('warn', 'The claim form link is missing its questions', 'Paste the pre-filled link, not the regular share link.', 'In the form editor: ⋮ → Pre-fill form, type anything in the three boxes, then Get link → COPY LINK.');
     else if (cl.log === 'error' || cl.log === 'html') add('warn', 'Claims are sent, but the log can\'t be read', 'Gift-givers can mark items, but they won\'t see each other\'s purchases.', 'In Publish to web, choose "Entire document", then wait a few minutes.');
+    else if (cl.log === 'ref') add('warn', 'The claims log can\'t find your form\'s responses', 'The hidden Claimed Items Log tab copies purchases from a tab called "Form Responses 1", and that tab isn\'t there.', 'Create your form with Tools → Create a new form (see the gift claiming guide). If your responses tab has a different name, unhide Claimed Items Log and change the name in cell A1 to match.');
     else if (cl.log === 'headers') add('warn', 'The claims log looks different than expected', 'It needs columns named item and quantity.', 'Don\'t rename or reorder the claim form\'s questions (item, quantity, ref).');
     else if (CLAIMS_ON) add('ok', 'Gift claiming is on', 'The claim form and log are connected. (This page never shows what was bought.)');
 
@@ -1514,6 +1515,7 @@
         const res = await claimsPromise;
         if (res instanceof Error) { console.error('[wishlist] could not load claims:', res); CHECK.claims.log = 'error'; }
         else if (/^\s*</.test(res)) CHECK.claims.log = 'html';
+        else if (/#REF!/.test(res)) CHECK.claims.log = 'ref';
         else {
           rows = parseCSV(res);
           const head = (rows[0] || []).map((h) => h.toLowerCase());

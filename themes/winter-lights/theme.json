@@ -12,7 +12,7 @@
     "title": "My Holiday List",
     "eventTag": "Happy Holidays",
     "welcomeName": "Welcome",
-    "welcome": "Thank you for thinking of me! Everything here is something I'd love. The ones marked Top Pick are my favorites. Tap the {i} on a photo to see sizes, colors and notes.",
+    "welcome": "Thank you for thinking of me! The ones marked Top Pick are my favorites. Tap the {i} on a photo to see sizes, colors and notes.",
     "footer": "Wishing you a bright and happy season",
     "stat.items": "{n} gift idea | {n} gift ideas",
     "stat.starred": "{n} top pick | {n} top picks",

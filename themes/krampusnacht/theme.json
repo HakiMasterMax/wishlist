@@ -20,7 +20,7 @@
     "title": "The Wish List",
     "eventTag": "Naughty or Nice",
     "welcomeName": "Be Warned",
-    "welcome": "Whether I was naughty or nice this year is between me and Krampus. Everything here is fair game, and anything marked Most Wanted is at the top of my list. Tap the {i} on a photo for sizes, colors and notes.",
+    "welcome": "Whether I was naughty or nice this year is between me and Krampus. Anything marked Most Wanted is at the top of my list. Tap the {i} on a photo for sizes, colors and notes.",
     "footer": "Gruß vom Krampus",
     "stat.items": "{n} wish | {n} wishes",
     "stat.starred": "{n} most wanted",

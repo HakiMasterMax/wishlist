@@ -48,15 +48,15 @@ The buttons appear on your site within about 5 minutes. Open your site with `?ch
 <summary>My responses tab isn't called "Form Responses 1"</summary>
 <br>
 
-That happens if your sheet ever had another form. Your sheet has a hidden **Claimed Items Log** tab that copies purchases from "Form Responses 1". Unhide it (☰ at the bottom left), change the tab name in cell **A1** to match yours (for example `={'Form Responses 2'!A:D}`), and hide it again.
+That happens if your sheet ever had another form. Your sheet has a hidden **Claimed items (Warning Spoilers!)** tab that copies purchases from "Form Responses 1". Unhide it (☰ at the bottom left), change the tab name in cell **A1** to match yours (for example `={'Form Responses 2'!A:D}`), and hide it again.
 
 </details>
 
 ## Keep the surprise
 
-Purchases are recorded in your **Form Responses 1** tab and copied into the hidden **Claimed Items Log** tab, which your site reads. Keep both hidden: hidden tabs show up greyed out in the sheet's list of tabs (the ☰ button at the bottom left).
+Purchases are recorded in your **Form Responses 1** tab and copied into the hidden **Claimed items (Warning Spoilers!)** tab, which your site reads. Keep both hidden: hidden tabs show up greyed out in the sheet's list of tabs (the ☰ button at the bottom left).
 
-<img src="media/claiming/04-hidden-log.webp" alt="The sheet's tab list, with the hidden Claimed Items Log (Warning Spoilers!) tab greyed out" width="300">
+<img src="media/claiming/04-hidden-log.webp" alt="The sheet's tab list, with the hidden Claimed items (Warning Spoilers!) tab greyed out" width="300">
 
 On each of your own phones and computers, open your site once with `?shield` added to the end of the address:
 
@@ -79,7 +79,7 @@ Untick **Enable item claiming** on the Settings tab.
 
 ## Using your own form
 
-If your sheet doesn't have the hidden Claimed Items Log tab (for example, you copied it before October 15, 2026), make a Google Form with three short-answer questions, in this order: **item**, **quantity** and **ref**.
+If your sheet doesn't have the hidden Claimed items tab (for example, you copied it before October 15, 2026), make a Google Form with three short-answer questions, in this order: **item**, **quantity** and **ref**.
 
 - Don't add number-only rules to quantity, because Undo sends a negative number.
 - Don't require sign-in.

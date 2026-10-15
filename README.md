@@ -1,146 +1,182 @@
-# Wishlist Item Shop
+<p align="center">
+  <img src="docs/media/banner.webp" alt="Wishlist Shop: turn a Google Sheet into a cozy, filterable gift shop. Shown in the RPG, Krampusnacht and Gingerbread themes." width="100%">
+</p>
 
-Turn a Google Sheet into a cozy, filterable wishlist shop that friends and family can browse. Gift-givers can filter by price, shop and category, see your most-wanted items first, ask Smudge to pick gifts that fit their budget, and mark things as bought so nobody doubles up.
+<p align="center">
+  <a href="https://nicolenadine.github.io/wishlist/"><b>See the live demo</b></a>
+  &nbsp;·&nbsp;
+  <a href="docs/setup.md"><b>Setup guide</b></a>
+  &nbsp;·&nbsp;
+  <a href="#themes"><b>Themes</b></a>
+  &nbsp;·&nbsp;
+  <a href="#questions"><b>Help</b></a>
+</p>
 
-**[See the live demo](https://nicolenadine.github.io/wishlist/)**
+<p align="center">
+  <img alt="No coding needed" src="https://img.shields.io/badge/no_coding-needed-E0527A?style=flat-square">
+  <img alt="Hosting: free on GitHub Pages" src="https://img.shields.io/badge/hosting-free-2F9C8A?style=flat-square">
+  <img alt="Runs on Google Sheets" src="https://img.shields.io/badge/runs_on-Google_Sheets-34A853?style=flat-square&logo=googlesheets&logoColor=white">
+  <img alt="7 themes" src="https://img.shields.io/badge/themes-7-5A3FA0?style=flat-square">
+</p>
 
-No coding needed. It runs free on GitHub Pages, and you update it by editing your spreadsheet.
+Keep your wishlist in a Google Sheet, and this turns it into a little online shop that friends and family can actually enjoy browsing. They can filter by price or store, see what you want most, get gift ideas that fit their budget, and quietly mark what they bought so nobody doubles up. You never see the spoilers.
 
-## Set up your own (about 10 minutes)
+You update it by editing the spreadsheet. There's nothing to install and nothing to pay for.
 
-You'll need a free [GitHub](https://github.com/signup) account and a Google account.
+<p align="center">
+  <img src="docs/media/demo.gif" alt="Demo: entering a budget gets gift suggestions, filtering by category, peeking at an item's details, and marking an item as bought." width="760">
+</p>
 
-### 1. Copy the spreadsheet
+## What gift-givers get
 
-**[Make a copy of the wishlist template](https://docs.google.com/spreadsheets/d/1xcYWpix2X1ZDpUfDu7IXhiKeWtpUENBPletfdRZQ8g8/copy)**. It opens a copy in your own Google Drive with example items, a tip on every column header, a **Settings** tab, and a **How to use** tab. Replace the examples with your own items whenever you're ready.
+- **A shop, not a spreadsheet.** Photos, prices and where to buy, with filters for price, store and category. Your favorites float to the top.
+- **A gift helper.** Type in a budget and it suggests gifts that fit, holding a little back for tax and shipping.
+- **No doubled-up gifts.** One tap marks something as bought. Everyone else sees it's taken; you don't.
+- **Sale prices.** Optional daily price checks show when something you want goes on sale.
+- **A look that fits the occasion.** Seven themes, from a pixel-art item shop to a Krampus night. Pick one from a dropdown.
 
-Then publish it so the site can read it: **File → Share → Publish to web**, choose **Entire document** and **Comma-separated values (.csv)**, click **Publish**, and copy the link it gives you. (Keep **Items** as the first tab: that's the one the link opens.)
+## How it works
 
-### 2. Fork this repo
+<p align="center">
+  <img src="docs/media/how-it-works.png" alt="1: Your Google Sheet, where you add items and pick a theme. 2: Your free website on GitHub Pages, which reads the sheet on every visit. 3: Family and friends browse, get gift ideas and mark what they bought. Purchases go to a hidden tab in your sheet." width="820">
+</p>
 
-Click **Fork** at the top of this page, then **Create fork**. You now have your own copy at `github.com/<your-username>/wishlist`.
+## Set it up in about 10 minutes
 
-### 3. Connect your sheet
+> [!NOTE]
+> You'll need a free Google account and a free [GitHub account](https://github.com/signup). No coding and no downloads. The [illustrated setup guide](docs/setup.md) walks through every click.
 
-In your fork, open `config.js` and click the pencil icon to edit it. Paste your sheet link between the quotes after `sheetUrl:` and click **Commit changes**. That's the only thing you have to change here; everything else is set in the sheet's **Settings** tab.
+**1. Copy the spreadsheet.** It comes with example items, a **Settings** tab and a **How to use** tab.
 
-### 4. Turn on the website
+[![Copy the sheet template](https://img.shields.io/badge/Copy_the_sheet_template-34A853?style=for-the-badge&logo=googlesheets&logoColor=white)](https://docs.google.com/spreadsheets/d/1xcYWpix2X1ZDpUfDu7IXhiKeWtpUENBPletfdRZQ8g8/copy)
 
-In your fork, go to **Settings → Pages**. Under **Build and deployment**, set Source to **Deploy from a branch**, Branch to `main`, and folder to `/ (root)`, then click **Save**.
+**2. Publish it so your site can read it.** In your copy: **File → Share → Publish to web**, choose **Entire document** and **Comma-separated values (.csv)**, then **Publish**. Copy the link it gives you.
 
-After a minute or two your wishlist is live at `https://<your-username>.github.io/wishlist/`. Share that link with gift-givers.
+**3. Make your own copy of this site.**
 
-### Optional extras
+[![Fork this repo](https://img.shields.io/badge/Fork_this_repo-24292F?style=for-the-badge&logo=github&logoColor=white)](https://github.com/nicolenadine/wishlist/fork)
 
-- **Daily price and sale checks:** open your fork's **Actions** tab and click the button to enable workflows. See [Daily price check](#daily-price-check).
-- **Let gift-givers mark things as bought:** see [Looting](#looting-gift-givers-marking-things-as-bought).
-- **Get new features later:** on your fork's main page, click **Sync fork → Update branch**. Your settings in `config.js` are kept. If GitHub ever offers to **Discard commits** instead, don't: that would erase your settings. Open an issue here and we'll sort it out.
+**4. Connect the two.** In your copy on GitHub, open `config.js`, click the pencil icon, paste your sheet link between the quotes after `sheetUrl:`, and click **Commit changes**. That's the only file you ever need to edit.
+
+**5. Turn on the website.** Go to **Settings → Pages**, set the branch to `main` and the folder to `/ (root)`, and click **Save**. In a minute or two your list is live at `https://your-username.github.io/wishlist/`.
+
+> [!TIP]
+> Before you share the link, open it once on each of your own devices with `?shield` on the end (like `…/wishlist/?shield`). That hides what's been bought in that browser, so you can browse your own list without spoilers.
+
+Everything else (your name, your theme, the title, gift claiming) is set in the sheet's **Settings** tab. Changes show up on your site within about 5 minutes.
 
 ## Themes
 
-Pick a look from the **Theme** dropdown in your sheet's **Settings** tab. Preview any theme first by adding `?theme=` and its folder name to your site's address. The [themes guide](themes/README.md) lists the themes and shows how to make your own: colors, fonts, wording, art and a mascot, with no coding.
+Pick one from the **Theme** dropdown in your sheet's Settings tab. To try one first, add `?theme=` and the folder name to your site's address. Click a picture to preview it on the demo.
 
-## Files
+<table>
+  <tr>
+    <td width="33%" valign="top"><a href="https://nicolenadine.github.io/wishlist/?theme=rpg-shop"><img src="docs/media/themes/rpg-shop-thumb.webp" alt="RPG Item Shop theme"></a><br><b>RPG Item Shop</b><br><sub>Pixel-game shop. Gift-givers "loot" what they buy and Smudge the soot sprite picks gifts.</sub></td>
+    <td width="33%" valign="top"><a href="https://nicolenadine.github.io/wishlist/?theme=hearthside"><img src="docs/media/themes/hearthside-thumb.webp" alt="Hearthside theme"></a><br><b>Hearthside</b><br><sub>Classic Christmas in evergreen and cranberry. Large, easy-to-read text.</sub></td>
+    <td width="33%" valign="top"><a href="https://nicolenadine.github.io/wishlist/?theme=winter-lights"><img src="docs/media/themes/winter-lights-thumb.webp" alt="Winter Lights theme"></a><br><b>Winter Lights</b><br><sub>Navy and silver with a string of lights, for any winter holiday.</sub></td>
+  </tr>
+  <tr>
+    <td valign="top"><a href="https://nicolenadine.github.io/wishlist/?theme=shiny-bright"><img src="docs/media/themes/shiny-bright-thumb.webp" alt="Shiny and Bright theme"></a><br><b>Shiny &amp; Bright</b><br><sub>Mid-century retro: tinsel trees, glass ornaments and starbursts.</sub></td>
+    <td valign="top"><a href="https://nicolenadine.github.io/wishlist/?theme=krampusnacht"><img src="docs/media/themes/krampusnacht-thumb.webp" alt="Krampusnacht theme"></a><br><b>Krampusnacht</b><br><sub>The dark side of the holidays, with a woodcut Krampus running the gift helper.</sub></td>
+    <td valign="top"><a href="https://nicolenadine.github.io/wishlist/?theme=gingerbread"><img src="docs/media/themes/gingerbread-thumb.webp" alt="Gingerbread theme"></a><br><b>Gingerbread</b><br><sub>A kawaii bakery with Ginny the cookie. Works for birthdays too.</sub></td>
+  </tr>
+  <tr>
+    <td valign="top"><a href="https://nicolenadine.github.io/wishlist/?theme=starter"><img src="docs/media/themes/starter-thumb.webp" alt="Starter theme"></a><br><b>Starter</b><br><sub>Plain and simple. The one to copy when you make your own.</sub></td>
+    <td colspan="2" valign="middle" align="center"><b>Make your own</b><br><sub>Colors, fonts, wording, art and a mascot, with no JavaScript.<br>See the <a href="themes/README.md">themes guide</a>.</sub></td>
+  </tr>
+</table>
+
+## Keeping it up to date
+
+- **Add, change or remove items** right in the sheet. The [sheet guide](docs/sheet-guide.md) covers every column, photos and gift cards.
+- **Change your theme, name or title** on the sheet's **Settings** tab.
+- **Get new features and themes:** on your copy's GitHub page, click **Sync fork → Update branch**. Your settings are kept.
+
+<details>
+<summary><b>Let gift-givers mark items as bought</b></summary>
+<br>
+
+Your copy of the sheet comes with its own claim form. Paste the form's link into the **Settings** tab and tick **Enable item claiming**, and every item gets a button for gift-givers. Purchases are recorded in a hidden tab in your sheet, and items grey out once they're taken. [Turn on claiming →](docs/claiming.md)
+
+</details>
+
+<details>
+<summary><b>Show sale prices with daily price checks</b></summary>
+<br>
+
+A free GitHub Action checks prices every morning and shows sales on the cards. It works for Steam and Nintendo out of the box, and Etsy with a free API key. [Set up price checks →](docs/price-checks.md)
+
+</details>
+
+## Questions
+
+<details>
+<summary><b>My site says "No sheet connected yet."</b></summary>
+<br>
+
+The sheet link in `config.js` is missing or has a typo. Copy it again from **File → Share → Publish to web** and make sure it's between the quotes after `sheetUrl:`.
+
+</details>
+
+<details>
+<summary><b>I changed the sheet but the site didn't update.</b></summary>
+<br>
+
+Google takes up to about 5 minutes to republish. Wait a few minutes, then refresh. If it's still old, check that **Automatically republish when changes are made** is ticked under **File → Share → Publish to web**.
+
+</details>
+
+<details>
+<summary><b>I picked a theme in the Settings tab, but nothing changed.</b></summary>
+<br>
+
+Check that you published the **Entire document**, not just the Items tab, and that **Items** is still the first tab. Then give it about 5 minutes.
+
+</details>
+
+<details>
+<summary><b>An item's photo doesn't show up.</b></summary>
+<br>
+
+Some stores block their images from appearing on other sites. Try **Copy image address** on a different photo of the product, or save the photo to the `wishlist-images` folder instead. See [Adding photos](docs/sheet-guide.md#adding-photos).
+
+</details>
+
+<details>
+<summary><b>Will I see what people bought?</b></summary>
+<br>
+
+Not unless you go looking. Purchases go to a hidden tab in your sheet, so don't unhide it. Turn on the spoiler shield on your own devices (`?shield` at the end of your link) and your site hides them too.
+
+</details>
+
+Still stuck? [Open an issue](https://github.com/nicolenadine/wishlist/issues) and describe what you see.
+
+<details>
+<summary><b>For developers</b></summary>
+<br>
+
+No build step and no dependencies: plain HTML, CSS and JavaScript, served by GitHub Pages.
 
 ```
-config.js           your settings: sheet link, name, theme, gift planner, claims (the only file you need to edit)
-themes/             looks and wording; see themes/README.md
+config.js           sheet link plus advanced options (the only file most people edit)
+app.js              loads the sheet and Settings tab, filters, cards, gift helper, claims
 index.html          page structure
-styles.css          all styling
-app.js              loads the sheet, filters, cards, Smudge's gift planner
-wishlist-images/    optional: photos hosted in the repo instead of linked
+styles.css          shared layout; colors and fonts come from the theme
+themes/             one folder per theme (CSS, JSON and SVG only), plus themes.json
+scripts/            daily price check, run by .github/workflows/update-prices.yml
+wishlist-images/    optional photos hosted in the repo
+docs/               guides and the images in this README
 ```
 
-## Updating the wishlist
-
-Edit the Google Sheet. The published CSV refreshes within about 5 minutes, and the site picks it up on the next page load. You don't need to redeploy anything.
-
-### Sheet columns
-
-| Column | What it does |
-|---|---|
-| `name` | Card title |
-| `price` | Number; a `$` is fine. Used for the price filter, sorting and the gift planner |
-| `size`, `color`, `notes` | Shown in the **i** details popup (hover on desktop, tap on phones) |
-| `quantity` | If more than 1, a ×N tag appears, and Smudge can pick it up to N times |
-| `starred` | `TRUE` (or yes / x / ✓, or a ticked checkbox) makes the item **Legendary**: gold card, star badge, picked first |
-| `shop` | Where it's sold. Shown on the card and used as a filter. Shops with only one item are grouped under **Other** in the filter so the list stays short (change this with `groupSmallShops` in `config.js`) |
-| `category` | What kind of thing it is, separated by `:` (e.g. `craft: clothing`). Blank counts as **Other** |
-| `image` | A link to the photo (right-click the product photo → **Copy image address**), or a file name in `wishlist-images/` |
-| `link` | Where the **View** button goes (opens in a new tab) |
-
-Only `name` is required, and columns can be in any order. Headers are matched loosely, so `Starred?`, `Shop name` or `IMAGE` all work. The older names (`item_name`, `excite`, `source`, `tags`, `image_name`, `color_or_pattern`) still work too.
-
-New categories and shops show up as filters automatically.
-
-### Gift cards
-
-Set a row's category to `gift card` and put the smallest amount in `price` (or leave it blank for any amount). Gift cards show "From $10" / "Any amount", have no Loot button (several people can give one), always pass the price filter, and sort after regular items. Smudge uses one to fill leftover budget after picking items (a blank minimum counts as $5); it doesn't count toward "Number of gifts".
-
-### Adding a photo
-
-The easy way: on the product page, right-click the photo, choose **Copy image address**, and paste that into the `image` column. Google Drive share links work too, as long as the file is shared with "Anyone with the link". If a photo can't load, the card shows a placeholder.
-
-Or keep photos in the repo: save it into `wishlist-images/` with exactly the name in the `image` column, plus `.jpg` (or `.png`/`.webp`), then upload it to the repo. Names are case-sensitive on GitHub Pages. Keep photos around 900px wide so the page stays quick.
-
-## Looting (gift-givers marking things as bought)
-
-Each card gets a **Loot** button. Pressing it asks how many they bought and records it in a Google Form. The item then shows how many are left, and once none are left it greys out with a LOOTED stamp, sinks to the end of the list, and Smudge stops suggesting it. A giver can **Undo** right after. Other mistakes are fixed by deleting the row in the claims sheet.
-
-**Easiest:** the template sheet comes with its own claim form, linked to a hidden **Claimed Items Log** tab, and copying the sheet copies the form too. In your copy's **Settings** tab, paste the form's pre-filled link into **Claim form link** and tick **Enable item claiming** (the **How to use** tab walks through it). Unticking the box turns the feature off again.
-
-**Or, in `config.js`** (for your own form, or a sheet without a Settings tab), fill in the `claims` values:
-
-| Setting | Where it comes from |
-|---|---|
-| `csvUrl` | The claims response sheet, published as CSV (File > Share > Publish to web) |
-| `formUrl` | The form's pre-filled link, with `viewform?...` replaced by `formResponse` |
-| `itemField`, `qtyField`, `refField` | The `entry.123456` ids in the pre-filled link, in question order |
-
-The form needs three short-answer questions titled **item**, **quantity** and **ref**. Don't add number-only validation to quantity, because Undo sends a negative number. Don't require sign-in.
-
-### Spoiler shield
-
-- `…/wishlist/?shield`: turns the shield on in that browser for good. Purchases are never loaded, Loot buttons are hidden, and a "Spoiler shield on" badge shows. Open this once on each of your devices.
-- `…/wishlist/?shield=off`: turns it off again in that browser.
-- `…/wishlist/?test-claims`: fake purchases and nothing gets sent. Works even with the shield on, so you can try Loot and the animation safely.
-
-When you change `config.js`, `app.js` or `styles.css`, bump the `?v=` number on them in `index.html` so browsers fetch the new version.
-
-Share the plain link with gift-givers.
-
-## Daily price check
-
-A GitHub Action (`.github/workflows/update-prices.yml`) runs `scripts/update-prices.mjs` every morning (about 7:17am Pacific). It can also be run by hand from the repo's **Actions** tab → **Update prices** → **Run workflow**. It reads the sheet link from `config.js` and saves `prices.json` to a separate `prices` branch (so it never adds commits to `main` or gets in the way of **Sync fork**). The site uses those prices when they're less than 3 days old.
-
-- **Steam** and **Nintendo**: checked automatically, including sales.
-- **Etsy**: checked once an `ETSY_API_KEY` secret is added (Settings → Secrets and variables → Actions). The value is `keystring:shared_secret` from your Etsy developer app. Etsy's API gives the listing's normal price, so Etsy sales and coupons may not show. Links that pick a specific size or style (`variation=` in the link) are skipped.
-- **Amazon** and everything else: not checked; the sheet price is used.
-
-When the current price is below the store's regular price or your sheet price, the card shows the new price in pink with the old one crossed out and a **Sale −N%** tag. The ⓘ details show when the price was last checked. Smudge's gift picks use current prices.
-
-## Settings
-
-Most settings live in your sheet's **Settings** tab, so you can change them without touching any code:
-
-| Setting | What it does |
-|---|---|
-| **Theme** | The look and wording of your shop. Pick one from the dropdown (see [Themes](#themes)). |
-| **Your name** | Shown to gift-givers, e.g. "Sam won't see it" when they mark something as bought. |
-| **List title** *(optional)* | Replaces the theme's title, e.g. "Sam's Birthday List". |
-| **Welcome message** *(optional)* | Replaces the theme's welcome note. Type `{i}` where you want the little info icon. |
-| **Tax & shipping buffer** | How much of a gift-giver's budget the gift planner holds back, e.g. `15%`. Use `0%` to turn it off. |
-
-Changes show up on your site within about 5 minutes, just like item edits. Leave a setting blank to use the theme's own wording or the value in `config.js`.
-
-`config.js` holds the sheet link and anything technical: the photo folder, the optional claims form, and a few advanced options. Every setting in the Settings tab can also be set there; the sheet wins when both are filled in. If your sheet doesn't have a Settings tab (for example, it was copied before the tab existed, or only the Items tab is published), the site simply uses `config.js` as before.
-
-## Run it locally
-
-Opening `index.html` straight from Finder won't load the sheet, because browsers block it. Run a tiny server from the repo folder instead:
+**Run it locally.** Browsers won't load the sheet from a file opened directly, so serve the folder:
 
 ```
 python3 -m http.server 8000
 ```
 
-Then open http://localhost:8000.
+Then open http://localhost:8000. Handy URL switches: `?theme=name` previews a theme, `?test-claims` fakes purchases without sending anything, and `?shield` / `?shield=off` turn the spoiler shield on and off.
+
+**Settings.** Anything in the sheet's Settings tab can also be set in `config.js`; the sheet wins when both are filled in, and `config.js` is the fallback if the tab is missing. When you change `app.js`, `styles.css` or `config.js`, bump the `?v=` number in `index.html` so browsers fetch the new version.
+
+</details>

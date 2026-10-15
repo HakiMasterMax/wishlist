@@ -18,6 +18,9 @@
     imageFolder: 'wishlist-images/',
     taxShippingBuffer: 0.15,
     claims: { csvUrl: '', formUrl: '', itemField: '', qtyField: '', refField: '' },
+    // Question ids of the template claims form. Copies of the form keep them, so people
+    // who copy the template only need its two links. Override in config.js for your own form.
+    templateClaimFields: { itemField: '', qtyField: '', refField: '' },
     imageExtensions: ['jpg', 'png', 'jpeg', 'webp'],
     maxPlannerBudget: 5000,
     maxPriceAgeDays: 3,
@@ -308,7 +311,25 @@
     title: ['listtitle', 'title', 'pagetitle'],
     welcome: ['welcomemessage', 'welcome', 'message'],
     taxShippingBuffer: ['taxshippingbuffer', 'taxandshippingbuffer', 'taxshipping', 'buffer'],
+    claimsOn: ['enableitemclaiming', 'enableclaiming', 'itemclaiming', 'claiming'],
+    claimsForm: ['claimformlink', 'claimsformlink', 'formlink', 'claimform', 'claimsform'],
+    claimsSheet: ['claimeditemssheetpublishlink', 'claimeditemssheetlink', 'claimeditemslink', 'claimssheetlink',
+      'claimssheetpublishlink', 'claimedsheetlink', 'claimssheet', 'claimedsheet'],
   };
+
+  // The form's share link ("…/viewform") becomes the address answers are sent to ("…/formResponse").
+  function formPostUrl(link) {
+    const m = String(link).trim().match(/^(https:\/\/docs\.google\.com\/forms\/(?:u\/\d+\/)?d\/e\/[\w-]+)\//i);
+    if (m) return m[1] + '/formResponse';
+    if (/forms\.gle\//i.test(link)) console.warn('[wishlist] the claim form link is a short forms.gle link. In the form, click Send, then the link icon, and untick "Shorten URL".');
+    return '';
+  }
+  // A published sheet link, made to return CSV.
+  function csvLink(link) {
+    const u = String(link).trim();
+    if (!/^https:\/\/docs\.google\.com\/spreadsheets\/d\/e\/[\w-]+\/pub/i.test(u)) return '';
+    return u.replace(/\/pubhtml/i, '/pub').replace(/([?&])output=\w+/i, '$1output=csv') + (/output=/i.test(u) ? '' : (u.includes('?') ? '&' : '?') + 'output=csv');
+  }
 
   // The Settings tab's CSV link: set directly, or worked out from the published sheet link.
   function settingsUrl() {
@@ -385,6 +406,11 @@
       const n = parseFloat(String(settings.taxShippingBuffer).replace(/[^\d.]/g, ''));
       if (Number.isFinite(n)) CONFIG.taxShippingBuffer = /%/.test(settings.taxShippingBuffer) || n > 1 ? n / 100 : n;
     }
+    // Item claiming: the checkbox turns it on or off; the two links say where claims go and are read from.
+    if (settings.claimsForm) c.formUrl = formPostUrl(settings.claimsForm) || c.formUrl;
+    if (settings.claimsSheet) c.csvUrl = csvLink(settings.claimsSheet) || c.csvUrl;
+    if (settings.claimsOn != null && !truthy(settings.claimsOn)) { c.formUrl = ''; c.csvUrl = ''; }
+    refreshClaims();
     if (window.WISHLIST_THEME_PREVIEW) return; // ?theme= previews win over the sheet
     const fromConfig = String(CONFIG.theme || 'rpg-shop').toLowerCase().replace(/[^a-z0-9-]/g, '') || 'rpg-shop';
     let wanted = settings.theme ? await themeFolder(settings.theme) : null;
@@ -419,9 +445,14 @@
   const SHIELD = store.get(SHIELD_KEY) === 'on';
   const TEST = params.has('test-claims');
   const c = CONFIG.claims;
-  const CLAIMS_CONFIGURED = Boolean(c.csvUrl && c.formUrl && c.itemField && c.qtyField);
+  ['itemField', 'qtyField', 'refField'].forEach((k) => { if (!c[k]) c[k] = CONFIG.templateClaimFields[k] || ''; });
+  let CLAIMS_CONFIGURED = Boolean(c.csvUrl && c.formUrl && c.itemField && c.qtyField);
   // Test mode only ever uses fake claims, so it's allowed even behind the spoiler shield.
-  const CLAIMS_ON = TEST || (!SHIELD && CLAIMS_CONFIGURED);
+  let CLAIMS_ON = TEST || (!SHIELD && CLAIMS_CONFIGURED);
+  const refreshClaims = () => {
+    CLAIMS_CONFIGURED = Boolean(c.csvUrl && c.formUrl && c.itemField && c.qtyField);
+    CLAIMS_ON = TEST || (!SHIELD && CLAIMS_CONFIGURED);
+  };
   const pendingKey = TEST ? PENDING_KEY + '-test' : PENDING_KEY;
 
   const state = {
@@ -1294,9 +1325,10 @@
     // Start every download at once; the theme's words are needed before anything is drawn.
     const sheetSet = /^https?:\/\//i.test(String(CONFIG.sheetUrl).trim());
     const settingsReady = sheetSet ? loadSettings() : Promise.resolve({});
-    const themeReady = settingsReady.then(applySettings).then(loadTheme);
+    const settingsApplied = settingsReady.then(applySettings);
+    const themeReady = settingsApplied.then(loadTheme);
     const dataPromise = sheetSet ? fetchText(CONFIG.sheetUrl).catch((err) => err) : null;
-    const claimsPromise = sheetSet && CLAIMS_ON && !TEST ? fetchText(c.csvUrl).catch((err) => err) : null;
+    const claimsPromise = settingsApplied.then(() => (sheetSet && CLAIMS_ON && !TEST ? fetchText(c.csvUrl).catch((err) => err) : null));
     const pricesPromise = sheetSet ? loadPrices() : null;
     await themeReady;
     wire();

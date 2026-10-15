@@ -50,6 +50,8 @@ The buttons appear on your site within about 5 minutes. Open your site with `?ch
 
 That happens if your sheet ever had another form. Your sheet has a hidden **Claimed items (Warning Spoilers!)** tab that copies purchases from "Form Responses 1". Unhide it (☰ at the bottom left), change the tab name in cell **A1** to match yours (for example `={'Form Responses 2'!A:D}`), and hide it again.
 
+No hidden Claimed items tab at all? Open your responses tab, copy the address from your browser, and paste it into a Settings row named `Claims tab link`.
+
 </details>
 
 ## Keep the surprise

@@ -20,7 +20,7 @@
     claims: { csvUrl: '', formUrl: '', itemField: '', qtyField: '', refField: '' },
     // Question ids of the template claims form. Copies of the form keep them, so people
     // who copy the template only need its two links. Override in config.js for your own form.
-    templateClaimFields: { itemField: '', qtyField: '', refField: '' },
+    templateClaimFields: { itemField: 'entry.913828344', qtyField: 'entry.1527095566', refField: 'entry.188142570' },
     imageExtensions: ['jpg', 'png', 'jpeg', 'webp'],
     maxPlannerBudget: 5000,
     maxPriceAgeDays: 3,

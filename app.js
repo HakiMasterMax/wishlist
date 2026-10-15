@@ -319,7 +319,7 @@
     taxShippingBuffer: ['taxshippingbuffer', 'taxandshippingbuffer', 'taxshipping', 'buffer'],
     claimsOn: ['enableitemclaiming', 'enableclaiming', 'itemclaiming', 'claiming'],
     claimsForm: ['claimformlink', 'claimsformlink', 'formlink', 'claimform', 'claimsform'],
-    claimsSheet: ['claimeditemssheetpublishlink', 'claimeditemssheetlink', 'claimeditemslink', 'claimssheetlink',
+    claimsSheet: ['claimstablink', 'claimstab', 'claimedtablink', 'claimeditemstablink', 'claimeditemssheetpublishlink', 'claimeditemssheetlink', 'claimeditemslink', 'claimssheetlink',
       'claimssheetpublishlink', 'claimedsheetlink', 'claimssheet', 'claimedsheet'],
   };
 
@@ -342,6 +342,14 @@
     gid = String(gid || '').trim();
     const m = String(CONFIG.sheetUrl).trim().match(/^(https:\/\/docs\.google\.com\/spreadsheets\/d\/e\/[\w-]+)\/pub/i);
     return gid && m ? m[1] + '/pub?gid=' + encodeURIComponent(gid) + '&single=true&output=csv' : '';
+  }
+
+  // Where to read claims from: a published CSV link, the browser address while the responses tab
+  // is open (anything with gid=…), or just the tab's id number.
+  function claimsTabLink(value) {
+    const v = String(value).trim();
+    const gid = (v.match(/[#?&]gid=(\d+)/) || v.match(/^(\d+)$/) || [])[1];
+    return csvLink(v) || tabUrl(gid);
   }
 
   // The Settings tab's CSV link: set directly, or worked out from the published sheet link.
@@ -413,7 +421,7 @@
   // Whether the theme exists is checked on the file itself: a link's error event also fires when only a
   // Google Font it imports is blocked (ad blockers, school networks), and that shouldn't reject the theme.
   async function swapThemeCss(folder) {
-    const href = 'themes/' + folder + '/theme.css?v=20261015a';
+    const href = 'themes/' + folder + '/theme.css?v=20261015b';
     try {
       const res = await fetch(href, { method: 'HEAD', cache: 'no-cache' });
       if (!res.ok) return false;
@@ -449,7 +457,7 @@
       const ids = [...String(settings.claimsForm).matchAll(/[?&](entry\.\d+)=/g)].map((m) => m[1]);
       if (ids.length >= 2) { [c.itemField, c.qtyField] = ids; c.refField = ids[2] || ''; }
     }
-    if (settings.claimsSheet) c.csvUrl = csvLink(settings.claimsSheet) || c.csvUrl;
+    if (settings.claimsSheet) c.csvUrl = claimsTabLink(settings.claimsSheet) || c.csvUrl;
     // Sheets copied from the template have the claimed-items log built in, so no link is needed.
     if (settings.claimsForm && !c.csvUrl) c.csvUrl = tabUrl(CONFIG.claimsTabId);
     if (settings.claimsOn != null && !truthy(settings.claimsOn)) { c.formUrl = ''; c.csvUrl = ''; }
@@ -1371,9 +1379,9 @@
     else if (cl.sheetSays && !cl.formLink && !CLAIMS_CONFIGURED) add('warn', 'Claiming is ticked, but there\'s no claim form link', null, 'Paste your form\'s pre-filled link into Claim form link on the Settings tab.');
     else if (cl.formLink && !cl.formOk) add('warn', 'The claim form link doesn\'t look right', /forms\.gle/i.test(cl.formLink) ? 'It\'s a short forms.gle link.' : null, 'In the form editor, use Tools → Manage form → Edit form, then ⋮ → Pre-fill form. Type anything, click Get link, then COPY LINK, and paste that.');
     else if (cl.formLink && !cl.ids) add('warn', 'The claim form link is missing its questions', 'Paste the pre-filled link, not the regular share link.', 'In the form editor: ⋮ → Pre-fill form, type anything in the three boxes, then Get link → COPY LINK.');
-    else if (cl.log === 'error' || cl.log === 'html') add('warn', 'Claims are sent, but the log can\'t be read', 'Gift-givers can mark items, but they won\'t see each other\'s purchases.', 'In Publish to web, choose "Entire document", then wait a few minutes.');
+    else if (cl.log === 'error' || cl.log === 'html') add('warn', 'Claims are sent, but the log can\'t be read', 'Gift-givers can mark items, but they won\'t see each other\'s purchases.', 'In Publish to web, choose "Entire document", then wait a few minutes. If your sheet has no hidden "Claimed items" tab, open your Form Responses tab, copy the address from your browser, and paste it into a Settings row named "Claims tab link".');
     else if (cl.log === 'ref') add('warn', 'The claims log can\'t find your form\'s responses', 'The hidden "Claimed items" tab copies purchases from a tab called "Form Responses 1", and that tab isn\'t there.', 'Create your form with Tools → Create a new form (see the gift claiming guide). If your responses tab has a different name, unhide the "Claimed items" tab and change the name in cell A1 to match.');
-    else if (cl.log === 'headers') add('warn', 'The claims log looks different than expected', 'It needs columns named item and quantity.', 'Don\'t rename or reorder the claim form\'s questions (item, quantity, ref).');
+    else if (cl.log === 'headers') add('warn', 'The claims log looks different than expected', 'It needs columns named item and quantity.', 'Don\'t rename or reorder the claim form\'s questions (item, quantity, ref). If you added a "Claims tab link" row, check it points at your Form Responses tab.');
     else if (CLAIMS_ON) add('ok', 'Gift claiming is on', 'The claim form and log are connected. (This page never shows what was bought.)');
 
     // 5. Price checks

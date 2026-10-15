@@ -53,6 +53,7 @@ Gift cards show "From $25" or "Any amount", have no "bought it" button (several 
 | **Tax & shipping buffer** | How much of a gift-giver's budget the gift helper holds back, like `15%`. Use `0%` to turn it off. |
 | **Enable item claiming** | Lets gift-givers mark what they bought. See [Gift claiming](claiming.md). |
 | **Claim form link** | Your claim form's link. See [Gift claiming](claiming.md). |
+| **Claims tab link** | Rarely needed: only if your sheet has no hidden Claimed items tab. See [Sheet changes](sheet-changes.md). |
 
 Leave a setting blank to use the theme's own wording. Changes show up on your site within about 5 minutes.
 

@@ -42,7 +42,8 @@ You update it by editing the spreadsheet. There's nothing to install and nothing
   <img src="docs/media/how-it-works.png" alt="1: Your Google Sheet, where you add items and pick a theme. 2: Your free website on GitHub Pages, which reads the sheet on every visit. 3: Family and friends browse, get gift ideas and mark what they bought. Purchases go to a hidden tab in your sheet." width="820">
 </p>
 
-## Set it up in about 10 minutes
+## Set it up in about 10 minutes 
+See detailed setup guide <a href="docs/setup.md"><b>HERE</b></a>
 
 > [!NOTE]
 > You'll need a free Google account and a free [GitHub account](https://github.com/signup). No coding and no downloads. The [illustrated setup guide](docs/setup.md) walks through every click.

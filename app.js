@@ -313,6 +313,7 @@
     ownerName: ['yourname', 'name', 'ownername', 'owner'],
     title: ['listtitle', 'title', 'pagetitle'],
     welcome: ['welcomemessage', 'welcome', 'message'],
+    footer: ['footertext', 'footer', 'footermessage', 'pagefooter', 'bottomtext'],
     taxShippingBuffer: ['taxshippingbuffer', 'taxandshippingbuffer', 'taxshipping', 'buffer'],
     claimsOn: ['enableitemclaiming', 'enableclaiming', 'itemclaiming', 'claiming'],
     claimsForm: ['claimformlink', 'claimsformlink', 'formlink', 'claimform', 'claimsform'],
@@ -397,7 +398,7 @@
       const link = document.createElement('link');
       link.rel = 'stylesheet';
       link.id = 'theme-css';
-      link.href = 'themes/' + folder + '/theme.css?v=20261014b';
+      link.href = 'themes/' + folder + '/theme.css?v=20261014c';
       const done = (ok) => { if (ok && old) old.remove(); resolve(ok); };
       link.onload = () => done(true);
       link.onerror = () => { link.remove(); done(false); };
@@ -410,6 +411,7 @@
     if (settings.ownerName) CONFIG.ownerName = settings.ownerName;
     if (settings.title) SHEET_TEXT.title = settings.title;
     if (settings.welcome) SHEET_TEXT.welcome = settings.welcome;
+    if (settings.footer) SHEET_TEXT.footer = settings.footer;
     if (settings.taxShippingBuffer) {
       const n = parseFloat(String(settings.taxShippingBuffer).replace(/[^\d.]/g, ''));
       if (Number.isFinite(n)) CONFIG.taxShippingBuffer = /%/.test(settings.taxShippingBuffer) || n > 1 ? n / 100 : n;

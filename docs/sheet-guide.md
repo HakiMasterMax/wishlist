@@ -49,6 +49,7 @@ Gift cards show "From $25" or "Any amount", have no "bought it" button (several 
 | **Your name** | Shown to gift-givers, e.g. "Sam won't see it" when they mark something as bought. |
 | **List title** | Replaces the theme's title, like "Sam's Birthday List". Optional. |
 | **Welcome message** | Replaces the theme's welcome note. Type `{i}` where you want the little ⓘ icon. Optional. |
+| **Footer text** | Replaces the line of text at the very bottom of the page, like "Thanks for looking, see you at the party!" Optional. |
 | **Tax & shipping buffer** | How much of a gift-giver's budget the gift helper holds back, like `15%`. Use `0%` to turn it off. |
 | **Enable item claiming** | Lets gift-givers mark what they bought. See [Gift claiming](claiming.md). |
 | **Claim form link** | Your claim form's link. See [Gift claiming](claiming.md). |

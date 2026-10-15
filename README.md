@@ -83,7 +83,7 @@ Pick one from the **Theme** dropdown in your sheet's Settings tab. To try one fi
   </tr>
   <tr>
     <td valign="top"><a href="https://nicolenadine.github.io/wishlist/?theme=starter"><img src="docs/media/themes/starter-thumb.webp" alt="Starter theme"></a><br><b>Starter</b><br><sub>Plain and simple. The one to copy when you make your own.</sub></td>
-    <td colspan="2" valign="middle" align="center"><b>Make your own</b><br><sub>Colors, fonts, wording, art and a mascot, with no JavaScript.<br>See the <a href="themes/README.md">themes guide</a>.</sub></td>
+    <td colspan="2" valign="middle" align="center"><b>Make your own</b><br><sub>Colors, fonts, wording, art and a mascot, with no JavaScript.<br>See the <a href="themes/README.md">themes guide</a>, then <a href="themes/README.md#share-your-theme-with-everyone">share it</a><br>with a pull request so everyone can use it.</sub></td>
   </tr>
 </table>
 
@@ -91,7 +91,8 @@ Pick one from the **Theme** dropdown in your sheet's Settings tab. To try one fi
 
 - **Add, change or remove items** right in the sheet. The [sheet guide](docs/sheet-guide.md) covers every column, photos and gift cards.
 - **Change your theme, name or title** on the sheet's **Settings** tab.
-- **Get new features and themes:** on your copy's GitHub page, click **Sync fork → Update branch**. Your settings are kept.
+- **Get new features and themes:** on your copy's GitHub page, click **Sync fork → Update branch**. Your settings and your sheet stay exactly as they are, so there's nothing to copy over. New themes also appear in your sheet's Theme dropdown on their own.
+- **Check that everything's working:** add `?check` to the end of your site's address. You'll get a plain-language checklist of your sheet, settings, theme and claiming, with a fix for anything that's off.
 
 <details>
 <summary><b>Let gift-givers mark items as bought</b></summary>
@@ -110,6 +111,9 @@ A free GitHub Action checks prices every morning and shows sales on the cards. I
 </details>
 
 ## Questions
+
+> [!TIP]
+> Start with the setup check: open your site with `?check` on the end, like `https://your-username.github.io/wishlist/?check`. It spots most problems and tells you how to fix them.
 
 <details>
 <summary><b>My site says "No sheet connected yet."</b></summary>
@@ -164,7 +168,7 @@ config.js           sheet link plus advanced options (the only file most people 
 app.js              loads the sheet and Settings tab, filters, cards, gift helper, claims
 index.html          page structure
 styles.css          shared layout; colors and fonts come from the theme
-themes/             one folder per theme (CSS, JSON and SVG only), plus themes.json
+themes/             one folder per theme (CSS, JSON and SVG only), plus themes.csv (the theme list the sheet's dropdown reads)
 scripts/            daily price check, run by .github/workflows/update-prices.yml
 wishlist-images/    optional photos hosted in the repo
 docs/               guides and the images in this README
@@ -176,7 +180,7 @@ docs/               guides and the images in this README
 python3 -m http.server 8000
 ```
 
-Then open http://localhost:8000. Handy URL switches: `?theme=name` previews a theme, `?test-claims` fakes purchases without sending anything, and `?shield` / `?shield=off` turn the spoiler shield on and off.
+Then open http://localhost:8000. Handy URL switches: `?check` shows the setup report, `?theme=name` previews a theme, `?test-claims` fakes purchases without sending anything, and `?shield` / `?shield=off` turn the spoiler shield on and off.
 
 **Settings.** Anything in the sheet's Settings tab can also be set in `config.js`; the sheet wins when both are filled in, and `config.js` is the fallback if the tab is missing. When you change `app.js`, `styles.css` or `config.js`, bump the `?v=` number in `index.html` so browsers fetch the new version.
 

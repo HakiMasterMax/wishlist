@@ -17,6 +17,7 @@
   <img alt="Hosting: free on GitHub Pages" src="https://img.shields.io/badge/hosting-free-2F9C8A?style=flat-square">
   <img alt="Runs on Google Sheets" src="https://img.shields.io/badge/runs_on-Google_Sheets-34A853?style=flat-square&logo=googlesheets&logoColor=white">
   <img alt="7 themes" src="https://img.shields.io/badge/themes-7-5A3FA0?style=flat-square">
+  <a href="LICENSE"><img alt="License: GPL v3" src="https://img.shields.io/badge/license-GPL_v3-2B2A5C?style=flat-square"></a>
 </p>
 
 Keep your wishlist in a Google Sheet, and this turns it into a little online shop that friends and family can actually enjoy browsing. They can filter by price or store, see what you want most, get gift ideas that fit their budget, and quietly mark what they bought so nobody doubles up. You never see the spoilers.
@@ -180,3 +181,10 @@ Then open http://localhost:8000. Handy URL switches: `?theme=name` previews a th
 **Settings.** Anything in the sheet's Settings tab can also be set in `config.js`; the sheet wins when both are filled in, and `config.js` is the fallback if the tab is missing. When you change `app.js`, `styles.css` or `config.js`, bump the `?v=` number in `index.html` so browsers fetch the new version.
 
 </details>
+
+## License
+
+© 2026 Nicole Nadine. Released under the [GNU General Public License v3](LICENSE).
+
+You're free to use, copy, change and share this, including for commercial projects. If you share a changed version, it has to stay open source under the same license, with the source available. Your own copy for your wishlist is fine as is: forks on GitHub are already public.
+

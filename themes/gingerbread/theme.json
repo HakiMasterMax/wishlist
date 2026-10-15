@@ -20,7 +20,7 @@
     "title": "Sweet Wishes",
     "eventTag": "Fresh from the oven",
     "welcomeName": "Hi there!",
-    "welcome": "Thanks for stopping by the bakery! Everything here is on my wish list. The ones with a gumdrop are Extra Sweet, my very favorites. Tap the {i} on a photo for sizes, colors and notes.",
+    "welcome": "Thanks for stopping by! A gumdrop marks the ones I'd love most. Tap the {i} on a photo for sizes, colors and notes.",
     "footer": "Baked fresh from a spreadsheet",
     "stat.items": "{n} treat | {n} treats",
     "stat.starred": "{n} extra sweet",

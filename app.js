@@ -30,6 +30,9 @@
     settingsTabId: '1991352544',
     // Or paste the Settings tab's own published CSV link here instead.
     settingsUrl: '',
+    // The claimed-items log tab's id in the template sheet (the claim form writes there). Copies keep
+    // it, so turning on claiming in the Settings tab only needs the form link.
+    claimsTabId: '',
   };
   const USER = window.WISHLIST_CONFIG || {};
   const CONFIG = { ...DEFAULTS, ...USER, claims: { ...DEFAULTS.claims, ...(USER.claims || {}) } };
@@ -331,12 +334,17 @@
     return u.replace(/\/pubhtml/i, '/pub').replace(/([?&])output=\w+/i, '$1output=csv') + (/output=/i.test(u) ? '' : (u.includes('?') ? '&' : '?') + 'output=csv');
   }
 
+  // Another tab of the published sheet, as CSV, found by its tab id (gid).
+  function tabUrl(gid) {
+    gid = String(gid || '').trim();
+    const m = String(CONFIG.sheetUrl).trim().match(/^(https:\/\/docs\.google\.com\/spreadsheets\/d\/e\/[\w-]+)\/pub/i);
+    return gid && m ? m[1] + '/pub?gid=' + encodeURIComponent(gid) + '&single=true&output=csv' : '';
+  }
+
   // The Settings tab's CSV link: set directly, or worked out from the published sheet link.
   function settingsUrl() {
     if (/^https?:\/\//i.test(String(CONFIG.settingsUrl).trim())) return String(CONFIG.settingsUrl).trim();
-    const gid = String(CONFIG.settingsTabId || '').trim();
-    const m = String(CONFIG.sheetUrl).trim().match(/^(https:\/\/docs\.google\.com\/spreadsheets\/d\/e\/[\w-]+)\/pub/i);
-    return gid && m ? m[1] + '/pub?gid=' + encodeURIComponent(gid) + '&single=true&output=csv' : '';
+    return tabUrl(CONFIG.settingsTabId);
   }
 
   function readSettings(rows) {
@@ -414,6 +422,8 @@
       if (ids.length >= 2) { [c.itemField, c.qtyField] = ids; c.refField = ids[2] || ''; }
     }
     if (settings.claimsSheet) c.csvUrl = csvLink(settings.claimsSheet) || c.csvUrl;
+    // Sheets copied from the template have the claimed-items log built in, so no link is needed.
+    if (settings.claimsForm && !c.csvUrl) c.csvUrl = tabUrl(CONFIG.claimsTabId);
     if (settings.claimsOn != null && !truthy(settings.claimsOn)) { c.formUrl = ''; c.csvUrl = ''; }
     refreshClaims();
     if (window.WISHLIST_THEME_PREVIEW) return; // ?theme= previews win over the sheet

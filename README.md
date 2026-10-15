@@ -46,6 +46,8 @@ You update it by editing the spreadsheet. There's nothing to install and nothing
 
 > [!NOTE]
 > You'll need a free Google account and a free [GitHub account](https://github.com/signup). No coding and no downloads. The [illustrated setup guide](docs/setup.md) walks through every click.
+>
+> **Tip:** open the buttons below with **Ctrl-click** (**⌘-click** on a Mac) so this page stays open while you work.
 
 **1. Copy the spreadsheet.** It comes with example items, a **Settings** tab and a **How to use** tab.
 
@@ -57,7 +59,7 @@ You update it by editing the spreadsheet. There's nothing to install and nothing
 
 [![Fork this repo](https://img.shields.io/badge/Fork_this_repo-24292F?style=for-the-badge&logo=github&logoColor=white)](https://github.com/nicolenadine/wishlist/fork)
 
-**4. Connect the two.** In your copy on GitHub, open `config.js`, click the pencil icon, paste your sheet link between the quotes after `sheetUrl:`, and click **Commit changes**. That's the only file you ever need to edit.
+**4. Connect the two.** In your copy on GitHub, click the name `config.js` in the file list (the name itself, not the grey text beside it), click the pencil icon, paste your sheet link between the quotes after `sheetUrl:`, and click **Commit changes**. That's the only file you ever need to edit.
 
 **5. Turn on the website.** Go to **Settings → Pages**, set the branch to `main` and the folder to `/ (root)`, and click **Save**. In a minute or two your list is live at `https://your-username.github.io/wishlist/`.
 

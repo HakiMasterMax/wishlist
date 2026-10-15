@@ -15,6 +15,9 @@ This takes about 10 minutes, and you don't need to know any code. By the end you
 | 5 | [Turn on the website](#5-turn-on-the-website) | GitHub | 2 min |
 | 6 | [Make it yours](#6-make-it-yours) | Google Sheets | as long as you like |
 
+> [!TIP]
+> **Keep this guide open as you go.** GitHub can't open links in a new tab for you, so open the buttons below with **Ctrl-click** (**⌘-click** on a Mac, or press and hold on a phone and choose **Open in New Tab**). Then you can switch back here instead of retracing your steps.
+
 ---
 
 ## 1. Copy the spreadsheet
@@ -58,7 +61,7 @@ Sign in to GitHub if it asks, then click **Create fork**. "Fork" is GitHub's wor
 
 ## 4. Connect the two
 
-1. On your copy's page, click the file named **config.js**.
+1. On your copy's page, click the name **config.js** in the list of files. Click the name itself, on the left: the grey text beside it opens a different page (if you land there, just go back).
 2. Click the **pencil icon** (top right of the file) to edit it.
 3. Find the line that starts with `sheetUrl:`. Replace the link between the quotes with the one you copied in step 2. Keep the quotes.
 4. Click **Commit changes…**, then **Commit changes** again.

@@ -112,6 +112,7 @@ When you're happy with it, share your site's address with family and friends.
 
 - **[Gift claiming](claiming.md):** let gift-givers mark what they bought so nobody doubles up. About five minutes.
 - **[Daily price checks](price-checks.md):** show sales on the cards. One click to turn on.
+- **[The Wishlist menu](sheet-menu.md):** in your sheet, **Wishlist → Check for updates** adds new sheet options, and **Set up gift claiming** does claiming for you.
 - **Get new features later:** on your copy's GitHub page, click **Sync fork → Update branch**. Your settings are kept.
 
 > [!CAUTION]

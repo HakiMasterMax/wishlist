@@ -94,14 +94,14 @@ Pick one from the **Theme** dropdown in your sheet's Settings tab. To try one fi
 - **Add, change or remove items** right in the sheet. The [sheet guide](docs/sheet-guide.md) covers every column, photos and gift cards.
 - **Change your theme, name or title** on the sheet's **Settings** tab.
 - **Get new features and themes:** on your copy's GitHub page, click **Sync fork → Update branch**. Your settings and your sheet stay exactly as they are, so there's nothing to copy over. New themes also appear in your sheet's Theme dropdown on their own.
-- **New sheet options:** the occasional update adds an optional setting to the sheet. [Sheet changes](docs/sheet-changes.md) lists them, newest first. You only need the ones dated after you made your copy.
+- **New sheet options:** the occasional update adds an optional setting to the sheet. In your sheet, click **Wishlist → Check for updates** and say yes. ([About the Wishlist menu](docs/sheet-menu.md), or add them by hand from [Sheet changes](docs/sheet-changes.md).)
 - **Check that everything's working:** add `?check` to the end of your site's address. You'll get a plain-language checklist of your sheet, settings, theme and claiming, with a fix for anything that's off.
 
 <details>
 <summary><b>Let gift-givers mark items as bought</b></summary>
 <br>
 
-Make a small Google Form from your sheet (**Tools → Create a new form**, then add three questions), paste its link into the **Settings** tab, and tick **Enable item claiming**. Every item gets a button for gift-givers, purchases are recorded in hidden tabs in your sheet, and items grey out once they're taken. [Turn on claiming →](docs/claiming.md)
+In your sheet, click **Wishlist → Set up gift claiming**. It makes your claim form and connects it for you (or do it by hand in a few minutes). Every item gets a button for gift-givers, purchases are recorded in hidden tabs in your sheet, and items grey out once they're taken. [Turn on claiming →](docs/claiming.md)
 
 </details>
 
@@ -180,6 +180,7 @@ app.js              loads the sheet and Settings tab, filters, cards, gift helpe
 index.html          page structure
 styles.css          shared layout; colors and fonts come from the theme
 themes/             one folder per theme (CSS, JSON and SVG only), plus themes.csv (the theme list the sheet's dropdown reads)
+sheet/              the sheet's optional Wishlist menu (Apps Script) and updates.json, the list of sheet changes it applies
 scripts/            daily price check, run by .github/workflows/update-prices.yml
 wishlist-images/    optional photos hosted in the repo
 docs/               guides and the images in this README
@@ -193,7 +194,7 @@ python3 -m http.server 8000
 
 Then open http://localhost:8000. Handy URL switches: `?check` shows the setup report, `?theme=name` previews a theme, `?test-claims` fakes purchases without sending anything, and `?shield` / `?shield=off` turn the spoiler shield on and off.
 
-**Sheet changes are always additive and optional.** A change must never break an existing sheet or require copying it again: new settings fall back to a default when their row is missing, and new columns are optional. Any change that touches the sheet gets an entry in [docs/sheet-changes.md](docs/sheet-changes.md) (the format is in a comment at the bottom), and new Settings rows go in `SETTING_NAMES` and `SETTING_LABELS` in `app.js` so `?check` can suggest them.
+**Sheet changes are always additive and optional.** A change must never break an existing sheet or require copying it again: new settings fall back to a default when their row is missing, and new columns are optional. Any change that touches the sheet gets an entry in [`sheet/updates.json`](sheet/updates.json), so the sheet's **Wishlist → Check for updates** can apply it, and in [docs/sheet-changes.md](docs/sheet-changes.md) for people adding it by hand (the format is in a comment at the bottom). Updates are data, not code: each one is a list of actions that [`sheet/Wishlist.gs`](sheet/Wishlist.gs) already knows (`settingRow`, `formulaTab`, `settingDropdown`). A new kind of action means a new `SCRIPT_VERSION` in the script and a matching `menuVersion` in `updates.json`, and new Settings rows go in `SETTING_NAMES` and `SETTING_LABELS` in `app.js` so `?check` can suggest them.
 
 **Settings.** Anything in the sheet's Settings tab can also be set in `config.js`; the sheet wins when both are filled in, and `config.js` is the fallback if the tab is missing. When you change `app.js`, `styles.css` or `config.js`, bump the `?v=` number in `index.html` so browsers fetch the new version.
 

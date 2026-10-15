@@ -10,7 +10,7 @@ The button's wording depends on your theme: "I bought this", "Loot", "Claim it",
 
 Your copy of the template sheet came with its own claim form. It's already connected to a hidden **Claimed Items Log** tab, so there are only three steps.
 
-**1. Open your claim form.** In your sheet, open the **Form** menu and choose **Edit form**. (You can also find "Copy of Wishlist claims" in your Google Drive.)
+**1. Open your claim form.** Find "Copy of Wishlist claims" in your Google Drive and open it. (It's also reachable from your sheet's **Tools** menu.)
 
 **2. Copy its pre-filled link.** In the form, click **⋮** (top right) → **Get pre-filled link**. Type anything into the three boxes, click **Get link**, then **Copy link**.
 

@@ -75,4 +75,4 @@ https://your-username.github.io/wishlist/?check
 
 You'll see a short checklist above your shop: whether your sheet and Settings tab were found, which theme loaded, whether gift claiming is connected, and when prices were last checked. Anything that needs attention comes with a fix in plain words. It never shows what anyone bought.
 
-It also lists any settings rows your sheet doesn't have yet, which is handy after an update adds a new option: just add the row to your Settings tab. You never need to start a new sheet.
+It also lists any settings rows your sheet doesn't have yet, which is handy after an update adds a new option: just add the row to your Settings tab. You never need to start a new sheet. [Sheet changes](sheet-changes.md) lists every option added since the template came out.

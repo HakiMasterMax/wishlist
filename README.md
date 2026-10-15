@@ -92,6 +92,7 @@ Pick one from the **Theme** dropdown in your sheet's Settings tab. To try one fi
 - **Add, change or remove items** right in the sheet. The [sheet guide](docs/sheet-guide.md) covers every column, photos and gift cards.
 - **Change your theme, name or title** on the sheet's **Settings** tab.
 - **Get new features and themes:** on your copy's GitHub page, click **Sync fork → Update branch**. Your settings and your sheet stay exactly as they are, so there's nothing to copy over. New themes also appear in your sheet's Theme dropdown on their own.
+- **New sheet options:** the occasional update adds an optional setting to the sheet. [Sheet changes](docs/sheet-changes.md) lists them, newest first. You only need the ones dated after you made your copy.
 - **Check that everything's working:** add `?check` to the end of your site's address. You'll get a plain-language checklist of your sheet, settings, theme and claiming, with a fix for anything that's off.
 
 <details>
@@ -189,6 +190,8 @@ python3 -m http.server 8000
 ```
 
 Then open http://localhost:8000. Handy URL switches: `?check` shows the setup report, `?theme=name` previews a theme, `?test-claims` fakes purchases without sending anything, and `?shield` / `?shield=off` turn the spoiler shield on and off.
+
+**Sheet changes are always additive and optional.** A change must never break an existing sheet or require copying it again: new settings fall back to a default when their row is missing, and new columns are optional. Any change that touches the sheet gets an entry in [docs/sheet-changes.md](docs/sheet-changes.md) (the format is in a comment at the bottom), and new Settings rows go in `SETTING_NAMES` and `SETTING_LABELS` in `app.js` so `?check` can suggest them.
 
 **Settings.** Anything in the sheet's Settings tab can also be set in `config.js`; the sheet wins when both are filled in, and `config.js` is the fallback if the tab is missing. When you change `app.js`, `styles.css` or `config.js`, bump the `?v=` number in `index.html` so browsers fetch the new version.
 

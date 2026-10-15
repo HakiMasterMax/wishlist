@@ -61,6 +61,8 @@ Leave a setting blank to use the theme's own wording. Changes show up on your si
 
 The template also has a hidden **Themes** tab. It fetches the current list of themes so your dropdown stays up to date. Leave it as it is.
 
+If your Theme dropdown is empty, look for a yellow bar at the top of the sheet that says formulas are trying to reach external parties, and click **Allow access**. It only downloads the list of theme names. You can also just type a theme's name into the cell: the site understands it either way.
+
 ## Checking your setup
 
 Add `?check` to the end of your site's address:

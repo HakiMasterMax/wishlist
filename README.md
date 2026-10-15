@@ -140,6 +140,14 @@ Check that you published the **Entire document**, not just the Items tab, and th
 </details>
 
 <details>
+<summary><b>My sheet shows a yellow "external parties" warning, or the Theme dropdown is empty.</b></summary>
+<br>
+
+Click **Allow access** on the yellow bar. It's the Theme dropdown fetching the current list of themes, so new ones appear automatically. Nothing from your sheet is sent anywhere. You can also type a theme's name into the cell instead.
+
+</details>
+
+<details>
 <summary><b>An item's photo doesn't show up.</b></summary>
 <br>
 

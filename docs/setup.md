@@ -27,6 +27,9 @@ Click **Make a copy**. A copy opens in your own Google Drive with three tabs at 
 - **Settings:** your theme, your name and a few other choices.
 - **How to use:** a cheat sheet for the columns.
 
+> [!NOTE]
+> Your copy may show a yellow bar: *"Some formulas are trying to send and receive data from external parties."* Click **Allow access**. It's the Theme dropdown fetching the list of available themes, so new ones show up for you automatically. Nothing from your sheet is sent anywhere.
+
 <img src="media/setup/01-copy-sheet.webp" alt="The Copy document dialog, with the Make a copy button highlighted" width="360">
 
 ## 2. Publish it

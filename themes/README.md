@@ -5,6 +5,11 @@ A theme sets the look and the wording of your wishlist shop. Each theme is a fol
 | Theme | Folder | What it's like |
 |---|---|---|
 | RPG Item Shop | `rpg-shop` | A cozy pixel-game shop. Starred items are *Legendary*, gift-givers *Loot* what they buy, and Smudge the soot sprite picks gifts. |
+| Hearthside | `hearthside` | A classic, elegant Christmas in evergreen, cranberry and gold. Large, easy-to-read text and plain wording: starred items are *Top Picks* and gift-givers press *I bought this*. |
+| Winter Lights | `winter-lights` | Navy and silver with a strand of little lights, for any winter holiday. Same large text and plain wording as Hearthside. |
+| Shiny & Bright | `shiny-bright` | Mid-century retro holiday: soft aqua, ornament pink and mint, tinsel trees and atomic starbursts. Large text and plain wording. |
+| Krampusnacht | `krampusnacht` | The dark side of the holidays: near-black, blood red and brass with a blackletter title. Starred items are *Most Wanted*, gift-givers *Claim* what they buy, and a woodcut Krampus runs the gift helper. |
+| Gingerbread | `gingerbread` | A kawaii bakery in cookie-brown, icing white, candy pink and mint, with piped-icing edges. Starred items are *Extra Sweet* (marked with a gumdrop), and Ginny the gingerbread cookie runs the gift helper. Works for the holidays or birthdays. |
 | Starter | `starter` | Plain and simple, with everyday wording and no mascot. A blank slate to copy when making your own. |
 
 ## Picking a theme

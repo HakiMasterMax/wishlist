@@ -45,7 +45,7 @@ Gift cards show "From $25" or "Any amount", have no "bought it" button (several 
 
 | Setting | What it does |
 |---|---|
-| **Theme** | The look and wording of your shop. Pick one from the dropdown. |
+| **Theme** | The look and wording of your shop. Pick one from the dropdown. New themes appear in it automatically. |
 | **Your name** | Shown to gift-givers, e.g. "Sam won't see it" when they mark something as bought. |
 | **List title** | Replaces the theme's title, like "Sam's Birthday List". Optional. |
 | **Welcome message** | Replaces the theme's welcome note. Type `{i}` where you want the little ⓘ icon. Optional. |
@@ -58,3 +58,19 @@ Leave a setting blank to use the theme's own wording. Changes show up on your si
 
 > [!IMPORTANT]
 > Keep **Items** as the first tab of the sheet. Your published link opens the first tab, so moving it breaks the list.
+
+The template also has a hidden **Themes** tab. It fetches the current list of themes so your dropdown stays up to date. Leave it as it is.
+
+## Checking your setup
+
+Add `?check` to the end of your site's address:
+
+```
+https://your-username.github.io/wishlist/?check
+```
+
+<img src="media/setup/check.webp" alt="The setup check: green ticks for sheet connected, Settings tab found, theme and gift claiming, and an info note listing optional settings rows to add" width="680">
+
+You'll see a short checklist above your shop: whether your sheet and Settings tab were found, which theme loaded, whether gift claiming is connected, and when prices were last checked. Anything that needs attention comes with a fix in plain words. It never shows what anyone bought.
+
+It also lists any settings rows your sheet doesn't have yet, which is handy after an update adds a new option: just add the row to your Settings tab. You never need to start a new sheet.

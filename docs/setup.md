@@ -92,6 +92,9 @@ Back in your sheet:
 
 Changes show up on your site within about 5 minutes. Just refresh.
 
+> [!TIP]
+> Want to make sure everything's connected? Open your site with `?check` on the end, like `https://your-username.github.io/wishlist/?check`, for a quick checklist.
+
 When you're happy with it, share your site's address with family and friends.
 
 > [!TIP]

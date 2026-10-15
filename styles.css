@@ -483,3 +483,22 @@ input[type="checkbox"] { width: 18px; height: 18px; margin: 0; accent-color: var
 .price.is-giftcard svg, .plan-dot.is-gift svg { width: 16px; height: 16px; }
 .plan-dot.is-gift { background: var(--accent-soft); }
 .plan-row.is-giftcard { border-style: dashed; }
+
+/* ---------- Setup check (?check) ---------- */
+.check-wrap { padding-top: 18px; }
+.check { display: flex; flex-direction: column; gap: 12px; }
+.check-title { margin: 0; font-family: var(--font-display); font-size: 24px; }
+.check-head p { margin: 4px 0 0; color: var(--text-soft); }
+.check-list { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 8px; }
+.check-item { display: flex; gap: 12px; align-items: flex-start; padding: 10px 12px; border-radius: 12px; background: var(--input); border: 1px solid var(--line); }
+.check-icon { flex: none; width: 26px; height: 26px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: 800; font-size: 14px; color: #fff; }
+.is-ok .check-icon { background: #2F9C6A; }
+.is-warn .check-icon { background: #D98A1E; }
+.is-bad .check-icon { background: #C9384A; }
+.is-info .check-icon { background: #6B7280; font-family: Georgia, serif; font-style: italic; }
+.is-bad { border-color: #C9384A; }
+.is-warn { border-color: #D98A1E; }
+.check-body p { margin: 2px 0 0; font-size: 14px; color: var(--text-soft); overflow-wrap: anywhere; }
+.check-body .check-fix { color: var(--text); font-weight: 600; }
+.check-body .check-fix::before { content: '→ '; }
+.check-foot { margin: 0; font-size: 14px; color: var(--text-soft); }

@@ -421,7 +421,7 @@
   // Whether the theme exists is checked on the file itself: a link's error event also fires when only a
   // Google Font it imports is blocked (ad blockers, school networks), and that shouldn't reject the theme.
   async function swapThemeCss(folder) {
-    const href = 'themes/' + folder + '/theme.css?v=20261015c';
+    const href = 'themes/' + folder + '/theme.css?v=20261015d';
     try {
       const res = await fetch(href, { method: 'HEAD', cache: 'no-cache' });
       if (!res.ok) return false;
@@ -1320,7 +1320,9 @@
     status.hidden = false;
     status.replaceChildren(
       el('div', { class: 'status-title', text: t(setup ? 'setup.title' : 'error.title') }),
-      el('p', { text: t(setup ? 'setup.text' : 'error.text') }),
+      el('p', { text: setup && CHECK.config && CHECK.config.broken
+        ? 'There\'s a typo in config.js' + (CHECK.config.line ? ' around line ' + CHECK.config.line : '') + ', usually a missing comma or quote at the end of a line. Add ?check to this page\'s address for help fixing it.'
+        : t(setup ? 'setup.text' : 'error.text') }),
     );
   }
 
@@ -1339,6 +1341,15 @@
     const items = [];
     const add = (state, title, detail, fix) => items.push({ state, title, detail, fix });
     const sh = CHECK.sheet;
+
+    // 0. A typo in config.js
+    const cf = CHECK.config;
+    if (cf && cf.broken) {
+      const where = cf.line ? 'around line ' + cf.line : 'somewhere in the file';
+      add(cf.rescued ? 'warn' : 'bad', 'config.js has a typo ' + where,
+        cf.rescued ? 'Your sheet link was still found, so your site works. Anything else you changed in config.js is being ignored until the typo is fixed.' : 'Because of it, your site can\'t read your sheet link.',
+        (cf.missingComma ? 'Line ' + cf.line + ' is probably missing a comma at the very end. ' : '') + 'On GitHub, open config.js and click the pencil. Look at that line and the one just above it. Every setting line ends with a comma, like  sheetUrl: \'https://…/pub?output=csv\',  and every link has a quote mark on both sides. Fix it and click Commit changes.');
+    }
 
     // 1. The sheet
     if (!sh.set) add('bad', 'No sheet connected yet', 'config.js has no sheet link.', 'Publish your sheet (File → Share → Publish to web → Entire document → Comma-separated values) and paste the link after sheetUrl: in config.js.');
@@ -1477,7 +1488,28 @@
     });
   }
 
+  // A typo in config.js (usually a missing comma) stops the whole file from running. Rescue the
+  // sheet link from its text so the site still works, and let ?check point at the line.
+  async function rescueConfig() {
+    if (window.WISHLIST_CONFIG) return;
+    const err = window.WISHLIST_CONFIG_ERROR;
+    CHECK.config = { broken: Boolean(err), line: err && err.line };
+    try {
+      const text = await fetchText('config.js?t=' + Date.now());
+      const m = text.match(/^\s*sheetUrl\s*:\s*['"`](https?:\/\/[^'"`\s]+)/m);
+      if (m) { CONFIG.sheetUrl = m[1]; CHECK.config.rescued = true; }
+      // The browser reports where it got confused, often several lines late. A setting line
+      // that doesn't end with a comma is almost always the real culprit.
+      const lines = text.split('\n');
+      const i = lines.findIndex((l) => /^\s*[A-Za-z]\w*\s*:\s*\S/.test(l) && !/[,{[(]\s*(\/\/.*)?$/.test(l));
+      if (i >= 0) { CHECK.config.line = i + 1; CHECK.config.missingComma = true; }
+      if (!err && !/WISHLIST_CONFIG/.test(text)) CHECK.config.broken = false;
+    } catch (e) { /* the setup message explains */ }
+    if (CHECK.config.broken) console.warn('[wishlist] config.js has a typo near line ' + CHECK.config.line + (CHECK.config.rescued ? '; using the sheet link from it anyway.' : '.'));
+  }
+
   async function init() {
+    await rescueConfig();
     try { await load(); } catch (err) { console.error('[wishlist]', err); }
     if (params.has('check')) renderCheck();
   }

@@ -60,7 +60,7 @@ See detailed setup guide <a href="docs/setup.md"><b>HERE</b></a>
 
 [![Fork this repo](https://img.shields.io/badge/Fork_this_repo-24292F?style=for-the-badge&logo=github&logoColor=white)](https://github.com/nicolenadine/wishlist/fork)
 
-**4. Connect the two.** In your copy on GitHub, click the name `config.js` in the file list (the name itself, not the grey text beside it), click the pencil icon, paste your sheet link between the quotes after `sheetUrl:`, and click **Commit changes**. That's the only file you ever need to edit.
+**4. Connect the two.** In your copy on GitHub, click the name `config.js` in the file list (the name itself, not the grey text beside it), click the pencil icon, paste your sheet link between the quotes after `sheetUrl:` (keep the comma at the end of the line), and click **Commit changes**. That's the only file you ever need to edit.
 
 **5. Turn on the website.** Go to **Settings → Pages**, set the branch to `main` and the folder to `/ (root)`, and click **Save**. In a minute or two your list is live at `https://your-username.github.io/wishlist/`.
 
@@ -123,7 +123,13 @@ A free GitHub Action checks prices every morning and shows sales on the cards. I
 <summary><b>My site says "No sheet connected yet."</b></summary>
 <br>
 
-The sheet link in `config.js` is missing or has a typo. Copy it again from **File → Share → Publish to web** and make sure it's between the quotes after `sheetUrl:`.
+The sheet link in `config.js` is missing or has a typo. Copy it again from **File → Share → Publish to web** and make sure it's between the quotes after `sheetUrl:`, with a comma at the very end of the line:
+
+```js
+sheetUrl: 'https://docs.google.com/spreadsheets/d/e/…/pub?output=csv',
+```
+
+A missing comma or quote is the most common slip, and your site's setup check (`?check`) will point to the exact line.
 
 </details>
 
@@ -147,7 +153,7 @@ Check that you published the **Entire document**, not just the Items tab, and th
 <summary><b>My sheet shows a yellow "external parties" warning, or the Theme dropdown is empty.</b></summary>
 <br>
 
-Click **Allow access** on the yellow bar. It's the Theme dropdown fetching the current list of themes, so new ones appear automatically. Nothing from your sheet is sent anywhere. You can also type a theme's name into the cell instead.
+Click **Allow access** on the yellow bar. It's the Theme dropdown fetching the current list of themes, so new ones appear automatically. Nothing from your sheet is sent anywhere ([more about this warning](docs/about-the-warnings.md)). You can also type a theme's name into the cell instead.
 
 </details>
 
@@ -155,7 +161,7 @@ Click **Allow access** on the yellow bar. It's the Theme dropdown fetching the c
 <summary><b>The Wishlist menu says "Google hasn't verified this app."</b></summary>
 <br>
 
-That's expected the first time, and you only see it once. The script lives in your own copy of the sheet, so the "developer" Google names on that screen is you. Click **Advanced → Go to Wishlist Shop (unsafe)**, tick **Select all**, then **Continue**. The [menu guide](docs/sheet-menu.md) walks through each screen and explains every permission.
+That's expected the first time, and you only see it once. The script lives in your own copy of the sheet, so the "developer" Google names on that screen is you. Click **Advanced → Go to Wishlist Shop (unsafe)**, tick **Select all**, then **Continue**. The [menu guide](docs/sheet-menu.md) walks through each screen, and [About Google's warnings](docs/about-the-warnings.md) explains in plain words why it's safe and how to check for yourself.
 
 </details>
 
@@ -205,7 +211,7 @@ Then open http://localhost:8000. Handy URL switches: `?check` shows the setup re
 
 **Sheet changes are always additive and optional.** A change must never break an existing sheet or require copying it again: new settings fall back to a default when their row is missing, and new columns are optional. Any change that touches the sheet gets an entry in [`sheet/updates.json`](sheet/updates.json), so the sheet's **Wishlist → Check for updates** can apply it, and in [docs/sheet-changes.md](docs/sheet-changes.md) for people adding it by hand (the format is in a comment at the bottom). Updates are data, not code: each one is a list of actions that [`sheet/Wishlist.gs`](sheet/Wishlist.gs) already knows (`settingRow`, `formulaTab`, `settingDropdown`). A new kind of action means a new `SCRIPT_VERSION` in the script and a matching `menuVersion` in `updates.json`, and new Settings rows go in `SETTING_NAMES` and `SETTING_LABELS` in `app.js` so `?check` can suggest them.
 
-**Settings.** Anything in the sheet's Settings tab can also be set in `config.js`; the sheet wins when both are filled in, and `config.js` is the fallback if the tab is missing. When you change `app.js`, `styles.css` or `config.js`, bump the `?v=` number in `index.html` so browsers fetch the new version.
+**Settings.** Anything in the sheet's Settings tab can also be set in `config.js`; the sheet wins when both are filled in, and `config.js` is the fallback if the tab is missing. When you change `app.js` or `styles.css`, bump the `?v=` number in `index.html` so browsers fetch the new version. `config.js` is always fetched fresh, so people's edits show up as soon as GitHub publishes them.
 
 </details>
 

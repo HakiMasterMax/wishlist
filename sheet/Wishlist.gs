@@ -8,11 +8,14 @@
  *     The list is plain data. It can only ask for the actions written below
  *     (see ACTIONS); it can't run any new code.
  *   - Set up gift claiming: make a Google Form in your Drive, connect it to this
- *     sheet, and fill in the Claim form link on your Settings tab.
+ *     sheet, hide the tabs that show purchases, and fill in the claiming rows on
+ *     your Settings tab (Enable item claiming, Claim form link, and Claims tab
+ *     link when it's needed).
  *   - Show a short note when you open the sheet and an update is waiting.
  *
  * It never sends anything from your sheet anywhere. The only web request it makes
- * is downloading UPDATES_URL.
+ * is downloading UPDATES_URL, and appsscript.json only allows this project's site.
+ * It can't send email or look through your Google Drive.
  */
 
 const SCRIPT_VERSION = 3;

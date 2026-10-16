@@ -33,7 +33,7 @@ Click **Make a copy**. A copy opens in your own Google Drive with three tabs at 
 A few seconds after it opens, a **Wishlist** menu appears at the top, next to **Help**. You don't need it for setup. Later it adds new sheet options and sets up gift claiming for you ([more about it](sheet-menu.md)).
 
 > [!NOTE]
-> Your copy may show a yellow bar: *"Some formulas are trying to send and receive data from external parties."* Click **Allow access**. It's the Theme dropdown fetching the list of available themes, so new ones show up for you automatically. Nothing from your sheet is sent anywhere.
+> Your copy may show a yellow bar: *"Some formulas are trying to send and receive data from external parties."* Click **Allow access**. It's the Theme dropdown fetching the list of available themes, so new ones show up for you automatically. Nothing from your sheet is sent anywhere. ([Why Google asks, and how to check](about-the-warnings.md).)
 
 <img src="media/setup/01-copy-sheet.webp" alt="The Copy document dialog, with the Make a copy button highlighted" width="360">
 
@@ -65,14 +65,14 @@ Sign in to GitHub if it asks, then click **Create fork**. "Fork" is GitHub's wor
 
 1. On your copy's page, click the name **config.js** in the list of files. Click the name itself, on the left: the grey text beside it opens a different page (if you land there, just go back).
 2. Click the **pencil icon** (top right of the file) to edit it.
-3. Find the line that starts with `sheetUrl:`. Replace the link between the quotes with the one you copied in step 2. Keep the quotes.
+3. Find the line that starts with `sheetUrl:`. Replace the link between the quotes with the one you copied in step 2. Keep the quote marks on both sides and the **comma at the very end** of the line.
 4. Click **Commit changes…**, then **Commit changes** again.
 
 <img src="media/setup/05-open-config.webp" alt="The file list on your copy of the repo, with config.js highlighted" width="620">
 
 <img src="media/setup/06-edit-config.webp" alt="config.js open, with the pencil (edit) icon and the sheetUrl line highlighted" width="760">
 
-It should look like this, with your own link:
+It should look like this, with your own link. Note the comma at the end:
 
 ```js
 sheetUrl: 'https://docs.google.com/spreadsheets/d/e/2PACX-…/pub?output=csv',

@@ -7,7 +7,7 @@
 <meta name="description" content="A wishlist shop, filterable by shop, type and price, with a little gift-picking helper.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="styles.css?v=20261015d">
+<link rel="stylesheet" href="styles.css?v=20261015e">
 <script>
   /* If config.js has a typo, the browser skips the whole file. Note where, so the site can
      still find the sheet link and ?check can point at the line. */
@@ -34,11 +34,11 @@
     var theme = clean(asked) || clean(remembered) || clean(cfg.theme) || 'rpg-shop';
     window.WISHLIST_THEME = theme;
     window.WISHLIST_THEME_PREVIEW = Boolean(clean(asked));
-    document.write('<link rel="stylesheet" id="theme-css" href="themes/' + theme + '/theme.css?v=20261015d">');
+    document.write('<link rel="stylesheet" id="theme-css" href="themes/' + theme + '/theme.css?v=20261015e">');
     setTimeout(function () { document.documentElement.classList.remove('theme-loading'); }, 4000);
   })();
 </script>
-<script src="app.js?v=20261015d" defer></script>
+<script src="app.js?v=20261015e" defer></script>
 </head>
 <body>
 

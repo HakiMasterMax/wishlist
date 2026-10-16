@@ -60,7 +60,7 @@ See detailed setup guide <a href="docs/setup.md"><b>HERE</b></a>
 
 [![Fork this repo](https://img.shields.io/badge/Fork_this_repo-24292F?style=for-the-badge&logo=github&logoColor=white)](https://github.com/nicolenadine/wishlist/fork)
 
-**4. Connect the two.** In your copy on GitHub, click the name `config.js` in the file list (the name itself, not the grey text beside it), click the pencil icon, paste your sheet link between the quotes after `sheetUrl:`, and click **Commit changes**. That's the only file you ever need to edit.
+**4. Connect the two.** In your copy on GitHub, click the name `config.js` in the file list (the name itself, not the grey text beside it), click the pencil icon, paste your sheet link between the quotes after `sheetUrl:` (keep the comma at the end of the line), and click **Commit changes**. That's the only file you ever need to edit.
 
 **5. Turn on the website.** Go to **Settings → Pages**, set the branch to `main` and the folder to `/ (root)`, and click **Save**. In a minute or two your list is live at `https://your-username.github.io/wishlist/`.
 
@@ -123,7 +123,13 @@ A free GitHub Action checks prices every morning and shows sales on the cards. I
 <summary><b>My site says "No sheet connected yet."</b></summary>
 <br>
 
-The sheet link in `config.js` is missing or has a typo. Copy it again from **File → Share → Publish to web** and make sure it's between the quotes after `sheetUrl:`.
+The sheet link in `config.js` is missing or has a typo. Copy it again from **File → Share → Publish to web** and make sure it's between the quotes after `sheetUrl:`, with a comma at the very end of the line:
+
+```js
+sheetUrl: 'https://docs.google.com/spreadsheets/d/e/…/pub?output=csv',
+```
+
+A missing comma or quote is the most common slip, and your site's setup check (`?check`) will point to the exact line.
 
 </details>
 

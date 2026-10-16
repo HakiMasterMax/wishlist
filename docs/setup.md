@@ -33,7 +33,7 @@ Click **Make a copy**. A copy opens in your own Google Drive with three tabs at 
 A few seconds after it opens, a **Wishlist** menu appears at the top, next to **Help**. You don't need it for setup. Later it adds new sheet options and sets up gift claiming for you ([more about it](sheet-menu.md)).
 
 > [!NOTE]
-> Your copy may show a yellow bar: *"Some formulas are trying to send and receive data from external parties."* Click **Allow access**. It's the Theme dropdown fetching the list of available themes, so new ones show up for you automatically. Nothing from your sheet is sent anywhere.
+> Your copy may show a yellow bar: *"Some formulas are trying to send and receive data from external parties."* Click **Allow access**. It's the Theme dropdown fetching the list of available themes, so new ones show up for you automatically. Nothing from your sheet is sent anywhere. ([Why Google asks, and how to check](about-the-warnings.md).)
 
 <img src="media/setup/01-copy-sheet.webp" alt="The Copy document dialog, with the Make a copy button highlighted" width="360">
 

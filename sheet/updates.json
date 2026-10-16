@@ -1,0 +1,34 @@
+{
+  "menuVersion": 3,
+  "updates": [
+    {
+      "id": "2026-10-15-claim-form-link",
+      "date": "2026-10-15",
+      "title": "Gift claiming settings",
+      "about": "Adds the Enable item claiming and Claim form link rows to your Settings tab. Use Wishlist → Set up gift claiming to fill them in.",
+      "ops": [
+        { "op": "settingRow", "name": "Enable item claiming", "checkbox": true, "value": false },
+        { "op": "settingRow", "name": "Claim form link" }
+      ]
+    },
+    {
+      "id": "2026-10-15-footer-text",
+      "date": "2026-10-15",
+      "title": "Footer text",
+      "about": "Adds a Footer text row to your Settings tab, for the line at the very bottom of your site.",
+      "ops": [
+        { "op": "settingRow", "name": "Footer text" }
+      ]
+    },
+    {
+      "id": "2026-10-15-theme-dropdown",
+      "date": "2026-10-15",
+      "title": "Live theme list",
+      "about": "Adds a hidden Themes tab and a Theme dropdown that always shows every available theme.",
+      "ops": [
+        { "op": "formulaTab", "tab": "Themes", "formula": "=IMPORTDATA(\"https://nicolenadine.github.io/wishlist/themes/themes.csv\")" },
+        { "op": "settingDropdown", "name": "Theme", "tab": "Themes", "range": "A2:A" }
+      ]
+    }
+  ]
+}

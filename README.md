@@ -42,12 +42,15 @@ You update it by editing the spreadsheet. There's nothing to install and nothing
   <img src="docs/media/how-it-works.png" alt="1: Your Google Sheet, where you add items and pick a theme. 2: Your free website on GitHub Pages, which reads the sheet on every visit. 3: Family and friends browse, get gift ideas and mark what they bought. Purchases go to a hidden tab in your sheet." width="820">
 </p>
 
-## Set it up in about 10 minutes
+## Set it up in about 10 minutes 
+See detailed setup guide <a href="docs/setup.md"><b>HERE</b></a>
 
 > [!NOTE]
 > You'll need a free Google account and a free [GitHub account](https://github.com/signup). No coding and no downloads. The [illustrated setup guide](docs/setup.md) walks through every click.
+>
+> **Tip:** open the buttons below with **Ctrl-click** (**⌘-click** on a Mac) so this page stays open while you work.
 
-**1. Copy the spreadsheet.** It comes with example items, a **Settings** tab and a **How to use** tab.
+**1. Copy the spreadsheet.** It comes with example items, a **Settings** tab, a **How to use** tab and a **Wishlist** menu that handles updates and gift claiming for you.
 
 [![Copy the sheet template](https://img.shields.io/badge/Copy_the_sheet_template-34A853?style=for-the-badge&logo=googlesheets&logoColor=white)](https://docs.google.com/spreadsheets/d/1xcYWpix2X1ZDpUfDu7IXhiKeWtpUENBPletfdRZQ8g8/copy)
 
@@ -57,7 +60,7 @@ You update it by editing the spreadsheet. There's nothing to install and nothing
 
 [![Fork this repo](https://img.shields.io/badge/Fork_this_repo-24292F?style=for-the-badge&logo=github&logoColor=white)](https://github.com/nicolenadine/wishlist/fork)
 
-**4. Connect the two.** In your copy on GitHub, open `config.js`, click the pencil icon, paste your sheet link between the quotes after `sheetUrl:`, and click **Commit changes**. That's the only file you ever need to edit.
+**4. Connect the two.** In your copy on GitHub, click the name `config.js` in the file list (the name itself, not the grey text beside it), click the pencil icon, paste your sheet link between the quotes after `sheetUrl:`, and click **Commit changes**. That's the only file you ever need to edit.
 
 **5. Turn on the website.** Go to **Settings → Pages**, set the branch to `main` and the folder to `/ (root)`, and click **Save**. In a minute or two your list is live at `https://your-username.github.io/wishlist/`.
 
@@ -92,14 +95,14 @@ Pick one from the **Theme** dropdown in your sheet's Settings tab. To try one fi
 - **Add, change or remove items** right in the sheet. The [sheet guide](docs/sheet-guide.md) covers every column, photos and gift cards.
 - **Change your theme, name or title** on the sheet's **Settings** tab.
 - **Get new features and themes:** on your copy's GitHub page, click **Sync fork → Update branch**. Your settings and your sheet stay exactly as they are, so there's nothing to copy over. New themes also appear in your sheet's Theme dropdown on their own.
-- **New sheet options:** the occasional update adds an optional setting to the sheet. [Sheet changes](docs/sheet-changes.md) lists them, newest first. You only need the ones dated after you made your copy.
+- **New sheet options:** the occasional update adds an optional setting to the sheet. In your sheet, click **Wishlist → Check for updates** and say yes. ([About the Wishlist menu](docs/sheet-menu.md), or add them by hand from [Sheet changes](docs/sheet-changes.md).)
 - **Check that everything's working:** add `?check` to the end of your site's address. You'll get a plain-language checklist of your sheet, settings, theme and claiming, with a fix for anything that's off.
 
 <details>
 <summary><b>Let gift-givers mark items as bought</b></summary>
 <br>
 
-Your copy of the sheet comes with its own claim form. Paste the form's link into the **Settings** tab and tick **Enable item claiming**, and every item gets a button for gift-givers. Purchases are recorded in a hidden tab in your sheet, and items grey out once they're taken. [Turn on claiming →](docs/claiming.md)
+In your sheet, click **Wishlist → Set up gift claiming**. It makes your claim form and connects it for you (or do it by hand in a few minutes). Every item gets a button for gift-givers, purchases are recorded in hidden tabs in your sheet, and items grey out once they're taken. [Turn on claiming →](docs/claiming.md)
 
 </details>
 
@@ -149,6 +152,14 @@ Click **Allow access** on the yellow bar. It's the Theme dropdown fetching the c
 </details>
 
 <details>
+<summary><b>The Wishlist menu says "Google hasn't verified this app."</b></summary>
+<br>
+
+That's expected the first time, and you only see it once. The script lives in your own copy of the sheet, so the "developer" Google names on that screen is you. Click **Advanced → Go to Wishlist Shop (unsafe)**, tick **Select all**, then **Continue**. The [menu guide](docs/sheet-menu.md) walks through each screen and explains every permission.
+
+</details>
+
+<details>
 <summary><b>An item's photo doesn't show up.</b></summary>
 <br>
 
@@ -178,6 +189,7 @@ app.js              loads the sheet and Settings tab, filters, cards, gift helpe
 index.html          page structure
 styles.css          shared layout; colors and fonts come from the theme
 themes/             one folder per theme (CSS, JSON and SVG only), plus themes.csv (the theme list the sheet's dropdown reads)
+sheet/              the sheet's optional Wishlist menu (Apps Script) and updates.json, the list of sheet changes it applies
 scripts/            daily price check, run by .github/workflows/update-prices.yml
 wishlist-images/    optional photos hosted in the repo
 docs/               guides and the images in this README
@@ -191,7 +203,7 @@ python3 -m http.server 8000
 
 Then open http://localhost:8000. Handy URL switches: `?check` shows the setup report, `?theme=name` previews a theme, `?test-claims` fakes purchases without sending anything, and `?shield` / `?shield=off` turn the spoiler shield on and off.
 
-**Sheet changes are always additive and optional.** A change must never break an existing sheet or require copying it again: new settings fall back to a default when their row is missing, and new columns are optional. Any change that touches the sheet gets an entry in [docs/sheet-changes.md](docs/sheet-changes.md) (the format is in a comment at the bottom), and new Settings rows go in `SETTING_NAMES` and `SETTING_LABELS` in `app.js` so `?check` can suggest them.
+**Sheet changes are always additive and optional.** A change must never break an existing sheet or require copying it again: new settings fall back to a default when their row is missing, and new columns are optional. Any change that touches the sheet gets an entry in [`sheet/updates.json`](sheet/updates.json), so the sheet's **Wishlist → Check for updates** can apply it, and in [docs/sheet-changes.md](docs/sheet-changes.md) for people adding it by hand (the format is in a comment at the bottom). Updates are data, not code: each one is a list of actions that [`sheet/Wishlist.gs`](sheet/Wishlist.gs) already knows (`settingRow`, `formulaTab`, `settingDropdown`). A new kind of action means a new `SCRIPT_VERSION` in the script and a matching `menuVersion` in `updates.json`, and new Settings rows go in `SETTING_NAMES` and `SETTING_LABELS` in `app.js` so `?check` can suggest them.
 
 **Settings.** Anything in the sheet's Settings tab can also be set in `config.js`; the sheet wins when both are filled in, and `config.js` is the fallback if the tab is missing. When you change `app.js`, `styles.css` or `config.js`, bump the `?v=` number in `index.html` so browsers fetch the new version.
 

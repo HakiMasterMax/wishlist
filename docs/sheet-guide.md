@@ -51,15 +51,19 @@ Gift cards show "From $25" or "Any amount", have no "bought it" button (several 
 | **Welcome message** | Replaces the theme's welcome note. Type `{i}` where you want the little ⓘ icon. Optional. |
 | **Footer text** | Replaces the line of text at the very bottom of the page, like "Thanks for looking, see you at the party!" Optional. |
 | **Tax & shipping buffer** | How much of a gift-giver's budget the gift helper holds back, like `15%`. Use `0%` to turn it off. |
-| **Enable item claiming** | Lets gift-givers mark what they bought. See [Gift claiming](claiming.md). |
-| **Claim form link** | Your claim form's link. See [Gift claiming](claiming.md). |
+| **Enable item claiming** | Lets gift-givers mark what they bought. **Wishlist → Set up gift claiming** fills in this row and the next for you. See [Gift claiming](claiming.md). |
+| **Claim form link** | Your claim form's pre-filled link. See [Gift claiming](claiming.md). |
+| **Claims tab link** | Usually not needed. Tells your site which tab holds the claims when it isn't the usual one. The Wishlist menu adds it for you when it's needed, and the [gift claiming guide](claiming.md#by-hand) says when to add it by hand. |
 
 Leave a setting blank to use the theme's own wording. Changes show up on your site within about 5 minutes.
 
 > [!IMPORTANT]
 > Keep **Items** as the first tab of the sheet. Your published link opens the first tab, so moving it breaks the list.
 
-The template also has a hidden **Themes** tab. It fetches the current list of themes so your dropdown stays up to date. Leave it as it is.
+The template also has two hidden tabs. Leave them as they are:
+
+- **Themes** fetches the current list of themes, so your dropdown stays up to date.
+- **Claimed items (Warning Spoilers!)** is where your site reads purchases once gift claiming is on. Don't open it unless you want spoilers.
 
 If your Theme dropdown is empty, look for a yellow bar at the top of the sheet that says formulas are trying to reach external parties, and click **Allow access**. It only downloads the list of theme names. You can also just type a theme's name into the cell: the site understands it either way.
 
@@ -75,4 +79,4 @@ https://your-username.github.io/wishlist/?check
 
 You'll see a short checklist above your shop: whether your sheet and Settings tab were found, which theme loaded, whether gift claiming is connected, and when prices were last checked. Anything that needs attention comes with a fix in plain words. It never shows what anyone bought.
 
-It also lists any settings rows your sheet doesn't have yet, which is handy after an update adds a new option: just add the row to your Settings tab. You never need to start a new sheet. [Sheet changes](sheet-changes.md) lists every option added since the template came out.
+It also lists any settings rows your sheet doesn't have yet, which is handy after an update adds a new option. You never need to start a new sheet: click **Wishlist → Check for updates** to add them, or add the rows by hand from [Sheet changes](sheet-changes.md).

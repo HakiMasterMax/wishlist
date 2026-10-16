@@ -25,7 +25,8 @@ The first time you click anything in the Wishlist menu, Google asks for your per
 
 <img src="media/menu/03-unverified.webp" alt="Google hasn't verified this app, with Advanced highlighted" width="560">
 
-The email address on this screen is **your own**. The copy of the script in your sheet belongs to you, so Google lists you as its developer.
+> [!TIP]
+> Look at the email address on this screen: it's **your own**. When Google says to continue only if you trust the developer, it means you. The copy of the script in your sheet belongs to you, so Google lists you as its developer.
 
 **3. Google asks what Wishlist Shop can access.** Tick **Select all**. (If you leave a box unticked, parts of the menu won't work.)
 

@@ -86,7 +86,7 @@ Pick one from the **Theme** dropdown in your sheet's Settings tab. To try one fi
   </tr>
   <tr>
     <td valign="top"><a href="https://nicolenadine.github.io/wishlist/?theme=starter"><img src="docs/media/themes/starter-thumb.webp" alt="Starter theme"></a><br><b>Starter</b><br><sub>Plain and simple. The one to copy when you make your own.</sub></td>
-    <td colspan="2" valign="middle" align="center"><b>Make your own</b><br><sub>Colors, fonts, wording, art and a mascot, with no JavaScript.<br>See the <a href="themes/README.md">themes guide</a>, then <a href="themes/README.md#share-your-theme-with-everyone">share it</a><br>with a pull request so everyone can use it.</sub></td>
+    <td colspan="2" valign="middle" align="center"><b>Make your own</b><br><sub>Colors, fonts, wording, art and a mascot, with no JavaScript.<br>See the <a href="themes/README.md">themes guide</a>, then <a href="themes/README.md#share-your-theme-with-everyone">share it</a><br>with a pull request so everyone can use it (optional).</sub></td>
   </tr>
 </table>
 

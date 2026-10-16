@@ -211,6 +211,8 @@ Then open http://localhost:8000. Handy URL switches: `?check` shows the setup re
 
 **Sheet changes are always additive and optional.** A change must never break an existing sheet or require copying it again: new settings fall back to a default when their row is missing, and new columns are optional. Any change that touches the sheet gets an entry in [`sheet/updates.json`](sheet/updates.json), so the sheet's **Wishlist → Check for updates** can apply it, and in [docs/sheet-changes.md](docs/sheet-changes.md) for people adding it by hand (the format is in a comment at the bottom). Updates are data, not code: each one is a list of actions that [`sheet/Wishlist.gs`](sheet/Wishlist.gs) already knows (`settingRow`, `formulaTab`, `settingDropdown`). A new kind of action means a new `SCRIPT_VERSION` in the script and a matching `menuVersion` in `updates.json`, and new Settings rows go in `SETTING_NAMES` and `SETTING_LABELS` in `app.js` so `?check` can suggest them.
 
+**Don't change `config.js` here.** Every copy edits that file (at least the sheet link), so any change to it in this repo, even to a comment, makes **Sync fork** stop with a conflict for everyone. New options go in the sheet's Settings tab, with their defaults in `DEFAULTS` in `app.js`.
+
 **Settings.** Anything in the sheet's Settings tab can also be set in `config.js`; the sheet wins when both are filled in, and `config.js` is the fallback if the tab is missing. When you change `app.js` or `styles.css`, bump the `?v=` number in `index.html` so browsers fetch the new version. `config.js` is always fetched fresh, so people's edits show up as soon as GitHub publishes them.
 
 </details>

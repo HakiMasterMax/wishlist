@@ -421,7 +421,7 @@
   // Whether the theme exists is checked on the file itself: a link's error event also fires when only a
   // Google Font it imports is blocked (ad blockers, school networks), and that shouldn't reject the theme.
   async function swapThemeCss(folder) {
-    const href = 'themes/' + folder + '/theme.css?v=20261015d';
+    const href = 'themes/' + folder + '/theme.css?v=20261015e';
     try {
       const res = await fetch(href, { method: 'HEAD', cache: 'no-cache' });
       if (!res.ok) return false;
@@ -738,8 +738,10 @@
     high: (a, b) => priceKey(a, -1) - priceKey(b, -1),
     name: (a, b) => a.name.localeCompare(b.name),
   };
-  // Looted items always sink to the end.
-  const sortWith = (fn) => (a, b) => (a.looted - b.looted) || (a.giftCard - b.giftCard) || fn(a, b);
+  // Claimed items always sink to the end. Gift cards follow the regular items, except that under
+  // "Most Wanted first" a starred gift card stays up with the other Most Wanted items.
+  const sinksAsGiftCard = (it) => it.giftCard && !(state.sort === 'wanted' && it.starred);
+  const sortWith = (fn) => (a, b) => (a.looted - b.looted) || (sinksAsGiftCard(a) - sinksAsGiftCard(b)) || fn(a, b);
 
   /* ---------- filter controls ---------- */
 

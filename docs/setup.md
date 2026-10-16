@@ -24,11 +24,13 @@ This takes about 10 minutes, and you don't need to know any code. By the end you
 
 [![Copy the sheet template](https://img.shields.io/badge/Copy_the_sheet_template-34A853?style=for-the-badge&logo=googlesheets&logoColor=white)](https://docs.google.com/spreadsheets/d/1xcYWpix2X1ZDpUfDu7IXhiKeWtpUENBPletfdRZQ8g8/copy)
 
-Click **Make a copy**. A copy opens in your own Google Drive with three tabs at the bottom:
+Click **Make a copy**. A copy opens in your own Google Drive with three tabs at the bottom (plus a couple of hidden ones it uses behind the scenes):
 
 - **Items:** your wishlist, one row per thing. It starts with a few examples.
 - **Settings:** your theme, your name and a few other choices.
 - **How to use:** a cheat sheet for the columns.
+
+A few seconds after it opens, a **Wishlist** menu appears at the top, next to **Help**. You don't need it for setup. Later it adds new sheet options and sets up gift claiming for you ([more about it](sheet-menu.md)).
 
 > [!NOTE]
 > Your copy may show a yellow bar: *"Some formulas are trying to send and receive data from external parties."* Click **Allow access**. It's the Theme dropdown fetching the list of available themes, so new ones show up for you automatically. Nothing from your sheet is sent anywhere.
@@ -110,10 +112,9 @@ When you're happy with it, share your site's address with family and friends.
 
 ## Optional extras
 
-- **[Gift claiming](claiming.md):** let gift-givers mark what they bought so nobody doubles up. About five minutes.
+- **[Gift claiming](claiming.md):** let gift-givers mark what they bought so nobody doubles up. One click with **Wishlist → Set up gift claiming**.
 - **[Daily price checks](price-checks.md):** show sales on the cards. One click to turn on.
-- **[The Wishlist menu](sheet-menu.md):** in your sheet, **Wishlist → Check for updates** adds new sheet options, and **Set up gift claiming** does claiming for you.
-- **Get new features later:** on your copy's GitHub page, click **Sync fork → Update branch**. Your settings are kept.
+- **Get new features later:** on your copy's GitHub page, click **Sync fork → Update branch**. Your settings are kept. Now and then an update also adds something to the sheet: click **Wishlist → Check for updates** in your sheet to get it.
 
 > [!CAUTION]
 > If GitHub ever offers to **Discard commits** when syncing, don't. That would erase your sheet link. [Open an issue](https://github.com/nicolenadine/wishlist/issues) instead and we'll sort it out.

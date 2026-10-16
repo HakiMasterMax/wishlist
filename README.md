@@ -50,7 +50,7 @@ See detailed setup guide <a href="docs/setup.md"><b>HERE</b></a>
 >
 > **Tip:** open the buttons below with **Ctrl-click** (**⌘-click** on a Mac) so this page stays open while you work.
 
-**1. Copy the spreadsheet.** It comes with example items, a **Settings** tab and a **How to use** tab.
+**1. Copy the spreadsheet.** It comes with example items, a **Settings** tab, a **How to use** tab and a **Wishlist** menu that handles updates and gift claiming for you.
 
 [![Copy the sheet template](https://img.shields.io/badge/Copy_the_sheet_template-34A853?style=for-the-badge&logo=googlesheets&logoColor=white)](https://docs.google.com/spreadsheets/d/1xcYWpix2X1ZDpUfDu7IXhiKeWtpUENBPletfdRZQ8g8/copy)
 
@@ -148,6 +148,14 @@ Check that you published the **Entire document**, not just the Items tab, and th
 <br>
 
 Click **Allow access** on the yellow bar. It's the Theme dropdown fetching the current list of themes, so new ones appear automatically. Nothing from your sheet is sent anywhere. You can also type a theme's name into the cell instead.
+
+</details>
+
+<details>
+<summary><b>The Wishlist menu says "Google hasn't verified this app."</b></summary>
+<br>
+
+That's expected the first time, and you only see it once. The script lives in your own copy of the sheet, so the "developer" Google names on that screen is you. Click **Advanced → Go to Wishlist Shop (unsafe)**, tick **Select all**, then **Continue**. The [menu guide](docs/sheet-menu.md) walks through each screen and explains every permission.
 
 </details>
 

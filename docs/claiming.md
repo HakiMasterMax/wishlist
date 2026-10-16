@@ -8,16 +8,23 @@ The button's wording depends on your theme: "I bought this", "Loot", "Claim it",
 
 ## Turn it on
 
-> [!TIP]
-> **The quick way:** in your sheet, click **Wishlist → Set up gift claiming**. It does all five steps below for you. (First time using the menu? Google will ask for permission: [here's what to expect](sheet-menu.md#using-it-the-first-time).)
+### The quick way: one click
 
-To do it by hand, you'll make your own small claim form (it takes a few minutes), and your sheet does the rest.
+In your sheet, click **Wishlist → Set up gift claiming**.
+
+It makes a claim form called "Wishlist claims" in your Google Drive, adds its three questions, connects it to your sheet, hides the tabs that show purchases, fills in your **Settings** tab and switches claiming on. When it says **Gift claiming is set up ✓**, you're done. The buttons appear on your site within about 5 minutes.
+
+First time using the menu? Google asks for your permission once: [here's what to expect](sheet-menu.md#using-it-the-first-time). No Wishlist menu in your sheet? [Here's how to add it](sheet-menu.md#no-wishlist-menu-in-your-sheet), or follow the steps below.
+
+### By hand
+
+If you'd rather not use the menu, it takes a few minutes.
 
 **1. Create your claim form.** In your sheet, go to **Tools → Create a new form**.
 
 <img src="media/claiming/01-create-form.webp" alt="The sheet's Tools menu with Create a new form highlighted" width="520">
 
-Google makes a new form that's already connected to your sheet, opens it in a new browser tab, and adds a tab called **Form Responses 1** to your sheet.
+Google makes a new form that's already connected to your sheet, opens it in a new browser tab, and adds a responses tab to your sheet called **Form Responses 1**. (If the sheet has had a form before, it may be **Form Responses 2** or **3** instead. That's fine: step 5 covers it.)
 
 **2. Add three questions.** Give the form any title you like, like "Wishlist claims". Then make three **Short answer** questions named exactly **item**, **quantity** and **ref**, in that order:
 
@@ -40,26 +47,21 @@ A copy of the form opens. Type anything into the three boxes (the words don't ma
 
 **4. Paste it and switch it on.** Back in your sheet, on the **Settings** tab, paste the link into **Claim form link** and tick **Enable item claiming**.
 
-**5. Hide the responses tab.** Right-click the **Form Responses 1** tab at the bottom and choose **Hide sheet**. It shows what people bought. If Google put it first, drag it to the end before hiding it: **Items** must stay the first tab.
+**5. Check the responses tab's name, then hide it.** Look at the new **Form Responses** tab at the bottom of your sheet.
+
+- **Called Form Responses 1?** Nothing to do.
+- **A different number, like Form Responses 3?** Click that tab, copy the whole address from your browser's address bar, and on the **Settings** tab add a row: `Claims tab link` in column A, the address in column B. That tells your site where to look.
+
+Then right-click the responses tab and choose **Hide sheet**, since it shows what people bought. If Google put it first, drag it to the end before hiding it: **Items** must stay the first tab.
 
 The buttons appear on your site within about 5 minutes. Open your site with `?check` on the end to confirm everything's connected.
 
 > [!WARNING]
 > Don't change or reorder the form's three questions (item, quantity, ref). The site depends on them. Renaming the form is fine.
 
-<details>
-<summary>My responses tab isn't called "Form Responses 1"</summary>
-<br>
-
-That happens if your sheet ever had another form. Your sheet has a hidden **Claimed items (Warning Spoilers!)** tab that copies purchases from "Form Responses 1". Unhide it (☰ at the bottom left), change the tab name in cell **A1** to match yours (for example `={'Form Responses 2'!A:D}`), and hide it again.
-
-No hidden Claimed items tab at all? Open your responses tab, copy the address from your browser, and paste it into a Settings row named `Claims tab link`.
-
-</details>
-
 ## Keep the surprise
 
-Purchases are recorded in your **Form Responses 1** tab and copied into the hidden **Claimed items (Warning Spoilers!)** tab, which your site reads. Keep both hidden: hidden tabs show up greyed out in the sheet's list of tabs (the ☰ button at the bottom left).
+Purchases are recorded in your **Form Responses** tab, and the hidden **Claimed items (Warning Spoilers!)** tab keeps a copy for your site. Keep both hidden. Hidden tabs show up greyed out in the sheet's list of tabs (the ☰ button at the bottom left), so you can see they're there without opening them.
 
 <img src="media/claiming/04-hidden-log.webp" alt="The sheet's tab list, with the hidden Claimed items (Warning Spoilers!) tab greyed out" width="300">
 
@@ -76,15 +78,15 @@ That browser will hide everything that's been bought from then on. Use `?shield=
 
 ## Fixing mistakes
 
-A gift-giver can press **Undo** right after marking something. For anything else, someone needs to delete that row in the **Form Responses 1** tab. Ask a partner or friend to do it so you don't see the spoiler.
+A gift-giver can press **Undo** right after marking something. For anything else, someone needs to delete that row in the hidden **Form Responses** tab. Ask a partner or friend to do it so you don't see the spoiler.
 
 ## Turning it off
 
-Untick **Enable item claiming** on the Settings tab.
+Untick **Enable item claiming** on the Settings tab. Your form and its responses stay where they are, so you can tick it again later.
 
-## Using your own form
+## Sheets from before the template
 
-If your sheet doesn't have the hidden Claimed items tab (for example, you copied it before October 15, 2026), make a Google Form with three short-answer questions, in this order: **item**, **quantity** and **ref**.
+If your sheet has no **Settings** tab (it was made before the template existed, before October 15, 2026), claiming is set up in `config.js` instead. Make a Google Form with three short-answer questions, in this order: **item**, **quantity** and **ref**.
 
 - Don't add number-only rules to quantity, because Undo sends a negative number.
 - Don't require sign-in.

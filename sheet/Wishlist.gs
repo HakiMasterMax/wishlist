@@ -15,7 +15,7 @@
  * is downloading UPDATES_URL.
  */
 
-const SCRIPT_VERSION = 2;
+const SCRIPT_VERSION = 3;
 const UPDATES_URL = 'https://nicolenadine.github.io/wishlist/sheet/updates.json';
 const DOCS_URL = 'https://github.com/nicolenadine/wishlist/blob/main/docs/sheet-menu.md';
 const SETTINGS_TAB = 'Settings';
@@ -173,7 +173,12 @@ function setUpClaiming() {
   if (log) log.getRange('A1').setFormula('={\'' + responses.getName().replace(/'/g, '\'\'') + '\'!A:D}');
   else setSetting_('Claims tab link', String(responses.getSheetId()));
 
-  // 5. Switch it on.
+  // 5. Hide every tab that shows purchases: the claims log and any form responses tabs.
+  ss.getSheets().forEach((s) => {
+    if (/^claimed items/i.test(s.getName()) || s.getFormUrl()) { try { s.hideSheet(); } catch (e) { /* already hidden */ } }
+  });
+
+  // 6. Switch it on.
   setSetting_('Enable item claiming', true, true);
   ss.setActiveSheet(settingsSheet_());
   SpreadsheetApp.flush();

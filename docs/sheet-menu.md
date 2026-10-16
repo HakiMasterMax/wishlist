@@ -5,9 +5,9 @@
 Your sheet can have a **Wishlist** menu, next to **Help** at the top. It does two things for you:
 
 - **Check for updates.** When Wishlist Shop adds something new to the sheet, like a new setting, this adds it to your copy. It shows you exactly what it will add and waits for you to say yes. It only ever adds things: nothing you've typed is changed or removed.
-- **Set up gift claiming.** Makes your claim form, adds its three questions, connects it to your sheet and fills in your Settings tab. It replaces all five [manual steps](claiming.md#turn-it-on).
+- **Set up gift claiming.** Makes your claim form, adds its three questions, connects it to your sheet, hides the tabs that show purchases and fills in your Settings tab. It replaces all the [by-hand steps](claiming.md#by-hand).
 
-Once you've used the menu once, opening your sheet also shows a small note in the corner whenever an update is waiting.
+After the first time you use the menu, opening your sheet also shows a small note in the corner whenever an update is waiting.
 
 The menu is optional. Everything it does can also be done by hand, and your site works the same either way.
 
@@ -58,7 +58,7 @@ Here's what each permission on that screen is for, in plain words:
 **What it can't do:**
 
 - Run new code from the internet. The list of updates is plain data. It can only ask for the few actions written into the script, like "add a row named Footer text".
-- Change or delete anything you've typed, or touch your items.
+- Touch your items. **Check for updates** never changes or removes anything you've typed. **Set up gift claiming** only fills in the claiming rows on your Settings tab, and asks first if you already have a claim form link.
 - Share your sheet or send its contents anywhere.
 
 You can read the whole script, with comments, in [`sheet/Wishlist.gs`](../sheet/Wishlist.gs). To remove its permission at any time, go to [your Google account's third-party connections](https://myaccount.google.com/connections) and remove **Wishlist Shop**.
@@ -72,6 +72,12 @@ Copies made before the menu was added don't have it. You can add it in about two
 3. Click the **gear icon** (Project Settings) on the left and tick **Show "appsscript.json" manifest file in editor**.
 4. Back in the editor (the **< >** icon), click **appsscript.json**, delete everything, and paste in the whole of [`appsscript.json`](../sheet/appsscript.json).
 5. Click the **save icon**, then close the tab and reload your sheet. The **Wishlist** menu appears after a few seconds.
+
+## If the menu doesn't show up
+
+- It appears a few seconds after the sheet finishes opening. Reload the page if it hasn't.
+- Google's Sheets app on phones and tablets doesn't show added menus. Open your sheet in a web browser instead.
+- Still missing? Your copy may be older than the menu: see the steps just above.
 
 ## Updating the menu itself
 

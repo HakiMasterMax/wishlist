@@ -12,11 +12,19 @@ Most updates to Wishlist Shop need nothing from you: you click **Sync fork** on 
 Every sheet change is **optional and additive**:
 
 - Your sheet keeps working exactly as it is. You never need to start over, copy your list into a new sheet, or change your published link.
-- If you want the new thing, it's always a small step, like adding a row to your Settings tab.
-- **Easiest:** in your sheet, click **Wishlist → Check for updates**. It adds whatever's new for you. ([About the Wishlist menu](sheet-menu.md).)
+- **Easiest:** in your sheet, click **Wishlist → Check for updates**. It shows what's new and adds it for you, so you don't need to read this page at all. ([About the Wishlist menu](sheet-menu.md).)
+- Rather do it by hand? Each entry below says exactly what to add, usually a row on your Settings tab.
 - Your site's [setup check](sheet-guide.md#checking-your-setup) (add `?check` to your site's address) also lists any settings rows your sheet doesn't have yet.
 
 ---
+
+## October 15, 2026: The Wishlist menu
+
+**What's new:** a **Wishlist** menu at the top of your sheet. **Check for updates** adds new sheet options for you, and **Set up gift claiming** sets up claiming in one click.
+
+**To use it (optional):** copies made from now on have it already. Older copies can add it in about two minutes: see [No Wishlist menu in your sheet?](sheet-menu.md#no-wishlist-menu-in-your-sheet)
+
+**If you skip it:** everything keeps working, and you add sheet changes by hand from this page.
 
 ## October 15, 2026: Gift claiming uses your own form
 
@@ -24,10 +32,14 @@ Every sheet change is **optional and additive**:
 
 **If you copied the sheet earlier on October 15 and want claiming:** you can fix your copy in place. You don't need to republish or touch `config.js`.
 
+**The quick way:** on your copy's GitHub page, click **Sync fork → Update branch**. Then [add the Wishlist menu](sheet-menu.md#no-wishlist-menu-in-your-sheet) to your sheet and click **Wishlist → Set up gift claiming**. It notices the old claims tab and works around it. (You can still delete that tab afterwards with step 2 below, to tidy up.)
+
+**By hand:**
+
 1. **Update your site.** On your copy's GitHub page, click **Sync fork → Update branch**.
 2. **Remove the old log tab.** Unhide the claims tab that came with your copy (its name starts with **Claimed items**; find it under ☰ at the bottom left). With that tab open, choose **Tools → Manage form → Unlink form**, then right-click the tab and choose **Delete**. That form was the template's, not yours.
-3. **Make your own form.** Follow the [gift claiming steps](claiming.md#turn-it-on), all five of them.
-4. **Tell your site where the responses are.** Open your **Form Responses 1** tab and copy the whole address from your browser's address bar. On the Settings tab, add a row: `Claims tab link` in column A, the address in column B.
+3. **Make your own form.** Follow the [by-hand gift claiming steps](claiming.md#by-hand).
+4. **Tell your site where the responses are.** Open your new **Form Responses** tab and copy the whole address from your browser's address bar. On the Settings tab, add a row: `Claims tab link` in column A, the address in column B.
 
 Open your site with `?check` on the end to confirm gift claiming shows a green tick.
 

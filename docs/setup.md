@@ -65,14 +65,14 @@ Sign in to GitHub if it asks, then click **Create fork**. "Fork" is GitHub's wor
 
 1. On your copy's page, click the name **config.js** in the list of files. Click the name itself, on the left: the grey text beside it opens a different page (if you land there, just go back).
 2. Click the **pencil icon** (top right of the file) to edit it.
-3. Find the line that starts with `sheetUrl:`. Replace the link between the quotes with the one you copied in step 2. Keep the quotes.
+3. Find the line that starts with `sheetUrl:`. Replace the link between the quotes with the one you copied in step 2. Keep the quote marks on both sides and the **comma at the very end** of the line.
 4. Click **Commit changes…**, then **Commit changes** again.
 
 <img src="media/setup/05-open-config.webp" alt="The file list on your copy of the repo, with config.js highlighted" width="620">
 
 <img src="media/setup/06-edit-config.webp" alt="config.js open, with the pencil (edit) icon and the sheetUrl line highlighted" width="760">
 
-It should look like this, with your own link:
+It should look like this, with your own link. Note the comma at the end:
 
 ```js
 sheetUrl: 'https://docs.google.com/spreadsheets/d/e/2PACX-…/pub?output=csv',

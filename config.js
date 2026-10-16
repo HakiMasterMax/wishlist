@@ -13,7 +13,7 @@ window.WISHLIST_CONFIG = {
    * click Publish, and paste the link it gives you here.
    * Your name, theme, title and more are set in the sheet's Settings tab. The settings
    * below are only used when the sheet leaves them blank (or has no Settings tab). */
-  sheetUrl: 'https://docs.google.com/spreadsheets/d/e/2PACX-1vQ2euoUrWUdimeikqQKIfwOp4Th93TXEZw2wwrpiCzbFqz7tz5XanVRAsfcxO3UgISH6smkGqGnX_V-/pubhtml'
+  sheetUrl: 'https://docs.google.com/spreadsheets/d/e/2PACX-1vSjI-WSTGaqb_jfD9bi7Nfc_9BQ6jDHwnI8TXSrvGwUzoCR0M9LpZ6-295LHOiCPEoohT9gJVjiZJ6k/pub?output=csv'
 
   /* ---------- 2. Your name ----------
    * Shown to gift-givers, e.g. "Sam won't see it" when they mark something as bought.

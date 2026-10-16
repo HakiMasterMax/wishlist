@@ -39,7 +39,7 @@ If a photo can't load, the card shows a friendly placeholder instead.
 
 Set the row's `category` to `gift card` and put the smallest amount in `price` (like `From $25`), or leave it blank for any amount.
 
-Gift cards show "From $25" or "Any amount", have no "bought it" button (several people can give one), always pass the price filter, and are listed after regular items. The gift helper uses one to fill leftover budget after picking items.
+Gift cards show "From $25" or "Any amount", have no "bought it" button (several people can give one), always pass the price filter, and are listed after regular items. Tick `starred` on one and it's listed with your other favorites instead. The gift helper uses one to fill leftover budget after picking items.
 
 ## The Settings tab
 

@@ -14,7 +14,7 @@ In your sheet, click **Wishlist → Set up gift claiming**.
 
 It makes a claim form called "Wishlist claims" in your Google Drive, adds its three questions, connects it to your sheet, hides the tabs that show purchases, fills in your **Settings** tab and switches claiming on. When it says **Gift claiming is set up ✓**, you're done. The buttons appear on your site within about 5 minutes.
 
-First time using the menu? Google asks for your permission once: [here's what to expect](sheet-menu.md#using-it-the-first-time). No Wishlist menu in your sheet? [Here's how to add it](sheet-menu.md#no-wishlist-menu-in-your-sheet), or follow the steps below.
+First time using the menu? Google asks for your permission once: [here's what to expect](sheet-menu.md#using-it-the-first-time), and [why it's nothing to worry about](about-the-warnings.md). No Wishlist menu in your sheet? [Here's how to add it](sheet-menu.md#no-wishlist-menu-in-your-sheet), or follow the steps below.
 
 ### By hand
 

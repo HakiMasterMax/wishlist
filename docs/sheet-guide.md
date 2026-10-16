@@ -65,7 +65,7 @@ The template also has two hidden tabs. Leave them as they are:
 - **Themes** fetches the current list of themes, so your dropdown stays up to date.
 - **Claimed items (Warning Spoilers!)** is where your site reads purchases once gift claiming is on. Don't open it unless you want spoilers.
 
-If your Theme dropdown is empty, look for a yellow bar at the top of the sheet that says formulas are trying to reach external parties, and click **Allow access**. It only downloads the list of theme names. You can also just type a theme's name into the cell: the site understands it either way.
+If your Theme dropdown is empty, look for a yellow bar at the top of the sheet that says formulas are trying to reach external parties, and click **Allow access**. It only downloads the list of theme names ([more about this warning](about-the-warnings.md)). You can also just type a theme's name into the cell: the site understands it either way.
 
 ## Checking your setup
 

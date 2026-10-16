@@ -42,6 +42,8 @@ The menu item runs straight away. (If nothing happens, click it again.) Google w
 
 > [!NOTE]
 > "Unsafe" is Google's word for any script it hasn't reviewed, which is almost every personal script. You're giving permission to the copy of the script inside **your own sheet**, which only you can edit. Nobody else, including whoever made Wishlist Shop, gets access to your sheet or your account.
+>
+> **Want to be sure?** [About Google's warnings](about-the-warnings.md) explains why this screen appears and gives you simple ways to check the script for yourself.
 
 ## What it can and can't do
 

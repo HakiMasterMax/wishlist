@@ -147,7 +147,7 @@ Check that you published the **Entire document**, not just the Items tab, and th
 <summary><b>My sheet shows a yellow "external parties" warning, or the Theme dropdown is empty.</b></summary>
 <br>
 
-Click **Allow access** on the yellow bar. It's the Theme dropdown fetching the current list of themes, so new ones appear automatically. Nothing from your sheet is sent anywhere. You can also type a theme's name into the cell instead.
+Click **Allow access** on the yellow bar. It's the Theme dropdown fetching the current list of themes, so new ones appear automatically. Nothing from your sheet is sent anywhere ([more about this warning](docs/about-the-warnings.md)). You can also type a theme's name into the cell instead.
 
 </details>
 
@@ -155,7 +155,7 @@ Click **Allow access** on the yellow bar. It's the Theme dropdown fetching the c
 <summary><b>The Wishlist menu says "Google hasn't verified this app."</b></summary>
 <br>
 
-That's expected the first time, and you only see it once. The script lives in your own copy of the sheet, so the "developer" Google names on that screen is you. Click **Advanced → Go to Wishlist Shop (unsafe)**, tick **Select all**, then **Continue**. The [menu guide](docs/sheet-menu.md) walks through each screen and explains every permission.
+That's expected the first time, and you only see it once. The script lives in your own copy of the sheet, so the "developer" Google names on that screen is you. Click **Advanced → Go to Wishlist Shop (unsafe)**, tick **Select all**, then **Continue**. The [menu guide](docs/sheet-menu.md) walks through each screen, and [About Google's warnings](docs/about-the-warnings.md) explains in plain words why it's safe and how to check for yourself.
 
 </details>
 

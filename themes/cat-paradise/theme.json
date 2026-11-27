@@ -1,0 +1,51 @@
+{
+  "name": "The Cozy Cat Cafe",
+  "description": "A Christmas wishlist inspired by a cozy rescue cat cafe, filled with resident kitties, warm drinks and festive charm.",
+  "mascot": {
+    "name": "Biscuit",
+    "idle": "Biscuit the orange tabby sitting patiently",
+    "happy": "Biscuit the orange tabby happily raising a paw",
+    "sad": "Biscuit the orange tabby looking disappointed"
+  },
+  "art": {
+    "heroSky": "art/hero-sky.svg",
+    "heroScene": "art/hero-scene.svg",
+    "portrait": "art/portrait.svg",
+    "mascotIdle": "art/mascot-idle.svg",
+    "mascotHappy": "art/mascot-happy.svg",
+    "mascotSad": "art/mascot-sad.svg",
+    "lootBag": "art/loot-bag.svg"
+  },
+  "text": {
+    "title": "The Cozy Cat Café",
+    "eventTag": "Christmas Wishlist",
+    "welcomeName": "From the Cat Café",
+    "welcome": "Come on in, grab something warm, and make yourself at home! Everything here is on my Christmas wishlist. Cat's Favorites are my most wanted gifts. Tap the {i} on a photo for sizes, colors and notes.",
+    "footer": "Made with love, a little coffee, and an unreasonable amount of cat hair.",
+    "starred": "Cat's Favorites",
+    "starredOnly": "Favorites only",
+    "starBadge": "Cat's Favorites",
+    "stat.items": "{n} wish | {n} wishes",
+    "stat.starred": "{n} favorites",
+    "sortStarred": "Favorites first",
+    "view": "View gift",
+    "loot": "Claim gift",
+    "lootedTag": "Claimed",
+    "lootedStamp": "CLAIMED",
+    "lootedNote": "This gift has found its home!",
+    "lootTitle": "Claim this gift?",
+    "lootConfirm": "Claim gift",
+    "toast": "Happy purrs! {qty}{name} is now claimed.",
+    "plannerTitle": "The Gift Concierge",
+    "plannerTag": "Resident kitty",
+    "mascotLabel": "Biscuit",
+    "planner.idle": "Welcome to my little corner of the café! Give me a budget and I'll find some lovely gifts for you.",
+    "planner.picksTitle": "Biscuit's recommendations",
+    "planner.foundOne": "Look what I found!",
+    "planner.foundMany": "I found {n} lovely gifts!",
+    "planner.starredFirst": "Cat's Favorites were picked first.",
+    "planner.claimHint": "Found something you like? Claim it on its card so nobody buys it twice.",
+    "empty.title": "Not even a whisker!",
+    "empty.text": "Nothing matches those filters. Try changing them and we'll have another look."
+  }
+}

@@ -1,0 +1,11 @@
+<!-- art/hero-sky.svg -->
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 420 170" width="420" height="170">
+  <g fill="none" stroke="#79614b" stroke-width="1.8"><path d="M60 0Q230 108 420 18"/></g>
+  <g fill="#f7d99b" stroke="#b8955e" stroke-width="1">
+    <ellipse cx="95" cy="23" rx="5" ry="8" transform="rotate(-30 95 23)"/><ellipse cx="151" cy="46" rx="5" ry="8" transform="rotate(-15 151 46)"/><ellipse cx="210" cy="58" rx="5" ry="8"/><ellipse cx="270" cy="59" rx="5" ry="8"/><ellipse cx="331" cy="49" rx="5" ry="8" transform="rotate(15 331 49)"/><ellipse cx="390" cy="30" rx="5" ry="8" transform="rotate(25 390 30)"/>
+  </g>
+  <g transform="translate(341 79)">
+    <path d="M0 67H79" stroke="#9c7859" stroke-width="6" stroke-linecap="round"/><ellipse cx="37" cy="56" rx="30" ry="10" fill="#64554b"/><path d="M12 40L10 20 26 30H40L54 20 54 42Q33 61 12 40" fill="#64554b"/><path d="M18 38q4 4 8 0m13 0q4 4 8 0" stroke="#f0ddbf" fill="none" stroke-width="1.7"/><path d="M59 57Q82 57 74 39" fill="none" stroke="#64554b" stroke-width="6" stroke-linecap="round"/><path d="M30 44l4 3 4-3" fill="#d8a697"/><path d="M12 46l-9-2m9 5H2m51-3 9-2m-9 5h11" stroke="#49362d" stroke-width="1"/>
+  </g>
+  <g fill="#a58b6e" font-family="Georgia,serif" font-style="italic"><text x="302" y="103" font-size="11">z</text><text x="314" y="89" font-size="14">z</text><text x="329" y="74" font-size="17">z</text></g>
+</svg>
